@@ -1,0 +1,166 @@
+# =============================================================
+# .NET / dotnet
+# =============================================================
+# Build results
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Ll]og/
+[Ll]ogs/
+[Oo]ut/
+
+# Visual Studio
+[Dd]ebug/
+[Dd]ebugPublic/
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+*.suo
+*.ntvs*
+*.njsproj
+*.sw?
+*.tmp
+# NOTE: do NOT ignore *.sln — the solution file itself must be tracked.
+# The patterns above cover Visual Studio's user/session artifacts only.
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+
+# Test results / coverage
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.coverage
+*.coveragexml
+coverage/
+coverage.*.xml
+coverage.*.json
+TestResults/
+
+# Entity Framework
+*.mdf
+*.ldf
+*.ndf
+*.ldf
+*.ndf
+
+# =============================================================
+# Node / npm
+# =============================================================
+node_modules/
+dist/
+dist-ssr/
+*.local
+.env
+.env.local
+.env.*.local
+coverage/
+.npm
+.eslintcache
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+.vite/
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# =============================================================
+# Editors / IDEs
+# =============================================================
+# VS Code (allow-list: .vscode/extensions.json and .vscode/mcp.json are tracked)
+.vscode/*
+!.vscode/extensions.json
+!.vscode/mcp.json
+!.vscode/settings.json
+
+# JetBrains / IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Visual Studio Code workspace settings
+*.code-workspace
+.history/
+
+# =============================================================
+# OS
+# =============================================================
+# Windows
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+*.url
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.fuse_hidden*
+.Trash-*
+.nfs*
+
+# =============================================================
+# Project-specific
+# =============================================================
+# Local env / secrets — never commit
+.env
+.env.example.bak
+secrets/
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Database dumps
+*.sql.gz
+*.dump
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
+blob-report/
+playwright/.cache/
+
+# Coverage artifacts
+/coverage/
+/.nyc_output/
