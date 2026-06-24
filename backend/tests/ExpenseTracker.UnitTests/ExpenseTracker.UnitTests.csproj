@@ -10,6 +10,7 @@
     <PackageReference Include="FluentAssertions" Version="8.10.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.0" />
+    <PackageReference Include="NSubstitute" Version="5.3.0" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2" />
   </ItemGroup>
@@ -19,7 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\ExpenseTracker.Application\ExpenseTracker.Application.csproj" />
     <ProjectReference Include="..\..\src\ExpenseTracker.Domain\ExpenseTracker.Domain.csproj" />
+    <ProjectReference Include="..\..\src\ExpenseTracker.Infrastructure\ExpenseTracker.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
