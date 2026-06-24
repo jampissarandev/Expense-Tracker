@@ -42,10 +42,12 @@ public class AuthService : IAuthService
 
         // Generate tokens
         var jwtResult = _jwtTokenService.GenerateToken(user.Id, user.Email);
-        var (refreshToken, _) = await _refreshTokenService.GenerateAsync(user.Id);
+        var (refreshPlaintext, refreshTokenEntity) = await _refreshTokenService.GenerateAsync(user.Id);
 
         return new AuthResponse(
             new AccessTokenDto(jwtResult.Token, jwtResult.ExpiresAt),
+            refreshPlaintext,
+            refreshTokenEntity.ExpiresAt,
             new UserDto(user.Id, user.Email, user.DisplayName));
     }
 
@@ -63,10 +65,12 @@ public class AuthService : IAuthService
 
         // Generate tokens
         var jwtResult = _jwtTokenService.GenerateToken(user.Id, user.Email);
-        var (refreshToken, _) = await _refreshTokenService.GenerateAsync(user.Id);
+        var (refreshPlaintext, refreshTokenEntity) = await _refreshTokenService.GenerateAsync(user.Id);
 
         return new AuthResponse(
             new AccessTokenDto(jwtResult.Token, jwtResult.ExpiresAt),
+            refreshPlaintext,
+            refreshTokenEntity.ExpiresAt,
             new UserDto(user.Id, user.Email, user.DisplayName));
     }
 
@@ -76,7 +80,7 @@ public class AuthService : IAuthService
         var currentToken = await _refreshTokenService.ValidateAsync(plaintextRefreshToken);
 
         // Rotate the token (revoke old, create new)
-        var (newPlaintext, _) = await _refreshTokenService.RotateAsync(currentToken);
+        var (newPlaintext, newRefreshTokenEntity) = await _refreshTokenService.RotateAsync(currentToken);
 
         // Find the user to generate a new access token
         var user = await _userRepository.FindByIdAsync(currentToken.UserId)
@@ -86,6 +90,8 @@ public class AuthService : IAuthService
 
         return new AuthResponse(
             new AccessTokenDto(jwtResult.Token, jwtResult.ExpiresAt),
+            newPlaintext,
+            newRefreshTokenEntity.ExpiresAt,
             new UserDto(user.Id, user.Email, user.DisplayName));
     }
 
