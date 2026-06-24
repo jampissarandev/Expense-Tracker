@@ -44,6 +44,23 @@ A multi-user **expense & income tracker** with a clean ASP.NET Core 10 backend a
 
 > 💡 The frontend declares `"engines": { "node": ">=22.0.0 <23" }` in `package.json` — a Node 23+ install will fail `npm ci`.
 
+### Windows + WSL2 networking note
+
+If your host is **Windows 11 with WSL2** (and Postgres is running **inside WSL2** via Docker or systemd), `localhost:5432` from a Windows process will not reach WSL2's Postgres by default. WSL2's eth0 IP is NAT'd and unreachable from Windows user-mode processes.
+
+The API and the integration tests in `tests/ExpenseTracker.IntegrationTests/` already work end-to-end (the test host spins up Postgres via Testcontainers, which routes through the same Windows loopback as the API). But for a **manual** `dotnet run` of the API on Windows, you need a portproxy:
+
+```powershell
+# Run PowerShell as Administrator
+make db-wsl-ip          # prints the current WSL IP
+make db-portproxy       # forwards localhost:5432 -> WSL:5432
+make db-portproxy-remove
+```
+
+Under the hood: `netsh interface portproxy add v4tov4 listenport=5432 listenaddress=0.0.0.0 connectport=5432 connectaddress=<WSL_IP>`. See `scripts/db-portproxy.ps1` for the script.
+
+On macOS, Linux, or when the API runs **inside** WSL2, this is unnecessary — `localhost:5432` works directly.
+
 ---
 
 ## 🚀 Quickstart

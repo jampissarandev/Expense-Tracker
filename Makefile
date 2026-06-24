@@ -1,4 +1,6 @@
-.PHONY: db-up db-down db-reset
+.PHONY: db-up db-down db-reset db-wsl-ip db-portproxy db-portproxy-remove
+
+# --- Docker Postgres lifecycle -------------------------------------------------
 
 db-up:
 	docker compose -f docker/postgres.yml up -d
@@ -9,3 +11,25 @@ db-down:
 db-reset:
 	docker compose -f docker/postgres.yml down -v
 	docker compose -f docker/postgres.yml up -d
+
+# --- WSL2 port forwarding (Windows hosts only) ---------------------------------
+# On Windows 11 + WSL2, `localhost:5432` from a Windows process does NOT
+# reach Postgres in WSL by default (the WSL eth0 IP is NAT'd). The fix is
+# `netsh interface portproxy` which requires admin. Use these targets on a
+# Windows host when the API is on Windows but Postgres is in WSL.
+#
+# Detection: only adds/removes the rule on Windows. On macOS/Linux these
+# are no-ops so the Makefile stays portable.
+#
+# Usage:
+#   make db-portproxy         # add: localhost:5432 -> WSL eth0 IP:5432
+#   make db-portproxy-remove  # remove the rule when done
+
+db-wsl-ip:
+	@powershell -NoProfile -Command "$$ip = ((wsl -d Ubuntu -- bash -c 'hostname -I' 2>$$null) -split '\s+')[0].Trim(); if ($$ip) { Write-Host $$ip } else { Write-Host 'WSL not detected' -ForegroundColor Yellow }"
+
+db-portproxy:
+	@powershell -NoProfile -ExecutionPolicy Bypass -File scripts/db-portproxy.ps1 add
+
+db-portproxy-remove:
+	@powershell -NoProfile -ExecutionPolicy Bypass -File scripts/db-portproxy.ps1 remove
