@@ -41,7 +41,7 @@ describe("apiClient", () => {
   })
 
   it("attaches Authorization header when token is available", async () => {
-    let token = "test-access-token"
+    const token = "test-access-token"
     setTokenGetter(() => token)
 
     let capturedAuth: string | null = null

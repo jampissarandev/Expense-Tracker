@@ -1,23 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom"
 import { useAuth } from "@/features/auth/AuthContext"
-
-// ── Public placeholder pages (will be replaced in P2.2) ─────────────────────
-
-function LoginPage() {
-  return (
-    <div className="flex min-h-screen items-center justify-center">
-      <h1 className="text-2xl font-bold">Login (P2.2)</h1>
-    </div>
-  )
-}
-
-function RegisterPage() {
-  return (
-    <div className="flex min-h-screen items-center justify-center">
-      <h1 className="text-2xl font-bold">Register (P2.2)</h1>
-    </div>
-  )
-}
+import LoginPage from "@/pages/LoginPage"
+import RegisterPage from "@/pages/RegisterPage"
 
 // ── Protected placeholder pages ─────────────────────────────────────────────
 
