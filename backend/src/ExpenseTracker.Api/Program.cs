@@ -2,6 +2,7 @@ using System.Text;
 using ExpenseTracker.Application.Abstractions;
 using ExpenseTracker.Application.Auth;
 using ExpenseTracker.Application.Categories;
+using ExpenseTracker.Application.Transactions;
 using ExpenseTracker.Infrastructure.Configuration;
 using ExpenseTracker.Infrastructure.Persistence;
 using ExpenseTracker.Infrastructure.Services;
@@ -28,6 +29,10 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 // Category services
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+// Transaction services
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 // FluentValidation
 builder.Services.AddFluentValidationAutoValidation();
