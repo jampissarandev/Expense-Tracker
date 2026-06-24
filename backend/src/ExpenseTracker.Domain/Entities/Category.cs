@@ -5,6 +5,7 @@ namespace ExpenseTracker.Domain.Entities;
 public class Category
 {
     private const int MaxNameLength = 50;
+    private const int MaxIconLength = 50;
 
     private Category()
     {
@@ -45,4 +46,20 @@ public class Category
 
         Name = normalized.Trim();
     }
+
+    public void UpdateAppearance(string? icon, string? color)
+    {
+        if (icon is not null && icon.Length > MaxIconLength)
+            throw new ArgumentException($"Icon must be {MaxIconLength} characters or fewer.", nameof(icon));
+
+        if (color is not null && !IsValidHexColor(color))
+            throw new ArgumentException("Color must be a valid hex color (e.g., #FF6B6B).", nameof(color));
+
+        Icon = icon;
+        Color = color;
+    }
+
+    private static bool IsValidHexColor(string color) =>
+        color.StartsWith('#') && color.Length == 7 &&
+        color[1..].All(c => (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F'));
 }
