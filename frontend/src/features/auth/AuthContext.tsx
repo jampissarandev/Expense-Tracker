@@ -1,0 +1,119 @@
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  type ReactNode,
+} from "react"
+import apiClient, { setTokenGetter } from "@/lib/apiClient"
+import type { UserDto, AuthResponse } from "@/types/api"
+
+// ── Context shape ───────────────────────────────────────────────────────────
+
+interface AuthContextValue {
+  user: UserDto | null
+  accessToken: string | null
+  isLoading: boolean
+  login: (email: string, password: string) => Promise<void>
+  register: (
+    email: string,
+    password: string,
+    displayName: string,
+  ) => Promise<void>
+  logout: () => Promise<void>
+}
+
+const AuthContext = createContext<AuthContextValue | null>(null)
+
+// ── Provider ────────────────────────────────────────────────────────────────
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<UserDto | null>(null)
+  const [accessToken, setAccessToken] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Expose accessToken to the apiClient interceptor via getter
+  useEffect(() => {
+    setTokenGetter(() => accessToken)
+  }, [accessToken])
+
+  // On mount: attempt silent refresh
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      try {
+        const { data } = await apiClient.post<AuthResponse>(
+          "/api/auth/refresh",
+        )
+        if (!cancelled) {
+          setAccessToken(data.accessToken.token)
+          setUser(data.user)
+        }
+      } catch {
+        // Not authenticated — stay logged out
+      } finally {
+        if (!cancelled) setIsLoading(false)
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  // ── Auth actions ─────────────────────────────────────────────────────────
+
+  const applyAuthResponse = useCallback((data: AuthResponse) => {
+    setAccessToken(data.accessToken.token)
+    setUser(data.user)
+  }, [])
+
+  const login = useCallback(
+    async (email: string, password: string) => {
+      const { data } = await apiClient.post<AuthResponse>("/api/auth/login", {
+        email,
+        password,
+      })
+      applyAuthResponse(data)
+    },
+    [applyAuthResponse],
+  )
+
+  const register = useCallback(
+    async (email: string, password: string, displayName: string) => {
+      const { data } = await apiClient.post<AuthResponse>(
+        "/api/auth/register",
+        { email, password, displayName },
+      )
+      applyAuthResponse(data)
+    },
+    [applyAuthResponse],
+  )
+
+  const logout = useCallback(async () => {
+    try {
+      await apiClient.post("/api/auth/logout")
+    } finally {
+      setAccessToken(null)
+      setUser(null)
+    }
+  }, [])
+
+  return (
+    <AuthContext.Provider
+      value={{ user, accessToken, isLoading, login, register, logout }}
+    >
+      {children}
+    </AuthContext.Provider>
+  )
+}
+
+// ── Hook ────────────────────────────────────────────────────────────────────
+
+export function useAuth(): AuthContextValue {
+  const ctx = useContext(AuthContext)
+  if (!ctx) {
+    throw new Error("useAuth must be used within an AuthProvider")
+  }
+  return ctx
+}
