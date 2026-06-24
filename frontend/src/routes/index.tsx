@@ -1,52 +1,50 @@
-import { Routes, Route, Navigate } from "react-router-dom"
-import { useAuth } from "@/features/auth/AuthContext"
-import LoginPage from "@/pages/LoginPage"
-import RegisterPage from "@/pages/RegisterPage"
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "@/features/auth/AuthContext";
+import { AppLayout } from "@/components/layout/AppLayout";
+import { LoadingFullPage } from "@/components/common/LoadingSpinner";
+import LoginPage from "@/pages/LoginPage";
+import RegisterPage from "@/pages/RegisterPage";
 
 // ── Protected placeholder pages ─────────────────────────────────────────────
 
 function DashboardPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <h1 className="text-2xl font-bold">Dashboard (P2.4)</h1>
+    <div className="flex items-center justify-center py-16">
+      <h1 className="text-2xl font-bold">แดชบอร์ด (P2.6)</h1>
     </div>
-  )
+  );
 }
 
 function TransactionsPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <h1 className="text-2xl font-bold">Transactions (P2.5)</h1>
+    <div className="flex items-center justify-center py-16">
+      <h1 className="text-2xl font-bold">รายการ (P2.5)</h1>
     </div>
-  )
+  );
 }
 
 function CategoriesPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <h1 className="text-2xl font-bold">Categories (P2.6)</h1>
+    <div className="flex items-center justify-center py-16">
+      <h1 className="text-2xl font-bold">หมวดหมู่ (P2.4)</h1>
     </div>
-  )
+  );
 }
 
 // ── RequireAuth wrapper ─────────────────────────────────────────────────────
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
-  const { user, isLoading } = useAuth()
+  const { user, isLoading } = useAuth();
 
   if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-      </div>
-    )
+    return <LoadingFullPage label="กำลังตรวจสอบสิทธิ์" />;
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />
+    return <Navigate to="/login" replace />;
   }
 
-  return <>{children}</>
+  return <>{children}</>;
 }
 
 // ── Route table ─────────────────────────────────────────────────────────────
@@ -58,34 +56,21 @@ export default function AppRoutes() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 
-      {/* Protected routes */}
+      {/* Protected routes — all wrapped in the AppLayout shell */}
       <Route
-        path="/"
         element={
           <RequireAuth>
-            <DashboardPage />
+            <AppLayout />
           </RequireAuth>
         }
-      />
-      <Route
-        path="/transactions"
-        element={
-          <RequireAuth>
-            <TransactionsPage />
-          </RequireAuth>
-        }
-      />
-      <Route
-        path="/categories"
-        element={
-          <RequireAuth>
-            <CategoriesPage />
-          </RequireAuth>
-        }
-      />
+      >
+        <Route path="/" element={<DashboardPage />} />
+        <Route path="/transactions" element={<TransactionsPage />} />
+        <Route path="/categories" element={<CategoriesPage />} />
+      </Route>
 
       {/* Catch-all redirect to dashboard */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
-  )
+  );
 }
