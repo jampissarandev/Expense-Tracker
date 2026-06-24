@@ -3,6 +3,7 @@ using ExpenseTracker.Application.Abstractions;
 using ExpenseTracker.Application.Auth;
 using ExpenseTracker.Application.Categories;
 using ExpenseTracker.Application.Transactions;
+using ExpenseTracker.Application.Dashboard;
 using ExpenseTracker.Infrastructure.Configuration;
 using ExpenseTracker.Infrastructure.Persistence;
 using ExpenseTracker.Infrastructure.Services;
@@ -33,6 +34,10 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 // Transaction services
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
+
+// Dashboard services
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 // FluentValidation
 builder.Services.AddFluentValidationAutoValidation();
