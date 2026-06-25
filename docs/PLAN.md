@@ -713,27 +713,42 @@ Next: **Phase 3** — CSV export endpoints + UI buttons.
 
 ### Phase 3 — Phase 2 Features: CSV Export (iterative phase)
 
-#### P3.1 — Backend CSV export
+#### P3.1 — Backend CSV export ✅
 - Add NuGet: `CsvHelper`
 - `IExportService`:
   - `BuildTransactionsCsvAsync(userId, filter)` → `MemoryStream` with UTF-8 BOM
-    - Columns: `วันที่,ประเภท,หมวดหมู่,จำนวนเงิน,หมายเหตุ` (or English headers — choose one and document)
+    - Columns: `วันที่,ประเภท,หมวดหมู่,จำนวนเงิน,หมายเหตุ`
     - CSV-injection guard: prefix `'` if cell starts with `=`, `+`, `-`, `@`, `\t`, `\r`
   - `BuildSummaryCsvAsync(userId, from, to)` → monthly totals
     - Columns: `เดือน,รายรับ,รายจ่าย,คงเหลือ`
 - `ExportsController` (`[Authorize]`):
   - `GET /api/exports/transactions.csv?type=&categoryId=&from=&to=` → `File(stream, "text/csv; charset=utf-8", "transactions-YYYYMMDD.csv")`
   - `GET /api/exports/summary.csv?from=&to=` → `File(stream, "text/csv; charset=utf-8", "summary-YYYYMMDD.csv")`
-- **Unit tests**:
-  - `Transactions_csv_contains_expected_columns_and_rows`
-  - `Summary_csv_contains_monthly_totals`
-  - `Csv_injection_unsafe_prefix_is_sanitized`
-  - `Csv_starts_with_utf8_bom`
-- **Integration tests**:
-  - `Export_returns_200_with_attachment_disposition`
-  - `Export_filters_apply_correctly`
+- **Unit tests** (14):
+  - `Transactions_csv_starts_with_utf8_bom`
+  - `Transactions_csv_contains_expected_headers`
+  - `Transactions_csv_contains_expected_rows`
+  - `Transactions_csv_passes_filter_to_service`
+  - `Transactions_csv_empty_result_returns_only_headers`
+  - `Summary_csv_starts_with_utf8_bom`
+  - `Summary_csv_contains_expected_headers`
+  - `Summary_csv_contains_monthly_totals_with_balance`
+  - `Transactions_csv_sanitizes_injection_prone_cells` (4× Theory)
+  - `Transactions_csv_does_not_prefix_safe_cells`
+  - `Transactions_csv_amount_not_prefixed_even_if_starts_with_minus`
+- **Integration tests** (11):
+  - `Transactions_csv_without_token_returns_401`
+  - `Summary_csv_without_token_returns_401`
+  - `Transactions_csv_returns_200_with_attachment_disposition`
+  - `Transactions_csv_starts_with_utf8_bom`
+  - `Transactions_csv_contains_thai_headers_and_data`
+  - `Transactions_csv_filters_apply_correctly`
+  - `Transactions_csv_empty_when_no_transactions`
+  - `Summary_csv_returns_200_with_attachment_disposition`
+  - `Summary_csv_starts_with_utf8_bom`
+  - `Summary_csv_contains_thai_headers`
   - `Cross_user_export_does_not_leak_data`
-- **Acceptance**: unit + integration tests pass; `curl` returns valid CSV with Thai characters
+- **Acceptance**: ✅ 163 total tests pass (90 unit + 73 integration); `dotnet format` clean; `curl` returns valid CSV with Thai characters
 - **Verify**: `dotnet test --filter Category=Exports`
 - **Files**: `backend/src/ExpenseTracker.Application/Exports/**`, `backend/src/ExpenseTracker.Api/Controllers/ExportsController.cs`
 - **Skills**: [api-and-interface-design](https://github.com/.github/skills/api-and-interface-design/SKILL.md), [security-and-hardening](https://github.com/.github/skills/security-and-hardening/SKILL.md), [test-driven-development](https://github.com/.github/skills/test-driven-development/SKILL.md)

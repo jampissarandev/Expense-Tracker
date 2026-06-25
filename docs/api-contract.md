@@ -54,6 +54,8 @@ All routes under `/api`. Auth column: `public` = no token; `cookie` = refresh co
 | 14 | PUT | `/transactions/{id}` | bearer | Update a transaction |
 | 15 | DELETE | `/transactions/{id}` | bearer | Delete a transaction (204) |
 | 16 | GET | `/dashboard/summary` | bearer | Aggregations: current month, last 6 months, top-10 by category |
+| 17 | GET | `/exports/transactions.csv` | bearer | Filtered transactions CSV (P3.1) |
+| 18 | GET | `/exports/summary.csv` | bearer | Monthly summary CSV (P3.1) |
 
 Health check `/health` is **deferred to P4.1** — Phase 1 does not yet expose it.
 
@@ -420,6 +422,66 @@ Same request body as create. Same validation rules.
 
 ---
 
+### 17. GET /api/exports/transactions.csv
+
+**Query parameters**
+
+| Param | Type | Default | Notes |
+|---|---|---|---|
+| `type` | `income` \| `expense` | (none) | Filter by transaction type |
+| `categoryId` | UUID | (none) | Filter by category |
+| `from` | `YYYY-MM-DD` | (none) | Inclusive start date |
+| `to` | `YYYY-MM-DD` | (none) | Inclusive end date |
+
+**Response — 200 OK**
+
+- Content-Type: `text/csv; charset=utf-8`
+- Content-Disposition: `attachment; filename="transactions-YYYYMMDD.csv"`
+- UTF-8 BOM prefix (`EF BB BF`) for Excel/Google Sheets compatibility
+- CSV-injection guard: fields starting with `=`, `+`, `-`, `@`, `\t`, `\r` are prefixed with `'`
+- All fields are double-quoted (safe for Thai characters)
+
+**CSV columns (Thai headers):**
+
+```csv
+วันที่,ประเภท,หมวดหมู่,จำนวนเงิน,หมายเหตุ
+2026-06-15,"ค่าใช้จ่าย","Food","150.50","Lunch"
+2026-06-01,"รายรับ","Salary","50000.00","Monthly salary"
+```
+
+- `ประเภท` values: `รายรับ` (income) or `ค่าใช้จ่าย` (expense)
+- `จำนวนเงน` is the raw decimal amount (invariant culture, 2 dp)
+
+---
+
+### 18. GET /api/exports/summary.csv
+
+**Query parameters**
+
+| Param | Type | Default | Notes |
+|---|---|---|---|
+| `from` | `YYYY-MM-DD` | (none) | Inclusive start date |
+| `to` | `YYYY-MM-DD` | (none) | Inclusive end date |
+
+**Response — 200 OK**
+
+- Content-Type: `text/csv; charset=utf-8`
+- Content-Disposition: `attachment; filename="summary-YYYYMMDD.csv"`
+- UTF-8 BOM prefix (`EF BB BF`)
+
+**CSV columns (Thai headers):**
+
+```csv
+เดือน,รายรับ,รายจ่าย,คงเหลือ
+2026-01,"50000.00","30000.00","20000.00"
+2026-02,"50000.00","28000.00","22000.00"
+```
+
+- `เดือน` format: `YYYY-MM`
+- `คงเหลือ` = `รายรับ - รายจ่าย`
+
+---
+
 ## Error envelope (RFC 7807)
 
 Every non-2xx response (except 204) is `application/problem+json`:
@@ -472,7 +534,7 @@ client                API                   DB
 
 ## Test coverage map
 
-Last verified 2026-06-24: **134 tests, all passing** (72 unit + 62 integration, 0 failed, 0 skipped).
+Last verified 2026-06-25: **163 tests, all passing** (90 unit + 73 integration, 0 failed, 0 skipped).
 
 | Endpoint / concern | Test file | Methods |
 |---|---|---|
@@ -480,6 +542,7 @@ Last verified 2026-06-24: **134 tests, all passing** (72 unit + 62 integration, 
 | `/categories/*` | `backend/tests/ExpenseTracker.IntegrationTests/Api/CategoriesEndpointsTests.cs` | 10 |
 | `/dashboard/*` | `backend/tests/ExpenseTracker.IntegrationTests/Api/DashboardEndpointsTests.cs` | 8 |
 | `/transactions/*` | `backend/tests/ExpenseTracker.IntegrationTests/Api/TransactionsEndpointsTests.cs` | 30 |
+| `/exports/*` | `backend/tests/ExpenseTracker.IntegrationTests/Api/ExportsEndpointsTests.cs` | 11 |
 | Migrations / seed / global filter | `backend/tests/ExpenseTracker.IntegrationTests/Persistence/MigrationsTests.cs` | 3 |
 | Auth service | `backend/tests/ExpenseTracker.UnitTests/Auth/AuthServiceTests.cs` | 12 |
 | Categories service | `backend/tests/ExpenseTracker.UnitTests/Categories/CategoryServiceTests.cs` | 17 |
@@ -487,6 +550,7 @@ Last verified 2026-06-24: **134 tests, all passing** (72 unit + 62 integration, 
 | Amount parser | `backend/tests/ExpenseTracker.UnitTests/Transactions/TransactionAmountParserTests.cs` | 4 |
 | Domain — Category | `backend/tests/ExpenseTracker.UnitTests/Domain/CategoryTests.cs` | 1 |
 | Domain — Transaction | `backend/tests/ExpenseTracker.UnitTests/Domain/TransactionTests.cs` | 2 |
+| Export service | `backend/tests/ExpenseTracker.UnitTests/Exports/ExportServiceTests.cs` | 14 |
 
 When a route or shape changes here, update the corresponding test in the same change.
 
@@ -495,7 +559,8 @@ When a route or shape changes here, update the corresponding test in the same ch
 ## Deferred (P4.1 / P5)
 
 - `GET /api/health` — health check endpoint with DB ping
-- `GET /api/exports/transactions.csv` — Phase 3
+- `GET /api/exports/transactions.csv` — ✅ Done (P3.1)
+- `GET /api/exports/summary.csv` — ✅ Done (P3.1)
 - `GET /api/exports/summary.csv` — Phase 3
 - Rate limiting on `/api/auth/*` (5 req/min/IP)
 - CORS for the Vite dev origin
