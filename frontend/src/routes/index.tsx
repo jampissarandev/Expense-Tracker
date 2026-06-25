@@ -4,6 +4,7 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import { LoadingFullPage } from "@/components/common/LoadingSpinner";
 import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
+import CategoriesPage from "@/pages/CategoriesPage";
 
 // ── Protected placeholder pages ─────────────────────────────────────────────
 
@@ -19,14 +20,6 @@ function TransactionsPage() {
   return (
     <div className="flex items-center justify-center py-16">
       <h1 className="text-2xl font-bold">รายการ (P2.5)</h1>
-    </div>
-  );
-}
-
-function CategoriesPage() {
-  return (
-    <div className="flex items-center justify-center py-16">
-      <h1 className="text-2xl font-bold">หมวดหมู่ (P2.4)</h1>
     </div>
   );
 }
