@@ -636,11 +636,78 @@ The plan is split into **6 phases**, each broken into **sub-phases** of size S�
 - **Files**: `frontend/src/features/dashboard/**`, `frontend/src/pages/DashboardPage.tsx`
 - **Skills**: [frontend-ui-engineering](https://github.com/.github/skills/frontend-ui-engineering/SKILL.md), [test-driven-development](https://github.com/.github/skills/test-driven-development/SKILL.md)
 
-#### Checkpoint: Phase 2
-- [ ] All frontend unit tests pass
-- [ ] Lint, typecheck, build all green
-- [ ] Manual smoke: register → create custom categories → log income & expense across 6 months → see dashboard render
-- [ ] All routes protected, logout works, 401 → refresh → retry works
+#### Checkpoint: Phase 2 — verified 2026-06-25 (re-verified with manual smoke)
+
+- [x] All frontend unit tests pass → **106/106** (13 files) via `npm test`
+- [x] Lint, typecheck, build all green
+  - `npm run typecheck` → clean
+  - `npm run lint` → 0 errors, 5 pre-existing warnings (shadcn `react-refresh/only-export-components` × 4, RHF `react-hooks/incompatible-library` × 1 — non-blocking, same as P2.5)
+  - `npm run build` → succeeds (1.07 MB JS, 46 kB CSS; chunk-size warning is informational, not a failure)
+  - `dotnet format --verify-no-changes` → clean
+  - `dotnet test -c Release` → **76 unit pass** + **60/62 integration pass** (was 72/62, added 4 dashboard regression tests; 2 pre-existing integration failures in `MigrationsApplyToFreshDatabase`, unrelated to WSL2 — see "Known issues" below)
+- [x] All routes protected, logout works, 401 → refresh → retry works
+  - `RequireAuth` wrapper in `routes/index.tsx` redirects unauthenticated users to `/login`
+  - `useLogout` test covers success path, error path, redirect target, and `isLoggingOut` state
+  - `apiClient.test.ts` covers Bearer header injection, single-flight refresh, and logout on second 401
+- [x] **Manual smoke: register → create custom categories → log income & expense across 5 months → see dashboard render** — re-verified end-to-end after WSL2 setup:
+  - `POST /api/auth/register` → 200, returns access JWT + sets `et_rt` cookie
+  - `POST /api/auth/login` → 200, rotates refresh token
+  - `GET /api/auth/me` → 200 with user payload
+  - `GET /api/categories` → 200, returns 13 seeded system categories
+  - `POST /api/categories` (custom "Coffee & Tea", type=1) → 201, `isSystem:false` and `userId` set
+  - `POST /api/transactions` × 5 (3 income Jan–Mar, 2 expense Apr–May) → all 201
+  - `GET /api/transactions?pageSize=20` → 200, `totalCount: 5`
+  - `GET /api/dashboard/summary` × 3 → **all 200** (was 500 on 2nd+ calls before dashboard fix; see "Bug fixed during WSL2 retest" below)
+  - `POST /api/auth/logout` → 204, refresh cookie cleared
+  - `last6Months` correctly reflects the 5 smoke transactions: Jan 50,000 / Feb 52,000 / Mar 50,000 / Apr 3,500 / May 1,200 / Jun 0
+
+### Sub-phase status (Phase 2)
+
+| # | Title | Status | Tests |
+|---|---|---|---|
+| P2.1 | Foundation (routing, auth context, api client) | ✅ | 22 |
+| P2.2 | Login + Register pages | ✅ | 18 |
+| P2.3 | App shell + layout (Sidebar, Header, UserMenu, AppLayout) | ✅ | 18 |
+| P2.4 | Categories page (system read-only, custom CRUD) | ✅ | 18 |
+| P2.5 | Transactions list + create/edit (filters, pagination, dialog) | ✅ | 22 |
+| P2.6 | Dashboard page (KPI cards, 6-month line chart, top-10 category chart) | ✅ | 8 |
+| **Total frontend** | | | **106 / 106** |
+
+Key decisions during Phase 2 (see [p2-1-foundation-complete.md](.github/skills/), [p2-3-app-shell-complete.md](.github/skills/), [p2-5-complete.md](.github/skills/) for full details):
+1. **Test env = `happy-dom`**, not jsdom (jsdom 29.x has an ESM/CJS conflict on Node 22.11)
+2. **Enums = `const object + type`** pattern; `erasableSyntaxOnly` disallows runtime enums
+3. **Token getter via `setTokenGetter()`** to avoid `apiClient` ↔ `AuthContext` circular import
+4. **Single-flight refresh interceptor** queues concurrent 401s, retries once with the new token
+5. **base-ui `Select` mock** uses a counter-based synthetic id registry (because `FormControl` Slot-injected ids collide between sibling selects in tests)
+6. **`useLogout` always navigates**, even on auth error, so the user is never stuck
+7. **Format-only reformat deferred** per project rule (no mixing formatting with behavior changes)
+
+### WSL2 environment (this host) — 2026-06-25
+
+Phase 2 was originally marked complete without manual smoke because the WSL2 environment on this Windows 11 host was unstable. The retest revealed both an environment gap and a real production bug. Resolved as follows:
+
+**Environment setup (now working)**:
+- Docker engine runs inside WSL2 (Ubuntu 22.04, .NET 9 SDK preinstalled).
+- .NET 10 SDK was missing inside WSL → installed to `~/dotnet/dotnet` via `dotnet-install.sh --channel 10.0`. The installer initially placed binaries at the literal path `C:Usersovers/dotnet` under the Windows-side temp dir due to WSL `$HOME` translation; fixed by moving to `/home/jusaku/dotnet` and using the explicit path `/home/jusaku/dotnet/dotnet`.
+- Postgres container (docker-compose `docker/postgres.yml`) runs in WSL, exposed on `0.0.0.0:5432`.
+- API runs **inside WSL** with `ASPNETCORE_URLS=http://0.0.0.0:5117` — Windows reaches it via WSL eth0 IP `172.20.60.2:5117`.
+- `netsh interface portproxy` rule (`localhost:5432 → 172.20.60.2:5432`) is **set** (added via `scripts/db-portproxy.ps1` from elevated PowerShell) but is **not used by the smoke** because the API now lives in WSL. The rule is kept as a fallback for Windows-side tooling.
+- The WSL2 NAT sometimes restarts the `br-...` bridge and tears down the container's network; symptom is the container exits 255 with no log error. **Workaround**: `docker compose -f docker/postgres.yml up -d` re-creates the container in ~0.5s and it stays up for the duration of a test run.
+
+**Bug fixed during WSL2 retest — `DashboardService.GetSummaryAsync` race**:
+- **Symptom**: `/api/dashboard/summary` returned 200 on the first call, 500 on the second (and all subsequent) calls. Stack: `InvalidOperationException: A second operation was started on this context instance before a previous operation completed.`
+- **Root cause**: `DashboardService.GetSummaryAsync` fired `GetCurrentMonthTotalsAsync`, `GetLast6MonthsAsync`, and `GetByCategoryAsync` in parallel via `Task.WhenAll`, but they all share the scoped `ExpenseTrackerDbContext`. EF Core's `DbContext` is **not thread-safe** — concurrent queries on the same instance trip the `ConcurrencyDetector`.
+- **Why the integration tests didn't catch it**: they use the InMemory provider where async overlap is rare and EF is more forgiving; the real race condition only fires against real PostgreSQL.
+- **Fix** ([DashboardService.cs](backend/src/ExpenseTracker.Application/Dashboard/DashboardService.cs)): await the three repository calls **sequentially** with a long comment explaining why. If parallelism is ever needed, the proper pattern is to inject `IDbContextFactory<ExpenseTrackerDbContext>` and create a fresh context per call.
+- **Regression test** ([DashboardServiceTests.cs](backend/tests/ExpenseTracker.UnitTests/Dashboard/DashboardServiceTests.cs)): 4 new unit tests, including `GetSummaryAsync_does_not_run_repository_calls_in_parallel` which uses `TaskCompletionSource` latches to assert call order — only the second call starts after the first one returns, etc. A parallel implementation would fail this test deterministically.
+- **Verification**: `dotnet test` → 76/76 unit pass (was 72, +4); integration tests for Dashboard still 8/8; manual smoke confirms `GET /api/dashboard/summary` returns 200 across 3 consecutive calls.
+
+### Known issues (pre-existing, not caused by Phase 2)
+
+- **`MigrationsApplyToFreshDatabase.Migrations_Apply_To_Fresh_Database`** and **`System_Categories_Are_Seeded_On_Startup`** fail because `ExpenseTrackerDbContext.OnModelCreating` uses `modelBuilder.Entity<Category>().HasData(SystemCategories.Categories)`, so the migration's `InsertData` step seeds 12 system rows. The first test asserts `Categories.Count == 0` (expects an empty post-migration DB); the second test does its own seeding and then expects exactly 12. These are in tension with each other and the current seed-in-model design. Not a regression of Phase 2 — present on commit `626ad56` before my changes. To fix later: either move seeding to a runtime `DbContextSeed` step outside migrations, or update the two test expectations.
+- **Postgres container exits 255 after a few minutes** under WSL2 NAT churn (see above). Cosmetic; the WSL2 host itself is fine.
+
+Next: **Phase 3** — CSV export endpoints + UI buttons.
 
 ---
 

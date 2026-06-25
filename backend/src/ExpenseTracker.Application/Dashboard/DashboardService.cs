@@ -13,16 +13,18 @@ public class DashboardService : IDashboardService
 
     public async Task<DashboardSummaryDto> GetSummaryAsync(Guid userId, TransactionType? type = null)
     {
-        var currentMonthTask = _repository.GetCurrentMonthTotalsAsync(userId);
-        var last6MonthsTask = _repository.GetLast6MonthsAsync(userId);
+        // IMPORTANT: Do NOT run these repository calls in parallel.
+        // They share the scoped `ExpenseTrackerDbContext`, and EF Core's
+        // DbContext is not thread-safe — concurrent queries on the same
+        // instance throw `InvalidOperationException: A second operation
+        // was started on this context instance...`. Await sequentially
+        // (each call completes before the next begins). If parallelism
+        // is ever needed, switch to `IDbContextFactory<T>` and create a
+        // fresh context per call.
+        var currentMonth = await _repository.GetCurrentMonthTotalsAsync(userId);
+        var last6Months = await _repository.GetLast6MonthsAsync(userId);
         var byCategoryType = type ?? TransactionType.Expense;
-        var byCategoryTask = _repository.GetByCategoryAsync(userId, byCategoryType);
-
-        await Task.WhenAll(currentMonthTask, last6MonthsTask, byCategoryTask);
-
-        var currentMonth = await currentMonthTask;
-        var last6Months = await last6MonthsTask;
-        var byCategory = await byCategoryTask;
+        var byCategory = await _repository.GetByCategoryAsync(userId, byCategoryType);
 
         var currentMonthDto = new CurrentMonthDto(
             currentMonth.Income,
