@@ -1,0 +1,1927 @@
+{
+  ".github/skills/idea-refine/scripts/idea-refine.sh": {
+    "mtime": 1781999800.0,
+    "ast_hash": "7d09d06b836527b5261a27027b1d8548",
+    "semantic_hash": ""
+  },
+  ".vscode/mcp.json": {
+    "mtime": 1782189394.5358863,
+    "ast_hash": "859499b7414ece03eb4dd7329ce217cc",
+    "semantic_hash": ""
+  },
+  "backend/ExpenseTracker.sln": {
+    "mtime": 1782189921.83937,
+    "ast_hash": "650dc5f7c91e8cff6aaaaa3a34dd5b6b",
+    "semantic_hash": ""
+  },
+  "backend/global.json": {
+    "mtime": 1782190552.5460396,
+    "ast_hash": "cdb364807ae5e600faf939c8538e4fd6",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Api/Controllers/AuthController.cs": {
+    "mtime": 1782294417.7959049,
+    "ast_hash": "3c59f18330606373a537e7af71751ab0",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Api/Controllers/CategoriesController.cs": {
+    "mtime": 1782294417.7979457,
+    "ast_hash": "a857de4dccfe3a9ff4622eb58319e7b9",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Api/Controllers/DashboardController.cs": {
+    "mtime": 1782298218.2881942,
+    "ast_hash": "f19effc5d69d8626c7d5afd889bee6f2",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Api/Controllers/TransactionsController.cs": {
+    "mtime": 1782296538.2540264,
+    "ast_hash": "b3f571bce69e20a48aad63d008dd6de7",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Api/ExpenseTracker.Api.csproj": {
+    "mtime": 1782200718.4916313,
+    "ast_hash": "c419002fce4274fff6802f1a0b9f5cf5",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Api/Middleware/GlobalExceptionMiddleware.cs": {
+    "mtime": 1782294417.7979457,
+    "ast_hash": "0b4a71d114fc8a37c218ea84ea122109",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Api/Program.cs": {
+    "mtime": 1782297925.2015295,
+    "ast_hash": "83151ad92660f92abd1ab9fe7554c7b8",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Api/Properties/launchSettings.json": {
+    "mtime": 1782189883.2328863,
+    "ast_hash": "8e9e73d9f3c80c17bde0683fe49d8782",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Api/appsettings.Development.json": {
+    "mtime": 1782301633.0778184,
+    "ast_hash": "d2d8cb2cf1c8a967853526d24ab11510",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Api/appsettings.json": {
+    "mtime": 1782289563.249189,
+    "ast_hash": "2edcc19daac9c8c4fe030ae28a5b3dfc",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Abstractions/ICategoryRepository.cs": {
+    "mtime": 1782295151.1470234,
+    "ast_hash": "ff94d700e892c458cf3e5a43b0daaa11",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Abstractions/ICurrentUserService.cs": {
+    "mtime": 1782279788.0753255,
+    "ast_hash": "1b505f201aa704578d758d95b578d108",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Abstractions/IJwtTokenService.cs": {
+    "mtime": 1782289648.7149582,
+    "ast_hash": "f3643b36c0faefcd7f2380c55ab04900",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Abstractions/IPasswordHasher.cs": {
+    "mtime": 1782289648.7149582,
+    "ast_hash": "383797f5aca233a3e9f7e36e3326d905",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Abstractions/IRefreshTokenService.cs": {
+    "mtime": 1782289648.7169645,
+    "ast_hash": "2e8378f4837861ab97b5d28e99b647f9",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Abstractions/ITransactionRepository.cs": {
+    "mtime": 1782296538.255028,
+    "ast_hash": "433cd174665f84025601aaa859e95626",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Abstractions/IUserRepository.cs": {
+    "mtime": 1782289648.7169645,
+    "ast_hash": "d6dd66572aa9c11dd46361abb4732845",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Auth/AuthService.cs": {
+    "mtime": 1782290645.9528677,
+    "ast_hash": "7270cea2581ca170cfa1d810723acb57",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Auth/DTOs/AuthDTOs.cs": {
+    "mtime": 1782290624.1409192,
+    "ast_hash": "c20e2e6553acbae4b72c808cf5a5b7d0",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Auth/IAuthService.cs": {
+    "mtime": 1782289648.7169645,
+    "ast_hash": "54556049e21ebb1b2716a213df3acbf7",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Categories/CategoryService.cs": {
+    "mtime": 1782294417.7979457,
+    "ast_hash": "14551744b2727ff4b34ae44bd008217c",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Categories/DTOs/CategoryDTOs.cs": {
+    "mtime": 1782294417.7979457,
+    "ast_hash": "d7f1946951047510b5f809df3074120e",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Categories/ICategoryService.cs": {
+    "mtime": 1782294417.7979457,
+    "ast_hash": "1aa117b22b31b766de1959d46d403fb3",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Categories/Validators/CategoryValidators.cs": {
+    "mtime": 1782294417.7979457,
+    "ast_hash": "b01b25768b4fabb6f27edc96a73bdc80",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Dashboard/DashboardDtos.cs": {
+    "mtime": 1782298218.2776213,
+    "ast_hash": "22adfc6b3cef1df6c42fa62f8510333c",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Dashboard/DashboardService.cs": {
+    "mtime": 1782298218.2806222,
+    "ast_hash": "58c6ebc83eebfaaff0f0075031fc3ac2",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Dashboard/IDashboardRepository.cs": {
+    "mtime": 1782298218.2796218,
+    "ast_hash": "9a7e8165ac986361f2b86792a8e2cc0f",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Dashboard/IDashboardService.cs": {
+    "mtime": 1782298218.278622,
+    "ast_hash": "cc9f21b98aa4a5e9b393db2b664c7133",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/ExpenseTracker.Application.csproj": {
+    "mtime": 1782190552.557934,
+    "ast_hash": "709970bcc08bea50b882bf8beebe5024",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Transactions/DTOs/PagedResult.cs": {
+    "mtime": 1782296538.255028,
+    "ast_hash": "419f92c6481c735b79b670f3e3b31e61",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Transactions/DTOs/TransactionDTOs.cs": {
+    "mtime": 1782296538.2560298,
+    "ast_hash": "8223c4e77e259f5bf02252f91fe9d97b",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Transactions/Filters/TransactionFilter.cs": {
+    "mtime": 1782296538.2610326,
+    "ast_hash": "ce53121040353260293127a3ca0dc467",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Transactions/ITransactionService.cs": {
+    "mtime": 1782296538.262031,
+    "ast_hash": "41b9c4e26ae1e6e8410f5d8d2ab2417a",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Transactions/TransactionService.cs": {
+    "mtime": 1782296538.262031,
+    "ast_hash": "44ef38cb0ed731ac4b7c1b0c9f90e1c3",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Application/Transactions/Validators/TransactionValidators.cs": {
+    "mtime": 1782296538.263538,
+    "ast_hash": "b3e3387df49ea49e0a6135ead638604a",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Domain/Entities/Category.cs": {
+    "mtime": 1782293778.7641847,
+    "ast_hash": "c9fb49b12db12769f3ebd983aa54edae",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Domain/Entities/RefreshToken.cs": {
+    "mtime": 1782277497.4073262,
+    "ast_hash": "03dda848d31a0358cfac4dd2657490aa",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Domain/Entities/Transaction.cs": {
+    "mtime": 1782277497.4073262,
+    "ast_hash": "864bc44670683634b94d7d10d89c7ba1",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Domain/Entities/User.cs": {
+    "mtime": 1782277497.4083283,
+    "ast_hash": "07777cd0333c7a1c7261039d391bc2f0",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Domain/Enums/TransactionType.cs": {
+    "mtime": 1782277497.4098763,
+    "ast_hash": "8bd7b75a2207bc49f5ba4a23bb717d76",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Domain/Exceptions/DomainException.cs": {
+    "mtime": 1782277497.4125915,
+    "ast_hash": "792d7a93aed728c5f5765279d538e25a",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Domain/Exceptions/DomainValidationException.cs": {
+    "mtime": 1782277497.41359,
+    "ast_hash": "364009b8c059d84ef63996f6d38232bf",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Domain/Exceptions/ForbiddenException.cs": {
+    "mtime": 1782277497.41359,
+    "ast_hash": "c0fc1b17807bb8c1da61a32306457452",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Domain/Exceptions/NotFoundException.cs": {
+    "mtime": 1782277497.4145908,
+    "ast_hash": "d744b9b00a9cc55222604fb55026e83d",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Domain/Exceptions/RefreshTokenValidationException.cs": {
+    "mtime": 1782289648.7109444,
+    "ast_hash": "5dc55d7ede950339b4a0a518674e6891",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Domain/ExpenseTracker.Domain.csproj": {
+    "mtime": 1782190552.557934,
+    "ast_hash": "0ee80615c4eec91a7b252ee34f55ae6e",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Infrastructure/Configuration/JwtSettings.cs": {
+    "mtime": 1782289648.7169645,
+    "ast_hash": "6e1280f2b900081806b5dbf2fc869164",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Infrastructure/Configuration/RefreshTokenSettings.cs": {
+    "mtime": 1782289648.7189734,
+    "ast_hash": "905b3de09c2b39c390d7b88831e28ab5",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Infrastructure/ExpenseTracker.Infrastructure.csproj": {
+    "mtime": 1782289027.6802876,
+    "ast_hash": "d726e451514a3ea286a327aec0dc1d6f",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Infrastructure/Migrations/20260624052221_InitialCreate.Designer.cs": {
+    "mtime": 1782278541.8418727,
+    "ast_hash": "e478a1f0c1c05a4d85998fd9060ff2ad",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Infrastructure/Migrations/20260624052221_InitialCreate.cs": {
+    "mtime": 1782279788.0914075,
+    "ast_hash": "419d5f27f55bb9c694aac8fe9a5c30d4",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Infrastructure/Migrations/ExpenseTrackerDbContextModelSnapshot.cs": {
+    "mtime": 1782278541.8418727,
+    "ast_hash": "ff1965ed1aedf33269e1403e78ecb28e",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Infrastructure/Persistence/CategoryRepository.cs": {
+    "mtime": 1782294417.7979457,
+    "ast_hash": "20a199ea0f41e99f11f7f4b7e9e224ce",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Infrastructure/Persistence/Configurations/CategoryConfiguration.cs": {
+    "mtime": 1782279788.0914075,
+    "ast_hash": "59eaf723fbb1dbb3052b28b2e9d40282",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Infrastructure/Persistence/Configurations/RefreshTokenConfiguration.cs": {
+    "mtime": 1782279788.0914075,
+    "ast_hash": "af4c20a0ed4e36ec88ccb4f3e12433aa",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Infrastructure/Persistence/Configurations/TransactionConfiguration.cs": {
+    "mtime": 1782279788.0934167,
+    "ast_hash": "997ad1c1f2a941b2d7c08826586cadf0",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Infrastructure/Persistence/Configurations/UserConfiguration.cs": {
+    "mtime": 1782279788.0934167,
+    "ast_hash": "e439a6ba44ec86b4d8a39aadca503ba8",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Infrastructure/Persistence/DashboardRepository.cs": {
+    "mtime": 1782298218.283625,
+    "ast_hash": "95cd11518a7c4987c3716e6a80af3994",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Infrastructure/Persistence/ExpenseTrackerDbContext.cs": {
+    "mtime": 1782287987.6835687,
+    "ast_hash": "d833f74fd94c82f2438b4b1ea5c16ebf",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Infrastructure/Persistence/SeedData/SystemCategories.cs": {
+    "mtime": 1782279788.0934167,
+    "ast_hash": "ca253e954e7271df12ad715707691dcd",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Infrastructure/Persistence/TransactionRepository.cs": {
+    "mtime": 1782296538.263538,
+    "ast_hash": "01c16f965185061e747482cd2fcf43a0",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Infrastructure/Services/BCryptPasswordHasher.cs": {
+    "mtime": 1782289648.7189734,
+    "ast_hash": "ccba612aa8cc5a9631dc70d42d2e6ba3",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Infrastructure/Services/CurrentUserService.cs": {
+    "mtime": 1782279788.0969346,
+    "ast_hash": "60bc029d75c50a685793c671f09e95fd",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Infrastructure/Services/JwtTokenService.cs": {
+    "mtime": 1782289648.7189734,
+    "ast_hash": "23f32eef1a4da265f9d62513be27b438",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Infrastructure/Services/RefreshTokenService.cs": {
+    "mtime": 1782289648.7189734,
+    "ast_hash": "1463eac5637d738152f140b74d58aa11",
+    "semantic_hash": ""
+  },
+  "backend/src/ExpenseTracker.Infrastructure/Services/UserRepository.cs": {
+    "mtime": 1782289648.7189734,
+    "ast_hash": "d54a77ba2d79bf0d66f61be5fdf1cfe1",
+    "semantic_hash": ""
+  },
+  "backend/tests/ExpenseTracker.IntegrationTests/Api/AuthEndpointsTests.cs": {
+    "mtime": 1782294417.8046815,
+    "ast_hash": "3300cbc5698436a287d110aeb7cbaeec",
+    "semantic_hash": ""
+  },
+  "backend/tests/ExpenseTracker.IntegrationTests/Api/CategoriesEndpointsTests.cs": {
+    "mtime": 1782294417.8046815,
+    "ast_hash": "fc54bb3f2ca701ba0becbf113d710e14",
+    "semantic_hash": ""
+  },
+  "backend/tests/ExpenseTracker.IntegrationTests/Api/DashboardEndpointsTests.cs": {
+    "mtime": 1782298210.983692,
+    "ast_hash": "97eecffa51102ee26dd2d2b73e7fb840",
+    "semantic_hash": ""
+  },
+  "backend/tests/ExpenseTracker.IntegrationTests/Api/TransactionsEndpointsTests.cs": {
+    "mtime": 1782296800.4986796,
+    "ast_hash": "5592c913b33fd33410b3244d862bedaf",
+    "semantic_hash": ""
+  },
+  "backend/tests/ExpenseTracker.IntegrationTests/ExpenseTracker.IntegrationTests.csproj": {
+    "mtime": 1782291212.5938227,
+    "ast_hash": "35c99f47dd95bd87d1563ca13e207346",
+    "semantic_hash": ""
+  },
+  "backend/tests/ExpenseTracker.IntegrationTests/Persistence/MigrationsTests.cs": {
+    "mtime": 1782288071.4786227,
+    "ast_hash": "18549cf8e8874160a656dc0d0233e7e9",
+    "semantic_hash": ""
+  },
+  "backend/tests/ExpenseTracker.IntegrationTests/Persistence/TestDbContextFactory.cs": {
+    "mtime": 1782288074.950544,
+    "ast_hash": "92875d5a32677306c9e5538ee2a050fe",
+    "semantic_hash": ""
+  },
+  "backend/tests/ExpenseTracker.UnitTests/Auth/AuthServiceTests.cs": {
+    "mtime": 1782289648.7189734,
+    "ast_hash": "b3221672878d7a60bdac70a8e7a89525",
+    "semantic_hash": ""
+  },
+  "backend/tests/ExpenseTracker.UnitTests/Categories/CategoryServiceTests.cs": {
+    "mtime": 1782294417.7979457,
+    "ast_hash": "beb36d38096f32f2987aa9c32068eb2c",
+    "semantic_hash": ""
+  },
+  "backend/tests/ExpenseTracker.UnitTests/Domain/CategoryTests.cs": {
+    "mtime": 1782277497.4916747,
+    "ast_hash": "c6e61621d9a2ea4e751b0f75967af5cd",
+    "semantic_hash": ""
+  },
+  "backend/tests/ExpenseTracker.UnitTests/Domain/TransactionTests.cs": {
+    "mtime": 1782277537.0205402,
+    "ast_hash": "666bc3e4481cfb9fd79591f622c0cdb6",
+    "semantic_hash": ""
+  },
+  "backend/tests/ExpenseTracker.UnitTests/ExpenseTracker.UnitTests.csproj": {
+    "mtime": 1782288536.0451622,
+    "ast_hash": "c6e8cdd76c8b5d8e5b1eed547ded233d",
+    "semantic_hash": ""
+  },
+  "backend/tests/ExpenseTracker.UnitTests/Transactions/TransactionAmountParserTests.cs": {
+    "mtime": 1782296491.8344507,
+    "ast_hash": "5b95263bbc59f58a9fd989a75162c28e",
+    "semantic_hash": ""
+  },
+  "backend/tests/ExpenseTracker.UnitTests/Transactions/TransactionServiceTests.cs": {
+    "mtime": 1782296491.8334515,
+    "ast_hash": "abcd77e2a9522de2143da8263a466769",
+    "semantic_hash": ""
+  },
+  "docker/install-docker-ce-wsl.sh": {
+    "mtime": 1782200283.6491811,
+    "ast_hash": "699a5839c2424ee60a37e6a8b50a77d9",
+    "semantic_hash": ""
+  },
+  "frontend/components.json": {
+    "mtime": 1782191464.890919,
+    "ast_hash": "2d8526f9ba9fd64b94205c549d5a1876",
+    "semantic_hash": ""
+  },
+  "frontend/eslint.config.js": {
+    "mtime": 1782192232.5606332,
+    "ast_hash": "b61ec0b60ec5007c9e7fe54d95957be4",
+    "semantic_hash": ""
+  },
+  "frontend/package.json": {
+    "mtime": 1782302582.6774766,
+    "ast_hash": "124c19bd6fd02b1d278fdebf407b7e3e",
+    "semantic_hash": ""
+  },
+  "frontend/scripts/verify-node-version.mjs": {
+    "mtime": 1782195409.7782276,
+    "ast_hash": "dc87f2b89e1469d85e97d9f6309c1fb1",
+    "semantic_hash": ""
+  },
+  "frontend/src/App.tsx": {
+    "mtime": 1782302438.5581915,
+    "ast_hash": "99a563508562582ebb1ca0076e8480a8",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/common/EmptyState.tsx": {
+    "mtime": 1782310152.270108,
+    "ast_hash": "9811f305b8b16822e04a1cf59242cadf",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/common/ErrorState.tsx": {
+    "mtime": 1782310152.2978592,
+    "ast_hash": "2fcaba258e84fe16a35e696bd75152c0",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/common/LoadingSpinner.tsx": {
+    "mtime": 1782310152.3149302,
+    "ast_hash": "a5ad278fa5a7c9b4bf8754f206740fec",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/layout/AppLayout.tsx": {
+    "mtime": 1782310152.3400064,
+    "ast_hash": "b2b5a617c3e41a1b34cc05ed325bb0e1",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/layout/Header.tsx": {
+    "mtime": 1782310152.354071,
+    "ast_hash": "1dc112adcb69082200a391cc9a7b0bb8",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/layout/Sidebar.tsx": {
+    "mtime": 1782310152.4012403,
+    "ast_hash": "eee3ccb37bb9d2dcb0c97219cfef56c7",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/layout/UserMenu.tsx": {
+    "mtime": 1782310152.4398444,
+    "ast_hash": "97002d77d08e4e7c28f1cf42ce29bd6a",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ui/alert-dialog.tsx": {
+    "mtime": 1782355848.8811622,
+    "ast_hash": "c4da2ee4062968cd7546d7cac191d9f0",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ui/avatar.tsx": {
+    "mtime": 1782191465.9699228,
+    "ast_hash": "9bcd3390d6d27da334f729bca65ce292",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ui/badge.tsx": {
+    "mtime": 1782191465.6621485,
+    "ast_hash": "5433d997e3d29caf309c647447f3401c",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ui/button.tsx": {
+    "mtime": 1782191464.8192468,
+    "ast_hash": "59aff8ab76d2927a706e78575281c922",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ui/calendar.tsx": {
+    "mtime": 1782191466.3480604,
+    "ast_hash": "8ddc8b8acb020abaa8c237323ef30ed1",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ui/card.tsx": {
+    "mtime": 1782191464.9393964,
+    "ast_hash": "0b4c457f9d3d1f03cbdbb17f33e62c91",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ui/dialog.tsx": {
+    "mtime": 1782191466.178717,
+    "ast_hash": "c080caa6945a64088c083de889f2a8ec",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ui/dropdown-menu.tsx": {
+    "mtime": 1782191465.3352594,
+    "ast_hash": "0dc6e276d7ff5b72c9a1c72c072449c2",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ui/form.tsx": {
+    "mtime": 1782192232.5414455,
+    "ast_hash": "40e65df023c47a867235994d8b7bb25e",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ui/input.tsx": {
+    "mtime": 1782191465.0490944,
+    "ast_hash": "ecd5f7a325c627db7221da904e13bf27",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ui/label.tsx": {
+    "mtime": 1782191465.155769,
+    "ast_hash": "9062606067aff3e72a31f5180c0b6a6a",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ui/select.tsx": {
+    "mtime": 1782191465.4703596,
+    "ast_hash": "f06e54790af1f5dc58f4da63cfac69dd",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ui/separator.tsx": {
+    "mtime": 1782191466.0638266,
+    "ast_hash": "0841598718be6176c4a2e9e1e21833c9",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ui/sheet.tsx": {
+    "mtime": 1782191466.4617414,
+    "ast_hash": "523c7a3f4b2f087df1e2ffd54c26cf3d",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ui/skeleton.tsx": {
+    "mtime": 1782191465.7540317,
+    "ast_hash": "c26ef6a79950a1d12e63a9cc7655919e",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ui/sonner.tsx": {
+    "mtime": 1782191465.875171,
+    "ast_hash": "31b3cb497e9623cf2f268286b3b413ca",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ui/table.tsx": {
+    "mtime": 1782191465.5693889,
+    "ast_hash": "47370da70c3bd92c5814e77af21be409",
+    "semantic_hash": ""
+  },
+  "frontend/src/features/auth/AuthContext.tsx": {
+    "mtime": 1782302438.5504415,
+    "ast_hash": "0963d565c6f3b49d43b5db8a36d2ed3f",
+    "semantic_hash": ""
+  },
+  "frontend/src/features/categories/CategoryFormDialog.tsx": {
+    "mtime": 1782358324.185609,
+    "ast_hash": "0626ba4d32d68571aad0994027505cfa",
+    "semantic_hash": ""
+  },
+  "frontend/src/features/categories/api.ts": {
+    "mtime": 1782355928.3860738,
+    "ast_hash": "36ea133e2042d1b68081aa4a9de679eb",
+    "semantic_hash": ""
+  },
+  "frontend/src/features/transactions/TransactionFormDialog.tsx": {
+    "mtime": 1782364649.4165406,
+    "ast_hash": "ecd78de04efcba056e37b592073121c2",
+    "semantic_hash": ""
+  },
+  "frontend/src/features/transactions/api.ts": {
+    "mtime": 1782364649.4175406,
+    "ast_hash": "b6f08446d40498b496aedb7cac61e903",
+    "semantic_hash": ""
+  },
+  "frontend/src/hooks/useLogout.ts": {
+    "mtime": 1782310152.4675477,
+    "ast_hash": "88c8d9a8fe14c266852c301f1e85a1cb",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/apiClient.ts": {
+    "mtime": 1782302627.2801533,
+    "ast_hash": "6646266e8baa341af75ac9e91dcebe71",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/format.ts": {
+    "mtime": 1782302438.5504415,
+    "ast_hash": "9776d9a3e5910978253c3d3dae163bb8",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/utils.ts": {
+    "mtime": 1782191437.522424,
+    "ast_hash": "6e7a2d4f1fa6b69ad722be7d66f8d57f",
+    "semantic_hash": ""
+  },
+  "frontend/src/main.tsx": {
+    "mtime": 1782302438.5504415,
+    "ast_hash": "617ced8b72df1f96e2198474e90eaa8a",
+    "semantic_hash": ""
+  },
+  "frontend/src/pages/CategoriesPage.tsx": {
+    "mtime": 1782358445.7490828,
+    "ast_hash": "3461740dc9220894f561018694afe8d8",
+    "semantic_hash": ""
+  },
+  "frontend/src/pages/LoginPage.tsx": {
+    "mtime": 1782308393.24446,
+    "ast_hash": "1d49f9804d1d9935c41ccaca6e57d85f",
+    "semantic_hash": ""
+  },
+  "frontend/src/pages/RegisterPage.tsx": {
+    "mtime": 1782308468.0737078,
+    "ast_hash": "e2804c89db209ad05753b4a7f2c0ae34",
+    "semantic_hash": ""
+  },
+  "frontend/src/pages/TransactionsPage.tsx": {
+    "mtime": 1782364824.9925447,
+    "ast_hash": "8d5c3e726bdd0bd8de15d8d7f2990d81",
+    "semantic_hash": ""
+  },
+  "frontend/src/routes/index.tsx": {
+    "mtime": 1782364649.3710663,
+    "ast_hash": "13e463db7a91f3d5f285a018375c5ed8",
+    "semantic_hash": ""
+  },
+  "frontend/src/types/api.ts": {
+    "mtime": 1782302503.270913,
+    "ast_hash": "4c8f74610ba0942025d2966bec359c2f",
+    "semantic_hash": ""
+  },
+  "frontend/tests/unit/LoginPage.test.tsx": {
+    "mtime": 1782308565.3767288,
+    "ast_hash": "71d0873872aec8639f8cf7667e4ffd00",
+    "semantic_hash": ""
+  },
+  "frontend/tests/unit/RegisterPage.test.tsx": {
+    "mtime": 1782308584.3944569,
+    "ast_hash": "ea5e3b1eaad9be98ca9da4c117e0c1a9",
+    "semantic_hash": ""
+  },
+  "frontend/tests/unit/apiClient.test.ts": {
+    "mtime": 1782308716.6668613,
+    "ast_hash": "59ff4e0ce35e0e3e0e6ff936bc195979",
+    "semantic_hash": ""
+  },
+  "frontend/tests/unit/components/AppLayout.test.tsx": {
+    "mtime": 1782310152.5192392,
+    "ast_hash": "fc0af6e94cea683e33683270412045de",
+    "semantic_hash": ""
+  },
+  "frontend/tests/unit/components/CategoriesPage.test.tsx": {
+    "mtime": 1782358218.308213,
+    "ast_hash": "555daa97b4c18b6c79ec4a709278cabd",
+    "semantic_hash": ""
+  },
+  "frontend/tests/unit/components/TransactionFormDialog.test.tsx": {
+    "mtime": 1782364824.9940062,
+    "ast_hash": "29a11abaf4766d168261e1cead31061f",
+    "semantic_hash": ""
+  },
+  "frontend/tests/unit/components/TransactionsPage.test.tsx": {
+    "mtime": 1782364824.9925447,
+    "ast_hash": "1b30f6a7c1fc0d9647db3f6d066d1279",
+    "semantic_hash": ""
+  },
+  "frontend/tests/unit/components/common.test.tsx": {
+    "mtime": 1782310152.5408125,
+    "ast_hash": "c344588833df00021237ebd7b6ecf4d8",
+    "semantic_hash": ""
+  },
+  "frontend/tests/unit/format.test.ts": {
+    "mtime": 1782302627.2731097,
+    "ast_hash": "28901bb9b66dd1fd9f81c4973b296beb",
+    "semantic_hash": ""
+  },
+  "frontend/tests/unit/hooks/useLogout.test.tsx": {
+    "mtime": 1782310152.5802395,
+    "ast_hash": "2d021cc77806510958c058ea363350d5",
+    "semantic_hash": ""
+  },
+  "frontend/tests/unit/placeholder.test.ts": {
+    "mtime": 1782192232.5424473,
+    "ast_hash": "b70e3abdc430f0d29c576372ca738eee",
+    "semantic_hash": ""
+  },
+  "frontend/tests/unit/setup.ts": {
+    "mtime": 1782192232.5424473,
+    "ast_hash": "99d012df6a92235e3229dffa36cc0441",
+    "semantic_hash": ""
+  },
+  "frontend/tests/unit/test-utils.tsx": {
+    "mtime": 1782308538.2295434,
+    "ast_hash": "93f4f0d5ce999d150a9f1596a2c5eb7a",
+    "semantic_hash": ""
+  },
+  "frontend/tsconfig.app.json": {
+    "mtime": 1782192232.5033798,
+    "ast_hash": "eae52dd9e22c909dd27deb57667dac52",
+    "semantic_hash": ""
+  },
+  "frontend/tsconfig.json": {
+    "mtime": 1781944429.1087134,
+    "ast_hash": "a3d39fa780ebff65444de257f291ce6c",
+    "semantic_hash": ""
+  },
+  "frontend/tsconfig.node.json": {
+    "mtime": 1781944429.1233082,
+    "ast_hash": "70bdd0a673bcfc0e828080b306e7c680",
+    "semantic_hash": ""
+  },
+  "frontend/vite.config.ts": {
+    "mtime": 1782308651.1404433,
+    "ast_hash": "a2c4468b327b9dd0d3bab4c250d2f942",
+    "semantic_hash": ""
+  },
+  "frontend/vitest.config.ts": {
+    "mtime": 1782308621.6446772,
+    "ast_hash": "c2cc30d2d4f1d07d8f6cbadbb39c8d15",
+    "semantic_hash": ""
+  },
+  "scripts/db-portproxy.ps1": {
+    "mtime": 1782301634.7231388,
+    "ast_hash": "cc1dc71f7eb9df67676eba95e62ba88f",
+    "semantic_hash": ""
+  },
+  ".github/agents/code-reviewer.agent.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "e2e731a69fa599f7bc5319b76a9a5335",
+    "semantic_hash": ""
+  },
+  ".github/agents/security-auditor.agent.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "88970bc2e33737479ec771b9d7280b59",
+    "semantic_hash": ""
+  },
+  ".github/agents/test-engineer.agent.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "3245a0e677806330c33d286cbdd38d77",
+    "semantic_hash": ""
+  },
+  ".github/agents/web-performance-auditor.agent.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "52f9fb3895c2c79bd865c7c95331df79",
+    "semantic_hash": ""
+  },
+  ".github/copilot-instructions.md": {
+    "mtime": 1782359497.806848,
+    "ast_hash": "df47e1ba27668d9d03026b2957469919",
+    "semantic_hash": ""
+  },
+  ".github/skills/api-and-interface-design/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "1e7577a49384c2d16eda0954677d6711",
+    "semantic_hash": ""
+  },
+  ".github/skills/browser-testing-with-devtools/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "639b3e0f3bae1118b986269fb7bd5e87",
+    "semantic_hash": ""
+  },
+  ".github/skills/ci-cd-and-automation/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "6a3b179662eb6f3b434bb3e95201d45f",
+    "semantic_hash": ""
+  },
+  ".github/skills/code-review-and-quality/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "a806cac3d1fe72be332583a53c166438",
+    "semantic_hash": ""
+  },
+  ".github/skills/code-simplification/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "239dbb2a2f3caca0de086f7e0e0ebb03",
+    "semantic_hash": ""
+  },
+  ".github/skills/context-engineering/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "51c73a9d507cfdf45bb2fc10742fe147",
+    "semantic_hash": ""
+  },
+  ".github/skills/debugging-and-error-recovery/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "12d41c57d8bb597c6f738f5d4ce9ef27",
+    "semantic_hash": ""
+  },
+  ".github/skills/deprecation-and-migration/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "7635f1ba9c1b4feb6bac88ed03128d88",
+    "semantic_hash": ""
+  },
+  ".github/skills/documentation-and-adrs/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "3fde17c9e49ead84fb2d654dcab79195",
+    "semantic_hash": ""
+  },
+  ".github/skills/doubt-driven-development/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "e586f44ec292216123a8c4486c3f32e0",
+    "semantic_hash": ""
+  },
+  ".github/skills/frontend-ui-engineering/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "bd59aa264e6d4ed0383950c7270942ef",
+    "semantic_hash": ""
+  },
+  ".github/skills/git-workflow-and-versioning/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "e74279996e43df0a914f0aa83a33a11f",
+    "semantic_hash": ""
+  },
+  ".github/skills/idea-refine/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "49d26901df19710e86bfbbcfb7558158",
+    "semantic_hash": ""
+  },
+  ".github/skills/idea-refine/examples.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "8e3e911c980f371e695e786d5b22b495",
+    "semantic_hash": ""
+  },
+  ".github/skills/idea-refine/frameworks.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "fa20786abdfa9de40c6886a8d7c958f2",
+    "semantic_hash": ""
+  },
+  ".github/skills/idea-refine/refinement-criteria.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "5ce82e7acc7b4b2b9dcd843fb9dcd1d6",
+    "semantic_hash": ""
+  },
+  ".github/skills/incremental-implementation/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "d4dce220ae13391c956284debfe809f7",
+    "semantic_hash": ""
+  },
+  ".github/skills/interview-me/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "9d57d4cd52197bad45adefee66226088",
+    "semantic_hash": ""
+  },
+  ".github/skills/observability-and-instrumentation/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "c3d1156d3cb5f4050fcec0001074b9d3",
+    "semantic_hash": ""
+  },
+  ".github/skills/performance-optimization/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "28839d674807c1ba1aef6c3be9864d6f",
+    "semantic_hash": ""
+  },
+  ".github/skills/planning-and-task-breakdown/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "d7f1d651f2c1cf4a656cf416fc3cb7cc",
+    "semantic_hash": ""
+  },
+  ".github/skills/security-and-hardening/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "f9a536fc646f6e75c19ea3a2bd3c1b19",
+    "semantic_hash": ""
+  },
+  ".github/skills/shipping-and-launch/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "05cdb53d7a6a407418cf5d1c1b715a00",
+    "semantic_hash": ""
+  },
+  ".github/skills/source-driven-development/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "eec37f9aa8f509c88ea59b82addcc971",
+    "semantic_hash": ""
+  },
+  ".github/skills/spec-driven-development/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "3994078991ce3671d1230608dc85e601",
+    "semantic_hash": ""
+  },
+  ".github/skills/test-driven-development/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "451c0d42e3bdef8ecfcba30eb806c93b",
+    "semantic_hash": ""
+  },
+  ".github/skills/using-agent-skills/SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "07e68ff4e73b52d36032a40772ac7aa4",
+    "semantic_hash": ""
+  },
+  ".github/workflows/ci.yml": {
+    "mtime": 1782195405.1273978,
+    "ast_hash": "d080898c611cb2ef4ff7fdc0c45286b2",
+    "semantic_hash": ""
+  },
+  ".github/workflows/test-plugin-install.yml": {
+    "mtime": 1781999800.0,
+    "ast_hash": "2ead5f1a23e039d492fd4159173b1e72",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1782301634.7231388,
+    "ast_hash": "dd85955727ce2ec8f3ef47cb72884266",
+    "semantic_hash": ""
+  },
+  "docker/postgres.yml": {
+    "mtime": 1782192415.4401264,
+    "ast_hash": "780ef7e9acc5d9bc5bb960ea02f4c6b2",
+    "semantic_hash": ""
+  },
+  "docs/PLAN.md": {
+    "mtime": 1782301630.7648578,
+    "ast_hash": "e3cfcf5137d89e2c2ec403444bf73dc8",
+    "semantic_hash": ""
+  },
+  "docs/api-contract.md": {
+    "mtime": 1782301634.6745229,
+    "ast_hash": "4a74a3361caabdb3aa93c954d900a3f0",
+    "semantic_hash": ""
+  },
+  "frontend/README.md": {
+    "mtime": 1781944429.139367,
+    "ast_hash": "f6e3faf55d738cf2affe1b44195f27cf",
+    "semantic_hash": ""
+  },
+  "frontend/index.html": {
+    "mtime": 1782192232.5424473,
+    "ast_hash": "7f0821842f88a2caec6f5ab02d2b9954",
+    "semantic_hash": ""
+  },
+  "frontend/public/favicon.svg": {
+    "mtime": 1781944429.2050395,
+    "ast_hash": "7e840862161341271697daa99a40d76b",
+    "semantic_hash": ""
+  },
+  "frontend/public/icons.svg": {
+    "mtime": 1781944429.226337,
+    "ast_hash": "3b4fcfcf393eca4d264dca4a4663bc37",
+    "semantic_hash": ""
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\idea-refine\\scripts\\idea-refine.sh": {
+    "mtime": 1781999800.0,
+    "ast_hash": "7d09d06b836527b5261a27027b1d8548",
+    "semantic_hash": "7d09d06b836527b5261a27027b1d8548"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.vscode\\mcp.json": {
+    "mtime": 1782189394.5358863,
+    "ast_hash": "859499b7414ece03eb4dd7329ce217cc",
+    "semantic_hash": "859499b7414ece03eb4dd7329ce217cc"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\ExpenseTracker.sln": {
+    "mtime": 1782189921.83937,
+    "ast_hash": "650dc5f7c91e8cff6aaaaa3a34dd5b6b",
+    "semantic_hash": "650dc5f7c91e8cff6aaaaa3a34dd5b6b"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\global.json": {
+    "mtime": 1782190552.5460396,
+    "ast_hash": "cdb364807ae5e600faf939c8538e4fd6",
+    "semantic_hash": "cdb364807ae5e600faf939c8538e4fd6"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Api\\Controllers\\AuthController.cs": {
+    "mtime": 1782294417.7959049,
+    "ast_hash": "3c59f18330606373a537e7af71751ab0",
+    "semantic_hash": "3c59f18330606373a537e7af71751ab0"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Api\\Controllers\\CategoriesController.cs": {
+    "mtime": 1782294417.7979457,
+    "ast_hash": "a857de4dccfe3a9ff4622eb58319e7b9",
+    "semantic_hash": "a857de4dccfe3a9ff4622eb58319e7b9"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Api\\Controllers\\DashboardController.cs": {
+    "mtime": 1782298218.2881942,
+    "ast_hash": "f19effc5d69d8626c7d5afd889bee6f2",
+    "semantic_hash": "f19effc5d69d8626c7d5afd889bee6f2"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Api\\Controllers\\TransactionsController.cs": {
+    "mtime": 1782296538.2540264,
+    "ast_hash": "b3f571bce69e20a48aad63d008dd6de7",
+    "semantic_hash": "b3f571bce69e20a48aad63d008dd6de7"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Api\\ExpenseTracker.Api.csproj": {
+    "mtime": 1782200718.4916313,
+    "ast_hash": "c419002fce4274fff6802f1a0b9f5cf5",
+    "semantic_hash": "c419002fce4274fff6802f1a0b9f5cf5"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Api\\Middleware\\GlobalExceptionMiddleware.cs": {
+    "mtime": 1782294417.7979457,
+    "ast_hash": "0b4a71d114fc8a37c218ea84ea122109",
+    "semantic_hash": "0b4a71d114fc8a37c218ea84ea122109"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Api\\Program.cs": {
+    "mtime": 1782297925.2015295,
+    "ast_hash": "83151ad92660f92abd1ab9fe7554c7b8",
+    "semantic_hash": "83151ad92660f92abd1ab9fe7554c7b8"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Api\\Properties\\launchSettings.json": {
+    "mtime": 1782189883.2328863,
+    "ast_hash": "8e9e73d9f3c80c17bde0683fe49d8782",
+    "semantic_hash": "8e9e73d9f3c80c17bde0683fe49d8782"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Api\\appsettings.Development.json": {
+    "mtime": 1782301633.0778184,
+    "ast_hash": "d2d8cb2cf1c8a967853526d24ab11510",
+    "semantic_hash": "d2d8cb2cf1c8a967853526d24ab11510"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Api\\appsettings.json": {
+    "mtime": 1782289563.249189,
+    "ast_hash": "2edcc19daac9c8c4fe030ae28a5b3dfc",
+    "semantic_hash": "2edcc19daac9c8c4fe030ae28a5b3dfc"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Abstractions\\ICategoryRepository.cs": {
+    "mtime": 1782295151.1470234,
+    "ast_hash": "ff94d700e892c458cf3e5a43b0daaa11",
+    "semantic_hash": "ff94d700e892c458cf3e5a43b0daaa11"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Abstractions\\ICurrentUserService.cs": {
+    "mtime": 1782279788.0753255,
+    "ast_hash": "1b505f201aa704578d758d95b578d108",
+    "semantic_hash": "1b505f201aa704578d758d95b578d108"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Abstractions\\IJwtTokenService.cs": {
+    "mtime": 1782289648.7149582,
+    "ast_hash": "f3643b36c0faefcd7f2380c55ab04900",
+    "semantic_hash": "f3643b36c0faefcd7f2380c55ab04900"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Abstractions\\IPasswordHasher.cs": {
+    "mtime": 1782289648.7149582,
+    "ast_hash": "383797f5aca233a3e9f7e36e3326d905",
+    "semantic_hash": "383797f5aca233a3e9f7e36e3326d905"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Abstractions\\IRefreshTokenService.cs": {
+    "mtime": 1782289648.7169645,
+    "ast_hash": "2e8378f4837861ab97b5d28e99b647f9",
+    "semantic_hash": "2e8378f4837861ab97b5d28e99b647f9"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Abstractions\\ITransactionRepository.cs": {
+    "mtime": 1782296538.255028,
+    "ast_hash": "433cd174665f84025601aaa859e95626",
+    "semantic_hash": "433cd174665f84025601aaa859e95626"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Abstractions\\IUserRepository.cs": {
+    "mtime": 1782289648.7169645,
+    "ast_hash": "d6dd66572aa9c11dd46361abb4732845",
+    "semantic_hash": "d6dd66572aa9c11dd46361abb4732845"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Auth\\AuthService.cs": {
+    "mtime": 1782290645.9528677,
+    "ast_hash": "7270cea2581ca170cfa1d810723acb57",
+    "semantic_hash": "7270cea2581ca170cfa1d810723acb57"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Auth\\DTOs\\AuthDTOs.cs": {
+    "mtime": 1782290624.1409192,
+    "ast_hash": "c20e2e6553acbae4b72c808cf5a5b7d0",
+    "semantic_hash": "c20e2e6553acbae4b72c808cf5a5b7d0"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Auth\\IAuthService.cs": {
+    "mtime": 1782289648.7169645,
+    "ast_hash": "54556049e21ebb1b2716a213df3acbf7",
+    "semantic_hash": "54556049e21ebb1b2716a213df3acbf7"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Categories\\CategoryService.cs": {
+    "mtime": 1782294417.7979457,
+    "ast_hash": "14551744b2727ff4b34ae44bd008217c",
+    "semantic_hash": "14551744b2727ff4b34ae44bd008217c"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Categories\\DTOs\\CategoryDTOs.cs": {
+    "mtime": 1782294417.7979457,
+    "ast_hash": "d7f1946951047510b5f809df3074120e",
+    "semantic_hash": "d7f1946951047510b5f809df3074120e"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Categories\\ICategoryService.cs": {
+    "mtime": 1782294417.7979457,
+    "ast_hash": "1aa117b22b31b766de1959d46d403fb3",
+    "semantic_hash": "1aa117b22b31b766de1959d46d403fb3"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Categories\\Validators\\CategoryValidators.cs": {
+    "mtime": 1782294417.7979457,
+    "ast_hash": "b01b25768b4fabb6f27edc96a73bdc80",
+    "semantic_hash": "b01b25768b4fabb6f27edc96a73bdc80"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Dashboard\\DashboardDtos.cs": {
+    "mtime": 1782298218.2776213,
+    "ast_hash": "22adfc6b3cef1df6c42fa62f8510333c",
+    "semantic_hash": "22adfc6b3cef1df6c42fa62f8510333c"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Dashboard\\DashboardService.cs": {
+    "mtime": 1782298218.2806222,
+    "ast_hash": "58c6ebc83eebfaaff0f0075031fc3ac2",
+    "semantic_hash": "58c6ebc83eebfaaff0f0075031fc3ac2"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Dashboard\\IDashboardRepository.cs": {
+    "mtime": 1782298218.2796218,
+    "ast_hash": "9a7e8165ac986361f2b86792a8e2cc0f",
+    "semantic_hash": "9a7e8165ac986361f2b86792a8e2cc0f"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Dashboard\\IDashboardService.cs": {
+    "mtime": 1782298218.278622,
+    "ast_hash": "cc9f21b98aa4a5e9b393db2b664c7133",
+    "semantic_hash": "cc9f21b98aa4a5e9b393db2b664c7133"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\ExpenseTracker.Application.csproj": {
+    "mtime": 1782190552.557934,
+    "ast_hash": "709970bcc08bea50b882bf8beebe5024",
+    "semantic_hash": "709970bcc08bea50b882bf8beebe5024"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Transactions\\DTOs\\PagedResult.cs": {
+    "mtime": 1782296538.255028,
+    "ast_hash": "419f92c6481c735b79b670f3e3b31e61",
+    "semantic_hash": "419f92c6481c735b79b670f3e3b31e61"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Transactions\\DTOs\\TransactionDTOs.cs": {
+    "mtime": 1782296538.2560298,
+    "ast_hash": "8223c4e77e259f5bf02252f91fe9d97b",
+    "semantic_hash": "8223c4e77e259f5bf02252f91fe9d97b"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Transactions\\Filters\\TransactionFilter.cs": {
+    "mtime": 1782296538.2610326,
+    "ast_hash": "ce53121040353260293127a3ca0dc467",
+    "semantic_hash": "ce53121040353260293127a3ca0dc467"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Transactions\\ITransactionService.cs": {
+    "mtime": 1782296538.262031,
+    "ast_hash": "41b9c4e26ae1e6e8410f5d8d2ab2417a",
+    "semantic_hash": "41b9c4e26ae1e6e8410f5d8d2ab2417a"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Transactions\\TransactionService.cs": {
+    "mtime": 1782296538.262031,
+    "ast_hash": "44ef38cb0ed731ac4b7c1b0c9f90e1c3",
+    "semantic_hash": "44ef38cb0ed731ac4b7c1b0c9f90e1c3"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Application\\Transactions\\Validators\\TransactionValidators.cs": {
+    "mtime": 1782296538.263538,
+    "ast_hash": "b3e3387df49ea49e0a6135ead638604a",
+    "semantic_hash": "b3e3387df49ea49e0a6135ead638604a"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Domain\\Entities\\Category.cs": {
+    "mtime": 1782293778.7641847,
+    "ast_hash": "c9fb49b12db12769f3ebd983aa54edae",
+    "semantic_hash": "c9fb49b12db12769f3ebd983aa54edae"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Domain\\Entities\\RefreshToken.cs": {
+    "mtime": 1782277497.4073262,
+    "ast_hash": "03dda848d31a0358cfac4dd2657490aa",
+    "semantic_hash": "03dda848d31a0358cfac4dd2657490aa"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Domain\\Entities\\Transaction.cs": {
+    "mtime": 1782277497.4073262,
+    "ast_hash": "864bc44670683634b94d7d10d89c7ba1",
+    "semantic_hash": "864bc44670683634b94d7d10d89c7ba1"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Domain\\Entities\\User.cs": {
+    "mtime": 1782277497.4083283,
+    "ast_hash": "07777cd0333c7a1c7261039d391bc2f0",
+    "semantic_hash": "07777cd0333c7a1c7261039d391bc2f0"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Domain\\Enums\\TransactionType.cs": {
+    "mtime": 1782277497.4098763,
+    "ast_hash": "8bd7b75a2207bc49f5ba4a23bb717d76",
+    "semantic_hash": "8bd7b75a2207bc49f5ba4a23bb717d76"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Domain\\Exceptions\\DomainException.cs": {
+    "mtime": 1782277497.4125915,
+    "ast_hash": "792d7a93aed728c5f5765279d538e25a",
+    "semantic_hash": "792d7a93aed728c5f5765279d538e25a"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Domain\\Exceptions\\DomainValidationException.cs": {
+    "mtime": 1782277497.41359,
+    "ast_hash": "364009b8c059d84ef63996f6d38232bf",
+    "semantic_hash": "364009b8c059d84ef63996f6d38232bf"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Domain\\Exceptions\\ForbiddenException.cs": {
+    "mtime": 1782277497.41359,
+    "ast_hash": "c0fc1b17807bb8c1da61a32306457452",
+    "semantic_hash": "c0fc1b17807bb8c1da61a32306457452"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Domain\\Exceptions\\NotFoundException.cs": {
+    "mtime": 1782277497.4145908,
+    "ast_hash": "d744b9b00a9cc55222604fb55026e83d",
+    "semantic_hash": "d744b9b00a9cc55222604fb55026e83d"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Domain\\Exceptions\\RefreshTokenValidationException.cs": {
+    "mtime": 1782289648.7109444,
+    "ast_hash": "5dc55d7ede950339b4a0a518674e6891",
+    "semantic_hash": "5dc55d7ede950339b4a0a518674e6891"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Domain\\ExpenseTracker.Domain.csproj": {
+    "mtime": 1782190552.557934,
+    "ast_hash": "0ee80615c4eec91a7b252ee34f55ae6e",
+    "semantic_hash": "0ee80615c4eec91a7b252ee34f55ae6e"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Infrastructure\\Configuration\\JwtSettings.cs": {
+    "mtime": 1782289648.7169645,
+    "ast_hash": "6e1280f2b900081806b5dbf2fc869164",
+    "semantic_hash": "6e1280f2b900081806b5dbf2fc869164"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Infrastructure\\Configuration\\RefreshTokenSettings.cs": {
+    "mtime": 1782289648.7189734,
+    "ast_hash": "905b3de09c2b39c390d7b88831e28ab5",
+    "semantic_hash": "905b3de09c2b39c390d7b88831e28ab5"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Infrastructure\\ExpenseTracker.Infrastructure.csproj": {
+    "mtime": 1782289027.6802876,
+    "ast_hash": "d726e451514a3ea286a327aec0dc1d6f",
+    "semantic_hash": "d726e451514a3ea286a327aec0dc1d6f"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Infrastructure\\Migrations\\20260624052221_InitialCreate.Designer.cs": {
+    "mtime": 1782278541.8418727,
+    "ast_hash": "e478a1f0c1c05a4d85998fd9060ff2ad",
+    "semantic_hash": "e478a1f0c1c05a4d85998fd9060ff2ad"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Infrastructure\\Migrations\\20260624052221_InitialCreate.cs": {
+    "mtime": 1782279788.0914075,
+    "ast_hash": "419d5f27f55bb9c694aac8fe9a5c30d4",
+    "semantic_hash": "419d5f27f55bb9c694aac8fe9a5c30d4"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Infrastructure\\Migrations\\ExpenseTrackerDbContextModelSnapshot.cs": {
+    "mtime": 1782278541.8418727,
+    "ast_hash": "ff1965ed1aedf33269e1403e78ecb28e",
+    "semantic_hash": "ff1965ed1aedf33269e1403e78ecb28e"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Infrastructure\\Persistence\\CategoryRepository.cs": {
+    "mtime": 1782294417.7979457,
+    "ast_hash": "20a199ea0f41e99f11f7f4b7e9e224ce",
+    "semantic_hash": "20a199ea0f41e99f11f7f4b7e9e224ce"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Infrastructure\\Persistence\\Configurations\\CategoryConfiguration.cs": {
+    "mtime": 1782279788.0914075,
+    "ast_hash": "59eaf723fbb1dbb3052b28b2e9d40282",
+    "semantic_hash": "59eaf723fbb1dbb3052b28b2e9d40282"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Infrastructure\\Persistence\\Configurations\\RefreshTokenConfiguration.cs": {
+    "mtime": 1782279788.0914075,
+    "ast_hash": "af4c20a0ed4e36ec88ccb4f3e12433aa",
+    "semantic_hash": "af4c20a0ed4e36ec88ccb4f3e12433aa"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Infrastructure\\Persistence\\Configurations\\TransactionConfiguration.cs": {
+    "mtime": 1782279788.0934167,
+    "ast_hash": "997ad1c1f2a941b2d7c08826586cadf0",
+    "semantic_hash": "997ad1c1f2a941b2d7c08826586cadf0"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Infrastructure\\Persistence\\Configurations\\UserConfiguration.cs": {
+    "mtime": 1782279788.0934167,
+    "ast_hash": "e439a6ba44ec86b4d8a39aadca503ba8",
+    "semantic_hash": "e439a6ba44ec86b4d8a39aadca503ba8"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Infrastructure\\Persistence\\DashboardRepository.cs": {
+    "mtime": 1782298218.283625,
+    "ast_hash": "95cd11518a7c4987c3716e6a80af3994",
+    "semantic_hash": "95cd11518a7c4987c3716e6a80af3994"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Infrastructure\\Persistence\\ExpenseTrackerDbContext.cs": {
+    "mtime": 1782287987.6835687,
+    "ast_hash": "d833f74fd94c82f2438b4b1ea5c16ebf",
+    "semantic_hash": "d833f74fd94c82f2438b4b1ea5c16ebf"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Infrastructure\\Persistence\\SeedData\\SystemCategories.cs": {
+    "mtime": 1782279788.0934167,
+    "ast_hash": "ca253e954e7271df12ad715707691dcd",
+    "semantic_hash": "ca253e954e7271df12ad715707691dcd"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Infrastructure\\Persistence\\TransactionRepository.cs": {
+    "mtime": 1782296538.263538,
+    "ast_hash": "01c16f965185061e747482cd2fcf43a0",
+    "semantic_hash": "01c16f965185061e747482cd2fcf43a0"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Infrastructure\\Services\\BCryptPasswordHasher.cs": {
+    "mtime": 1782289648.7189734,
+    "ast_hash": "ccba612aa8cc5a9631dc70d42d2e6ba3",
+    "semantic_hash": "ccba612aa8cc5a9631dc70d42d2e6ba3"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Infrastructure\\Services\\CurrentUserService.cs": {
+    "mtime": 1782279788.0969346,
+    "ast_hash": "60bc029d75c50a685793c671f09e95fd",
+    "semantic_hash": "60bc029d75c50a685793c671f09e95fd"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Infrastructure\\Services\\JwtTokenService.cs": {
+    "mtime": 1782289648.7189734,
+    "ast_hash": "23f32eef1a4da265f9d62513be27b438",
+    "semantic_hash": "23f32eef1a4da265f9d62513be27b438"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Infrastructure\\Services\\RefreshTokenService.cs": {
+    "mtime": 1782289648.7189734,
+    "ast_hash": "1463eac5637d738152f140b74d58aa11",
+    "semantic_hash": "1463eac5637d738152f140b74d58aa11"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\src\\ExpenseTracker.Infrastructure\\Services\\UserRepository.cs": {
+    "mtime": 1782289648.7189734,
+    "ast_hash": "d54a77ba2d79bf0d66f61be5fdf1cfe1",
+    "semantic_hash": "d54a77ba2d79bf0d66f61be5fdf1cfe1"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\tests\\ExpenseTracker.IntegrationTests\\Api\\AuthEndpointsTests.cs": {
+    "mtime": 1782294417.8046815,
+    "ast_hash": "3300cbc5698436a287d110aeb7cbaeec",
+    "semantic_hash": "3300cbc5698436a287d110aeb7cbaeec"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\tests\\ExpenseTracker.IntegrationTests\\Api\\CategoriesEndpointsTests.cs": {
+    "mtime": 1782294417.8046815,
+    "ast_hash": "fc54bb3f2ca701ba0becbf113d710e14",
+    "semantic_hash": "fc54bb3f2ca701ba0becbf113d710e14"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\tests\\ExpenseTracker.IntegrationTests\\Api\\DashboardEndpointsTests.cs": {
+    "mtime": 1782298210.983692,
+    "ast_hash": "97eecffa51102ee26dd2d2b73e7fb840",
+    "semantic_hash": "97eecffa51102ee26dd2d2b73e7fb840"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\tests\\ExpenseTracker.IntegrationTests\\Api\\TransactionsEndpointsTests.cs": {
+    "mtime": 1782296800.4986796,
+    "ast_hash": "5592c913b33fd33410b3244d862bedaf",
+    "semantic_hash": "5592c913b33fd33410b3244d862bedaf"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\tests\\ExpenseTracker.IntegrationTests\\ExpenseTracker.IntegrationTests.csproj": {
+    "mtime": 1782291212.5938227,
+    "ast_hash": "35c99f47dd95bd87d1563ca13e207346",
+    "semantic_hash": "35c99f47dd95bd87d1563ca13e207346"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\tests\\ExpenseTracker.IntegrationTests\\Persistence\\MigrationsTests.cs": {
+    "mtime": 1782288071.4786227,
+    "ast_hash": "18549cf8e8874160a656dc0d0233e7e9",
+    "semantic_hash": "18549cf8e8874160a656dc0d0233e7e9"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\tests\\ExpenseTracker.IntegrationTests\\Persistence\\TestDbContextFactory.cs": {
+    "mtime": 1782288074.950544,
+    "ast_hash": "92875d5a32677306c9e5538ee2a050fe",
+    "semantic_hash": "92875d5a32677306c9e5538ee2a050fe"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\tests\\ExpenseTracker.UnitTests\\Auth\\AuthServiceTests.cs": {
+    "mtime": 1782289648.7189734,
+    "ast_hash": "b3221672878d7a60bdac70a8e7a89525",
+    "semantic_hash": "b3221672878d7a60bdac70a8e7a89525"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\tests\\ExpenseTracker.UnitTests\\Categories\\CategoryServiceTests.cs": {
+    "mtime": 1782294417.7979457,
+    "ast_hash": "beb36d38096f32f2987aa9c32068eb2c",
+    "semantic_hash": "beb36d38096f32f2987aa9c32068eb2c"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\tests\\ExpenseTracker.UnitTests\\Domain\\CategoryTests.cs": {
+    "mtime": 1782277497.4916747,
+    "ast_hash": "c6e61621d9a2ea4e751b0f75967af5cd",
+    "semantic_hash": "c6e61621d9a2ea4e751b0f75967af5cd"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\tests\\ExpenseTracker.UnitTests\\Domain\\TransactionTests.cs": {
+    "mtime": 1782277537.0205402,
+    "ast_hash": "666bc3e4481cfb9fd79591f622c0cdb6",
+    "semantic_hash": "666bc3e4481cfb9fd79591f622c0cdb6"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\tests\\ExpenseTracker.UnitTests\\ExpenseTracker.UnitTests.csproj": {
+    "mtime": 1782288536.0451622,
+    "ast_hash": "c6e8cdd76c8b5d8e5b1eed547ded233d",
+    "semantic_hash": "c6e8cdd76c8b5d8e5b1eed547ded233d"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\tests\\ExpenseTracker.UnitTests\\Transactions\\TransactionAmountParserTests.cs": {
+    "mtime": 1782296491.8344507,
+    "ast_hash": "5b95263bbc59f58a9fd989a75162c28e",
+    "semantic_hash": "5b95263bbc59f58a9fd989a75162c28e"
+  },
+  "D:\\JamProject\\ExpenseTracker\\backend\\tests\\ExpenseTracker.UnitTests\\Transactions\\TransactionServiceTests.cs": {
+    "mtime": 1782296491.8334515,
+    "ast_hash": "abcd77e2a9522de2143da8263a466769",
+    "semantic_hash": "abcd77e2a9522de2143da8263a466769"
+  },
+  "D:\\JamProject\\ExpenseTracker\\docker\\install-docker-ce-wsl.sh": {
+    "mtime": 1782200283.6491811,
+    "ast_hash": "699a5839c2424ee60a37e6a8b50a77d9",
+    "semantic_hash": "699a5839c2424ee60a37e6a8b50a77d9"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\components.json": {
+    "mtime": 1782191464.890919,
+    "ast_hash": "2d8526f9ba9fd64b94205c549d5a1876",
+    "semantic_hash": "2d8526f9ba9fd64b94205c549d5a1876"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\eslint.config.js": {
+    "mtime": 1782192232.5606332,
+    "ast_hash": "b61ec0b60ec5007c9e7fe54d95957be4",
+    "semantic_hash": "b61ec0b60ec5007c9e7fe54d95957be4"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\package.json": {
+    "mtime": 1782302582.6774766,
+    "ast_hash": "124c19bd6fd02b1d278fdebf407b7e3e",
+    "semantic_hash": "124c19bd6fd02b1d278fdebf407b7e3e"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\scripts\\verify-node-version.mjs": {
+    "mtime": 1782195409.7782276,
+    "ast_hash": "dc87f2b89e1469d85e97d9f6309c1fb1",
+    "semantic_hash": "dc87f2b89e1469d85e97d9f6309c1fb1"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\App.tsx": {
+    "mtime": 1782302438.5581915,
+    "ast_hash": "99a563508562582ebb1ca0076e8480a8",
+    "semantic_hash": "99a563508562582ebb1ca0076e8480a8"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\common\\EmptyState.tsx": {
+    "mtime": 1782310152.270108,
+    "ast_hash": "9811f305b8b16822e04a1cf59242cadf",
+    "semantic_hash": "9811f305b8b16822e04a1cf59242cadf"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\common\\ErrorState.tsx": {
+    "mtime": 1782310152.2978592,
+    "ast_hash": "2fcaba258e84fe16a35e696bd75152c0",
+    "semantic_hash": "2fcaba258e84fe16a35e696bd75152c0"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\common\\LoadingSpinner.tsx": {
+    "mtime": 1782310152.3149302,
+    "ast_hash": "a5ad278fa5a7c9b4bf8754f206740fec",
+    "semantic_hash": "a5ad278fa5a7c9b4bf8754f206740fec"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\layout\\AppLayout.tsx": {
+    "mtime": 1782310152.3400064,
+    "ast_hash": "b2b5a617c3e41a1b34cc05ed325bb0e1",
+    "semantic_hash": "b2b5a617c3e41a1b34cc05ed325bb0e1"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\layout\\Header.tsx": {
+    "mtime": 1782310152.354071,
+    "ast_hash": "1dc112adcb69082200a391cc9a7b0bb8",
+    "semantic_hash": "1dc112adcb69082200a391cc9a7b0bb8"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\layout\\Sidebar.tsx": {
+    "mtime": 1782310152.4012403,
+    "ast_hash": "eee3ccb37bb9d2dcb0c97219cfef56c7",
+    "semantic_hash": "eee3ccb37bb9d2dcb0c97219cfef56c7"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\layout\\UserMenu.tsx": {
+    "mtime": 1782310152.4398444,
+    "ast_hash": "97002d77d08e4e7c28f1cf42ce29bd6a",
+    "semantic_hash": "97002d77d08e4e7c28f1cf42ce29bd6a"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\ui\\alert-dialog.tsx": {
+    "mtime": 1782355848.8811622,
+    "ast_hash": "c4da2ee4062968cd7546d7cac191d9f0",
+    "semantic_hash": "c4da2ee4062968cd7546d7cac191d9f0"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\ui\\avatar.tsx": {
+    "mtime": 1782191465.9699228,
+    "ast_hash": "9bcd3390d6d27da334f729bca65ce292",
+    "semantic_hash": "9bcd3390d6d27da334f729bca65ce292"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\ui\\badge.tsx": {
+    "mtime": 1782191465.6621485,
+    "ast_hash": "5433d997e3d29caf309c647447f3401c",
+    "semantic_hash": "5433d997e3d29caf309c647447f3401c"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\ui\\button.tsx": {
+    "mtime": 1782191464.8192468,
+    "ast_hash": "59aff8ab76d2927a706e78575281c922",
+    "semantic_hash": "59aff8ab76d2927a706e78575281c922"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\ui\\calendar.tsx": {
+    "mtime": 1782191466.3480604,
+    "ast_hash": "8ddc8b8acb020abaa8c237323ef30ed1",
+    "semantic_hash": "8ddc8b8acb020abaa8c237323ef30ed1"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\ui\\card.tsx": {
+    "mtime": 1782191464.9393964,
+    "ast_hash": "0b4c457f9d3d1f03cbdbb17f33e62c91",
+    "semantic_hash": "0b4c457f9d3d1f03cbdbb17f33e62c91"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\ui\\dialog.tsx": {
+    "mtime": 1782191466.178717,
+    "ast_hash": "c080caa6945a64088c083de889f2a8ec",
+    "semantic_hash": "c080caa6945a64088c083de889f2a8ec"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\ui\\dropdown-menu.tsx": {
+    "mtime": 1782191465.3352594,
+    "ast_hash": "0dc6e276d7ff5b72c9a1c72c072449c2",
+    "semantic_hash": "0dc6e276d7ff5b72c9a1c72c072449c2"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\ui\\form.tsx": {
+    "mtime": 1782192232.5414455,
+    "ast_hash": "40e65df023c47a867235994d8b7bb25e",
+    "semantic_hash": "40e65df023c47a867235994d8b7bb25e"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\ui\\input.tsx": {
+    "mtime": 1782191465.0490944,
+    "ast_hash": "ecd5f7a325c627db7221da904e13bf27",
+    "semantic_hash": "ecd5f7a325c627db7221da904e13bf27"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\ui\\label.tsx": {
+    "mtime": 1782191465.155769,
+    "ast_hash": "9062606067aff3e72a31f5180c0b6a6a",
+    "semantic_hash": "9062606067aff3e72a31f5180c0b6a6a"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\ui\\select.tsx": {
+    "mtime": 1782191465.4703596,
+    "ast_hash": "f06e54790af1f5dc58f4da63cfac69dd",
+    "semantic_hash": "f06e54790af1f5dc58f4da63cfac69dd"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\ui\\separator.tsx": {
+    "mtime": 1782191466.0638266,
+    "ast_hash": "0841598718be6176c4a2e9e1e21833c9",
+    "semantic_hash": "0841598718be6176c4a2e9e1e21833c9"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\ui\\sheet.tsx": {
+    "mtime": 1782191466.4617414,
+    "ast_hash": "523c7a3f4b2f087df1e2ffd54c26cf3d",
+    "semantic_hash": "523c7a3f4b2f087df1e2ffd54c26cf3d"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\ui\\skeleton.tsx": {
+    "mtime": 1782191465.7540317,
+    "ast_hash": "c26ef6a79950a1d12e63a9cc7655919e",
+    "semantic_hash": "c26ef6a79950a1d12e63a9cc7655919e"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\ui\\sonner.tsx": {
+    "mtime": 1782191465.875171,
+    "ast_hash": "31b3cb497e9623cf2f268286b3b413ca",
+    "semantic_hash": "31b3cb497e9623cf2f268286b3b413ca"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\components\\ui\\table.tsx": {
+    "mtime": 1782191465.5693889,
+    "ast_hash": "47370da70c3bd92c5814e77af21be409",
+    "semantic_hash": "47370da70c3bd92c5814e77af21be409"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\features\\auth\\AuthContext.tsx": {
+    "mtime": 1782302438.5504415,
+    "ast_hash": "0963d565c6f3b49d43b5db8a36d2ed3f",
+    "semantic_hash": "0963d565c6f3b49d43b5db8a36d2ed3f"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\features\\categories\\CategoryFormDialog.tsx": {
+    "mtime": 1782358324.185609,
+    "ast_hash": "0626ba4d32d68571aad0994027505cfa",
+    "semantic_hash": "0626ba4d32d68571aad0994027505cfa"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\features\\categories\\api.ts": {
+    "mtime": 1782355928.3860738,
+    "ast_hash": "36ea133e2042d1b68081aa4a9de679eb",
+    "semantic_hash": "36ea133e2042d1b68081aa4a9de679eb"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\features\\dashboard\\api.ts": {
+    "mtime": 1782365597.3099434,
+    "ast_hash": "05e5c88c5f723e584e1f9f8c2b1ad77d",
+    "semantic_hash": "05e5c88c5f723e584e1f9f8c2b1ad77d"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\features\\transactions\\TransactionFormDialog.tsx": {
+    "mtime": 1782364649.4165406,
+    "ast_hash": "ecd78de04efcba056e37b592073121c2",
+    "semantic_hash": "ecd78de04efcba056e37b592073121c2"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\features\\transactions\\api.ts": {
+    "mtime": 1782364649.4175406,
+    "ast_hash": "b6f08446d40498b496aedb7cac61e903",
+    "semantic_hash": "b6f08446d40498b496aedb7cac61e903"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\hooks\\useLogout.ts": {
+    "mtime": 1782310152.4675477,
+    "ast_hash": "88c8d9a8fe14c266852c301f1e85a1cb",
+    "semantic_hash": "88c8d9a8fe14c266852c301f1e85a1cb"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\lib\\apiClient.ts": {
+    "mtime": 1782302627.2801533,
+    "ast_hash": "6646266e8baa341af75ac9e91dcebe71",
+    "semantic_hash": "6646266e8baa341af75ac9e91dcebe71"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\lib\\format.ts": {
+    "mtime": 1782302438.5504415,
+    "ast_hash": "9776d9a3e5910978253c3d3dae163bb8",
+    "semantic_hash": "9776d9a3e5910978253c3d3dae163bb8"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\lib\\utils.ts": {
+    "mtime": 1782191437.522424,
+    "ast_hash": "6e7a2d4f1fa6b69ad722be7d66f8d57f",
+    "semantic_hash": "6e7a2d4f1fa6b69ad722be7d66f8d57f"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\main.tsx": {
+    "mtime": 1782302438.5504415,
+    "ast_hash": "617ced8b72df1f96e2198474e90eaa8a",
+    "semantic_hash": "617ced8b72df1f96e2198474e90eaa8a"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\pages\\CategoriesPage.tsx": {
+    "mtime": 1782358445.7490828,
+    "ast_hash": "3461740dc9220894f561018694afe8d8",
+    "semantic_hash": "3461740dc9220894f561018694afe8d8"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\pages\\DashboardPage.tsx": {
+    "mtime": 1782366196.9524965,
+    "ast_hash": "a6d32b25fb52eb68c0c31812afa56447",
+    "semantic_hash": "a6d32b25fb52eb68c0c31812afa56447"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\pages\\LoginPage.tsx": {
+    "mtime": 1782308393.24446,
+    "ast_hash": "1d49f9804d1d9935c41ccaca6e57d85f",
+    "semantic_hash": "1d49f9804d1d9935c41ccaca6e57d85f"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\pages\\RegisterPage.tsx": {
+    "mtime": 1782308468.0737078,
+    "ast_hash": "e2804c89db209ad05753b4a7f2c0ae34",
+    "semantic_hash": "e2804c89db209ad05753b4a7f2c0ae34"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\pages\\TransactionsPage.tsx": {
+    "mtime": 1782364824.9925447,
+    "ast_hash": "8d5c3e726bdd0bd8de15d8d7f2990d81",
+    "semantic_hash": "8d5c3e726bdd0bd8de15d8d7f2990d81"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\routes\\index.tsx": {
+    "mtime": 1782365625.0292647,
+    "ast_hash": "0218a8ae0b975830345b0f95bbf478f6",
+    "semantic_hash": "0218a8ae0b975830345b0f95bbf478f6"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\src\\types\\api.ts": {
+    "mtime": 1782302503.270913,
+    "ast_hash": "4c8f74610ba0942025d2966bec359c2f",
+    "semantic_hash": "4c8f74610ba0942025d2966bec359c2f"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\tests\\unit\\LoginPage.test.tsx": {
+    "mtime": 1782308565.3767288,
+    "ast_hash": "71d0873872aec8639f8cf7667e4ffd00",
+    "semantic_hash": "71d0873872aec8639f8cf7667e4ffd00"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\tests\\unit\\RegisterPage.test.tsx": {
+    "mtime": 1782308584.3944569,
+    "ast_hash": "ea5e3b1eaad9be98ca9da4c117e0c1a9",
+    "semantic_hash": "ea5e3b1eaad9be98ca9da4c117e0c1a9"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\tests\\unit\\apiClient.test.ts": {
+    "mtime": 1782308716.6668613,
+    "ast_hash": "59ff4e0ce35e0e3e0e6ff936bc195979",
+    "semantic_hash": "59ff4e0ce35e0e3e0e6ff936bc195979"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\tests\\unit\\components\\AppLayout.test.tsx": {
+    "mtime": 1782310152.5192392,
+    "ast_hash": "fc0af6e94cea683e33683270412045de",
+    "semantic_hash": "fc0af6e94cea683e33683270412045de"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\tests\\unit\\components\\CategoriesPage.test.tsx": {
+    "mtime": 1782358218.308213,
+    "ast_hash": "555daa97b4c18b6c79ec4a709278cabd",
+    "semantic_hash": "555daa97b4c18b6c79ec4a709278cabd"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\tests\\unit\\components\\DashboardPage.test.tsx": {
+    "mtime": 1782367601.9649756,
+    "ast_hash": "eef8e945061ce292a679941b5788b533",
+    "semantic_hash": "eef8e945061ce292a679941b5788b533"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\tests\\unit\\components\\TransactionFormDialog.test.tsx": {
+    "mtime": 1782364824.9940062,
+    "ast_hash": "29a11abaf4766d168261e1cead31061f",
+    "semantic_hash": "29a11abaf4766d168261e1cead31061f"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\tests\\unit\\components\\TransactionsPage.test.tsx": {
+    "mtime": 1782364824.9925447,
+    "ast_hash": "1b30f6a7c1fc0d9647db3f6d066d1279",
+    "semantic_hash": "1b30f6a7c1fc0d9647db3f6d066d1279"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\tests\\unit\\components\\common.test.tsx": {
+    "mtime": 1782310152.5408125,
+    "ast_hash": "c344588833df00021237ebd7b6ecf4d8",
+    "semantic_hash": "c344588833df00021237ebd7b6ecf4d8"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\tests\\unit\\format.test.ts": {
+    "mtime": 1782302627.2731097,
+    "ast_hash": "28901bb9b66dd1fd9f81c4973b296beb",
+    "semantic_hash": "28901bb9b66dd1fd9f81c4973b296beb"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\tests\\unit\\hooks\\useLogout.test.tsx": {
+    "mtime": 1782310152.5802395,
+    "ast_hash": "2d021cc77806510958c058ea363350d5",
+    "semantic_hash": "2d021cc77806510958c058ea363350d5"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\tests\\unit\\placeholder.test.ts": {
+    "mtime": 1782192232.5424473,
+    "ast_hash": "b70e3abdc430f0d29c576372ca738eee",
+    "semantic_hash": "b70e3abdc430f0d29c576372ca738eee"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\tests\\unit\\setup.ts": {
+    "mtime": 1782192232.5424473,
+    "ast_hash": "99d012df6a92235e3229dffa36cc0441",
+    "semantic_hash": "99d012df6a92235e3229dffa36cc0441"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\tests\\unit\\test-utils.tsx": {
+    "mtime": 1782308538.2295434,
+    "ast_hash": "93f4f0d5ce999d150a9f1596a2c5eb7a",
+    "semantic_hash": "93f4f0d5ce999d150a9f1596a2c5eb7a"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\tsconfig.app.json": {
+    "mtime": 1782192232.5033798,
+    "ast_hash": "eae52dd9e22c909dd27deb57667dac52",
+    "semantic_hash": "eae52dd9e22c909dd27deb57667dac52"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\tsconfig.json": {
+    "mtime": 1781944429.1087134,
+    "ast_hash": "a3d39fa780ebff65444de257f291ce6c",
+    "semantic_hash": "a3d39fa780ebff65444de257f291ce6c"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\tsconfig.node.json": {
+    "mtime": 1781944429.1233082,
+    "ast_hash": "70bdd0a673bcfc0e828080b306e7c680",
+    "semantic_hash": "70bdd0a673bcfc0e828080b306e7c680"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\vite.config.ts": {
+    "mtime": 1782308651.1404433,
+    "ast_hash": "a2c4468b327b9dd0d3bab4c250d2f942",
+    "semantic_hash": "a2c4468b327b9dd0d3bab4c250d2f942"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\vitest.config.ts": {
+    "mtime": 1782308621.6446772,
+    "ast_hash": "c2cc30d2d4f1d07d8f6cbadbb39c8d15",
+    "semantic_hash": "c2cc30d2d4f1d07d8f6cbadbb39c8d15"
+  },
+  "D:\\JamProject\\ExpenseTracker\\scripts\\db-portproxy.ps1": {
+    "mtime": 1782301634.7231388,
+    "ast_hash": "cc1dc71f7eb9df67676eba95e62ba88f",
+    "semantic_hash": "cc1dc71f7eb9df67676eba95e62ba88f"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\agents\\code-reviewer.agent.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "e2e731a69fa599f7bc5319b76a9a5335",
+    "semantic_hash": "e2e731a69fa599f7bc5319b76a9a5335"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\agents\\security-auditor.agent.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "88970bc2e33737479ec771b9d7280b59",
+    "semantic_hash": "88970bc2e33737479ec771b9d7280b59"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\agents\\test-engineer.agent.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "3245a0e677806330c33d286cbdd38d77",
+    "semantic_hash": "3245a0e677806330c33d286cbdd38d77"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\agents\\web-performance-auditor.agent.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "52f9fb3895c2c79bd865c7c95331df79",
+    "semantic_hash": "52f9fb3895c2c79bd865c7c95331df79"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\copilot-instructions.md": {
+    "mtime": 1782359497.806848,
+    "ast_hash": "df47e1ba27668d9d03026b2957469919",
+    "semantic_hash": "df47e1ba27668d9d03026b2957469919"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\api-and-interface-design\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "1e7577a49384c2d16eda0954677d6711",
+    "semantic_hash": "1e7577a49384c2d16eda0954677d6711"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\browser-testing-with-devtools\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "639b3e0f3bae1118b986269fb7bd5e87",
+    "semantic_hash": "639b3e0f3bae1118b986269fb7bd5e87"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\ci-cd-and-automation\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "6a3b179662eb6f3b434bb3e95201d45f",
+    "semantic_hash": "6a3b179662eb6f3b434bb3e95201d45f"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\code-review-and-quality\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "a806cac3d1fe72be332583a53c166438",
+    "semantic_hash": "a806cac3d1fe72be332583a53c166438"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\code-simplification\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "239dbb2a2f3caca0de086f7e0e0ebb03",
+    "semantic_hash": "239dbb2a2f3caca0de086f7e0e0ebb03"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\context-engineering\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "51c73a9d507cfdf45bb2fc10742fe147",
+    "semantic_hash": "51c73a9d507cfdf45bb2fc10742fe147"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\debugging-and-error-recovery\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "12d41c57d8bb597c6f738f5d4ce9ef27",
+    "semantic_hash": "12d41c57d8bb597c6f738f5d4ce9ef27"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\deprecation-and-migration\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "7635f1ba9c1b4feb6bac88ed03128d88",
+    "semantic_hash": "7635f1ba9c1b4feb6bac88ed03128d88"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\documentation-and-adrs\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "3fde17c9e49ead84fb2d654dcab79195",
+    "semantic_hash": "3fde17c9e49ead84fb2d654dcab79195"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\doubt-driven-development\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "e586f44ec292216123a8c4486c3f32e0",
+    "semantic_hash": "e586f44ec292216123a8c4486c3f32e0"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\frontend-ui-engineering\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "bd59aa264e6d4ed0383950c7270942ef",
+    "semantic_hash": "bd59aa264e6d4ed0383950c7270942ef"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\git-workflow-and-versioning\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "e74279996e43df0a914f0aa83a33a11f",
+    "semantic_hash": "e74279996e43df0a914f0aa83a33a11f"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\idea-refine\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "49d26901df19710e86bfbbcfb7558158",
+    "semantic_hash": "49d26901df19710e86bfbbcfb7558158"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\idea-refine\\examples.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "8e3e911c980f371e695e786d5b22b495",
+    "semantic_hash": "8e3e911c980f371e695e786d5b22b495"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\idea-refine\\frameworks.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "fa20786abdfa9de40c6886a8d7c958f2",
+    "semantic_hash": "fa20786abdfa9de40c6886a8d7c958f2"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\idea-refine\\refinement-criteria.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "5ce82e7acc7b4b2b9dcd843fb9dcd1d6",
+    "semantic_hash": "5ce82e7acc7b4b2b9dcd843fb9dcd1d6"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\incremental-implementation\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "d4dce220ae13391c956284debfe809f7",
+    "semantic_hash": "d4dce220ae13391c956284debfe809f7"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\interview-me\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "9d57d4cd52197bad45adefee66226088",
+    "semantic_hash": "9d57d4cd52197bad45adefee66226088"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\observability-and-instrumentation\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "c3d1156d3cb5f4050fcec0001074b9d3",
+    "semantic_hash": "c3d1156d3cb5f4050fcec0001074b9d3"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\performance-optimization\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "28839d674807c1ba1aef6c3be9864d6f",
+    "semantic_hash": "28839d674807c1ba1aef6c3be9864d6f"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\planning-and-task-breakdown\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "d7f1d651f2c1cf4a656cf416fc3cb7cc",
+    "semantic_hash": "d7f1d651f2c1cf4a656cf416fc3cb7cc"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\security-and-hardening\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "f9a536fc646f6e75c19ea3a2bd3c1b19",
+    "semantic_hash": "f9a536fc646f6e75c19ea3a2bd3c1b19"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\shipping-and-launch\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "05cdb53d7a6a407418cf5d1c1b715a00",
+    "semantic_hash": "05cdb53d7a6a407418cf5d1c1b715a00"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\source-driven-development\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "eec37f9aa8f509c88ea59b82addcc971",
+    "semantic_hash": "eec37f9aa8f509c88ea59b82addcc971"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\spec-driven-development\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "3994078991ce3671d1230608dc85e601",
+    "semantic_hash": "3994078991ce3671d1230608dc85e601"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\test-driven-development\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "451c0d42e3bdef8ecfcba30eb806c93b",
+    "semantic_hash": "451c0d42e3bdef8ecfcba30eb806c93b"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\skills\\using-agent-skills\\SKILL.md": {
+    "mtime": 1781999800.0,
+    "ast_hash": "07e68ff4e73b52d36032a40772ac7aa4",
+    "semantic_hash": "07e68ff4e73b52d36032a40772ac7aa4"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\workflows\\ci.yml": {
+    "mtime": 1782195405.1273978,
+    "ast_hash": "d080898c611cb2ef4ff7fdc0c45286b2",
+    "semantic_hash": "d080898c611cb2ef4ff7fdc0c45286b2"
+  },
+  "D:\\JamProject\\ExpenseTracker\\.github\\workflows\\test-plugin-install.yml": {
+    "mtime": 1781999800.0,
+    "ast_hash": "2ead5f1a23e039d492fd4159173b1e72",
+    "semantic_hash": "2ead5f1a23e039d492fd4159173b1e72"
+  },
+  "D:\\JamProject\\ExpenseTracker\\README.md": {
+    "mtime": 1782301634.7231388,
+    "ast_hash": "dd85955727ce2ec8f3ef47cb72884266",
+    "semantic_hash": "dd85955727ce2ec8f3ef47cb72884266"
+  },
+  "D:\\JamProject\\ExpenseTracker\\docker\\postgres.yml": {
+    "mtime": 1782192415.4401264,
+    "ast_hash": "780ef7e9acc5d9bc5bb960ea02f4c6b2",
+    "semantic_hash": "780ef7e9acc5d9bc5bb960ea02f4c6b2"
+  },
+  "D:\\JamProject\\ExpenseTracker\\docs\\PLAN.md": {
+    "mtime": 1782301630.7648578,
+    "ast_hash": "e3cfcf5137d89e2c2ec403444bf73dc8",
+    "semantic_hash": "e3cfcf5137d89e2c2ec403444bf73dc8"
+  },
+  "D:\\JamProject\\ExpenseTracker\\docs\\api-contract.md": {
+    "mtime": 1782301634.6745229,
+    "ast_hash": "4a74a3361caabdb3aa93c954d900a3f0",
+    "semantic_hash": "4a74a3361caabdb3aa93c954d900a3f0"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\README.md": {
+    "mtime": 1781944429.139367,
+    "ast_hash": "f6e3faf55d738cf2affe1b44195f27cf",
+    "semantic_hash": "f6e3faf55d738cf2affe1b44195f27cf"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\index.html": {
+    "mtime": 1782192232.5424473,
+    "ast_hash": "7f0821842f88a2caec6f5ab02d2b9954",
+    "semantic_hash": "7f0821842f88a2caec6f5ab02d2b9954"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\public\\favicon.svg": {
+    "mtime": 1781944429.2050395,
+    "ast_hash": "7e840862161341271697daa99a40d76b",
+    "semantic_hash": "7e840862161341271697daa99a40d76b"
+  },
+  "D:\\JamProject\\ExpenseTracker\\frontend\\public\\icons.svg": {
+    "mtime": 1781944429.226337,
+    "ast_hash": "3b4fcfcf393eca4d264dca4a4663bc37",
+    "semantic_hash": "3b4fcfcf393eca4d264dca4a4663bc37"
+  }
+}
