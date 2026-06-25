@@ -4,6 +4,8 @@ import {
   TrendingDownIcon,
   WalletIcon,
   BarChart3Icon,
+  DownloadIcon,
+  FileDownIcon,
 } from "lucide-react"
 import {
   LineChart,
@@ -21,10 +23,21 @@ import {
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { ErrorState } from "@/components/common/ErrorState"
 import { EmptyState } from "@/components/common/EmptyState"
 import { useDashboardSummary } from "@/features/dashboard/api"
+import {
+  downloadTransactionsCsv,
+  downloadSummaryCsv,
+} from "@/features/exports/api"
 import { formatTHB } from "@/lib/format"
+import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 
 // ── Thai month labels (Buddhist year) ──────────────────────────────────────
@@ -142,7 +155,46 @@ export default function DashboardPage() {
   return (
     <div className="space-y-8">
       {/* Page title */}
-      <h1 className="text-2xl font-bold">แดชบอร์ด</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">แดชบอร์ด</h1>
+        {/* Export dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={
+              <Button variant="outline">
+                <DownloadIcon className="mr-2 size-4" />
+                ส่งออก
+              </Button>
+            }
+          />
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onClick={() => {
+                toast.promise(downloadSummaryCsv(), {
+                  loading: "กำลังส่งออกรายงานสรุป...",
+                  success: "ส่งออกรายงานสรุปสำเร็จ",
+                  error: "ส่งออกรายงานสรุปไม่สำเร็จ",
+                })
+              }}
+            >
+              <BarChart3Icon className="mr-2 size-4" />
+              ส่งออกรายงานสรุป (CSV)
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                toast.promise(downloadTransactionsCsv({}), {
+                  loading: "กำลังส่งออกรายการ...",
+                  success: "ส่งออกรายการสำเร็จ",
+                  error: "ส่งออกรายการไม่สำเร็จ",
+                })
+              }}
+            >
+              <FileDownIcon className="mr-2 size-4" />
+              ส่งออกรายการ (CSV)
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
 
       {/* ── KPI Cards ─────────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">

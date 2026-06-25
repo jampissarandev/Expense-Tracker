@@ -22,6 +22,19 @@ vi.mock("@/features/auth/AuthContext", () => ({
   }),
 }))
 
+// ── Mock export functions ────────────────────────────────────────────────────
+
+const { mockDownloadTransactionsCsv, mockDownloadSummaryCsv } = vi.hoisted(
+  () => ({
+    mockDownloadTransactionsCsv: vi.fn(),
+    mockDownloadSummaryCsv: vi.fn(),
+  }),
+)
+vi.mock("@/features/exports/api", () => ({
+  downloadTransactionsCsv: mockDownloadTransactionsCsv,
+  downloadSummaryCsv: mockDownloadSummaryCsv,
+}))
+
 // ── Mock Select — Base UI popovers don't work in happy-dom ──────────────────
 // Replace with a deterministic button-driven mock. The trigger passes its
 // `id` and `aria-label` through to the button so tests can target it via
@@ -977,6 +990,91 @@ describe("TransactionsPage", () => {
     // Dialog should close
     await waitFor(() => {
       expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
+    })
+  })
+
+  // ── Export tests ────────────────────────────────────────────────────────
+
+  it("renders export button in the header", async () => {
+    renderWithProviders(<TransactionsPage />)
+
+    await waitFor(() => {
+      expect(screen.getByText("2026-06-25")).toBeInTheDocument()
+    })
+
+    expect(screen.getByRole("button", { name: /ส่งออก/i })).toBeInTheDocument()
+  })
+
+  it("calls downloadTransactionsCsv when export transactions is clicked", async () => {
+    const user = userEvent.setup()
+    renderWithProviders(<TransactionsPage />)
+
+    await waitFor(() => {
+      expect(screen.getByText("2026-06-25")).toBeInTheDocument()
+    })
+
+    // Open the export dropdown
+    await user.click(screen.getByRole("button", { name: /ส่งออก/i }))
+
+    // Click "ส่งออกรายการ (CSV)"
+    const exportItem = screen.getByRole("menuitem", { name: /ส่งออกรายการ.*CSV/i })
+    await user.click(exportItem)
+
+    await waitFor(() => {
+      expect(mockDownloadTransactionsCsv).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  it("includes current filter state in export call", async () => {
+    const user = userEvent.setup()
+    renderWithProviders(<TransactionsPage />)
+
+    await waitFor(() => {
+      expect(screen.getByText("2026-06-25")).toBeInTheDocument()
+    })
+
+    // Apply a type filter — click the type select to cycle from "all" → "รายรับ"
+    const typeSelectBtn = screen.getByTestId("select-filter-type")
+    fireEvent.click(typeSelectBtn)
+
+    // Wait for the filter to take effect (income-only view)
+    await waitFor(() => {
+      const t = screen.getByRole("table")
+      expect(within(t).queryByText("Lunch")).not.toBeInTheDocument()
+    })
+
+    // Open export dropdown and click transactions export
+    await user.click(screen.getByRole("button", { name: /ส่งออก/i }))
+    const exportItem = screen.getByRole("menuitem", { name: /ส่งออกรายการ.*CSV/i })
+    await user.click(exportItem)
+
+    await waitFor(() => {
+      expect(mockDownloadTransactionsCsv).toHaveBeenCalledTimes(1)
+    })
+
+    // The call should include the type filter
+    const filterArg = mockDownloadTransactionsCsv.mock.calls[0][0]
+    expect(filterArg).toHaveProperty("type")
+    expect(filterArg.type).toBe(0) // TransactionType.Income
+  })
+
+  it("calls downloadSummaryCsv when export summary is clicked", async () => {
+    const user = userEvent.setup()
+    renderWithProviders(<TransactionsPage />)
+
+    await waitFor(() => {
+      expect(screen.getByText("2026-06-25")).toBeInTheDocument()
+    })
+
+    // Open the export dropdown
+    await user.click(screen.getByRole("button", { name: /ส่งออก/i }))
+
+    // Click "ส่งออกรายงานสรุป (CSV)"
+    const summaryItem = screen.getByRole("menuitem", { name: /ส่งออกรายงานสรุป.*CSV/i })
+    await user.click(summaryItem)
+
+    await waitFor(() => {
+      expect(mockDownloadSummaryCsv).toHaveBeenCalledTimes(1)
     })
   })
 })

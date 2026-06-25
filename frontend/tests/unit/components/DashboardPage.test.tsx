@@ -20,6 +20,19 @@ vi.mock("@/features/auth/AuthContext", () => ({
   }),
 }))
 
+// ── Mock export functions ────────────────────────────────────────────────────
+
+const { mockDownloadTransactionsCsv, mockDownloadSummaryCsv } = vi.hoisted(
+  () => ({
+    mockDownloadTransactionsCsv: vi.fn(),
+    mockDownloadSummaryCsv: vi.fn(),
+  }),
+)
+vi.mock("@/features/exports/api", () => ({
+  downloadTransactionsCsv: mockDownloadTransactionsCsv,
+  downloadSummaryCsv: mockDownloadSummaryCsv,
+}))
+
 // ── Test data ───────────────────────────────────────────────────────────────
 
 const mockDashboardData = {
@@ -367,5 +380,59 @@ describe("DashboardPage", () => {
       expect(screen.getByText("คงเหลือ")).toBeInTheDocument()
     })
     expect(callCount).toBeGreaterThanOrEqual(2)
+  })
+
+  // ── Export tests ────────────────────────────────────────────────────────
+
+  it("renders export button in the header", async () => {
+    renderWithProviders(<DashboardPage />)
+
+    await waitFor(() => {
+      expect(screen.getByText("คงเหลือ")).toBeInTheDocument()
+    })
+
+    expect(screen.getByRole("button", { name: /ส่งออก/i })).toBeInTheDocument()
+  })
+
+  it("calls downloadSummaryCsv when export summary is clicked", async () => {
+    const { default: userEvent } = await import("@testing-library/user-event")
+    const user = userEvent.setup()
+    renderWithProviders(<DashboardPage />)
+
+    await waitFor(() => {
+      expect(screen.getByText("คงเหลือ")).toBeInTheDocument()
+    })
+
+    // Open the export dropdown
+    await user.click(screen.getByRole("button", { name: /ส่งออก/i }))
+
+    // Click "ส่งออกรายงานสรุป (CSV)"
+    const summaryItem = screen.getByRole("menuitem", { name: /ส่งออกรายงานสรุป.*CSV/i })
+    await user.click(summaryItem)
+
+    await waitFor(() => {
+      expect(mockDownloadSummaryCsv).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  it("calls downloadTransactionsCsv when export transactions is clicked", async () => {
+    const { default: userEvent } = await import("@testing-library/user-event")
+    const user = userEvent.setup()
+    renderWithProviders(<DashboardPage />)
+
+    await waitFor(() => {
+      expect(screen.getByText("คงเหลือ")).toBeInTheDocument()
+    })
+
+    // Open the export dropdown
+    await user.click(screen.getByRole("button", { name: /ส่งออก/i }))
+
+    // Click "ส่งออกรายการ (CSV)"
+    const txItem = screen.getByRole("menuitem", { name: /ส่งออกรายการ.*CSV/i })
+    await user.click(txItem)
+
+    await waitFor(() => {
+      expect(mockDownloadTransactionsCsv).toHaveBeenCalledTimes(1)
+    })
   })
 })

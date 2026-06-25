@@ -753,23 +753,26 @@ Next: **Phase 3** — CSV export endpoints + UI buttons.
 - **Files**: `backend/src/ExpenseTracker.Application/Exports/**`, `backend/src/ExpenseTracker.Api/Controllers/ExportsController.cs`
 - **Skills**: [api-and-interface-design](https://github.com/.github/skills/api-and-interface-design/SKILL.md), [security-and-hardening](https://github.com/.github/skills/security-and-hardening/SKILL.md), [test-driven-development](https://github.com/.github/skills/test-driven-development/SKILL.md)
 
-#### P3.2 — Frontend export buttons
+#### P3.2 — Frontend export buttons ✅
 - Add `Export` `DropdownMenu` on `TransactionsPage` and `DashboardPage`
 - Options: "Export Transactions (CSV)", "Export Summary (CSV)"
-- Uses anchor with `download` attribute pointing at the API URL; cookies sent automatically
+- Uses `apiClient` to fetch CSV as blob via `axios.get({ responseType: "blob" })`, then `URL.createObjectURL` + temp `<a download>` for browser download
 - Respects current filter state (transactions) and current month (dashboard)
-- **Unit tests**:
-  - `TransactionsPage_export_button_includes_current_filters_in_url`
-  - `DashboardPage_export_button_targets_current_month`
-- **Acceptance**: unit tests pass; manual download yields valid CSV
-- **Verify**: `npm test`, manual
-- **Files**: `frontend/src/features/exports/**`, additions to `TransactionsPage.tsx` and `DashboardPage.tsx`
+- **Unit tests** (7 page + 16 api = 23):
+  - `TransactionsPage` (4): `renders_export_button_in_header`, `calls_downloadTransactionsCsv_when_clicked`, `includes_current_filter_state_in_export_call`, `calls_downloadSummaryCsv_when_clicked`
+  - `DashboardPage` (3): `renders_export_button_in_header`, `calls_downloadSummaryCsv_when_clicked`, `calls_downloadTransactionsCsv_when_clicked`
+  - `features/exports/api.ts` (16): `triggerDownload` (2), `extractFilename` regex variants (4), `buildTransactionsQuery` mapping (5), `downloadSummaryCsv` date range (3), `apiClient` integration (2)
+- **Acceptance**: ✅ 129 frontend tests pass (113 → +16 api tests); `dotnet test -c Release` 163/163 green; `npm run typecheck` clean; `npm run lint` 0 errors
+- **Verify**: `npm test`, `dotnet test -c Release`
+- **Files**: `frontend/src/features/exports/api.ts` (new), `frontend/src/pages/TransactionsPage.tsx`, `frontend/src/pages/DashboardPage.tsx`, `frontend/tests/unit/components/TransactionsPage.test.tsx`, `frontend/tests/unit/components/DashboardPage.test.tsx`, `frontend/tests/unit/features/exports/api.test.ts` (new)
 - **Skills**: [frontend-ui-engineering](https://github.com/.github/skills/frontend-ui-engineering/SKILL.md), [test-driven-development](https://github.com/.github/skills/test-driven-development/SKILL.md)
 
 #### Checkpoint: Phase 3
-- [ ] Both export endpoints work
-- [ ] CSVs open correctly in Excel/Numbers with Thai characters
-- [ ] All previous tests still pass
+- [x] Both export endpoints work — backend P3.1 + frontend P3.2 complete
+- [x] Export dropdowns on TransactionsPage and DashboardPage (both options on each)
+- [x] Transactions CSV respects current filter state (type, category, date range)
+- [x] All tests pass: **129 frontend** (14 files) + **163 backend** (90 unit + 73 integration) = **292 total**
+- [ ] Manual: CSVs open correctly in Excel/Numbers with Thai characters (requires running backend)
 
 ---
 

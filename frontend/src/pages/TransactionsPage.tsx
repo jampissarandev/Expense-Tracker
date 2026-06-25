@@ -7,6 +7,9 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   XIcon,
+  DownloadIcon,
+  FileDownIcon,
+  BarChart3Icon,
 } from "lucide-react"
 import { toast } from "sonner"
 
@@ -38,6 +41,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Skeleton } from "@/components/ui/skeleton"
 import { EmptyState } from "@/components/common/EmptyState"
 import { ErrorState } from "@/components/common/ErrorState"
@@ -47,6 +56,10 @@ import {
 } from "@/features/transactions/api"
 import { useCategories } from "@/features/categories/api"
 import { TransactionFormDialog } from "@/features/transactions/TransactionFormDialog"
+import {
+  downloadTransactionsCsv,
+  downloadSummaryCsv,
+} from "@/features/exports/api"
 import { formatTHB } from "@/lib/format"
 import { TransactionType } from "@/types/api"
 import type { TransactionDto, TransactionFilter } from "@/types/api"
@@ -220,10 +233,49 @@ export default function TransactionsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">รายการ</h1>
-        <Button onClick={handleAdd}>
-          <PlusIcon className="mr-2 size-4" />
-          เพิ่มรายการ
-        </Button>
+        <div className="flex items-center gap-2">
+          {/* Export dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button variant="outline">
+                  <DownloadIcon className="mr-2 size-4" />
+                  ส่งออก
+                </Button>
+              }
+            />
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={() => {
+                  toast.promise(downloadTransactionsCsv(filter), {
+                    loading: "กำลังส่งออกรายการ...",
+                    success: "ส่งออกรายการสำเร็จ",
+                    error: "ส่งออกรายการไม่สำเร็จ",
+                  })
+                }}
+              >
+                <FileDownIcon className="mr-2 size-4" />
+                ส่งออกรายการ (CSV)
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  toast.promise(downloadSummaryCsv(), {
+                    loading: "กำลังส่งออกรายงานสรุป...",
+                    success: "ส่งออกรายงานสรุปสำเร็จ",
+                    error: "ส่งออกรายงานสรุปไม่สำเร็จ",
+                  })
+                }}
+              >
+                <BarChart3Icon className="mr-2 size-4" />
+                ส่งออกรายงานสรุป (CSV)
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <Button onClick={handleAdd}>
+            <PlusIcon className="mr-2 size-4" />
+            เพิ่มรายการ
+          </Button>
+        </div>
       </div>
 
       {/* Filter bar */}
