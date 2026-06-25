@@ -5,6 +5,7 @@ import { LoadingFullPage } from "@/components/common/LoadingSpinner";
 import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
 import CategoriesPage from "@/pages/CategoriesPage";
+import TransactionsPage from "@/pages/TransactionsPage";
 
 // ── Protected placeholder pages ─────────────────────────────────────────────
 
@@ -12,14 +13,6 @@ function DashboardPage() {
   return (
     <div className="flex items-center justify-center py-16">
       <h1 className="text-2xl font-bold">แดชบอร์ด (P2.6)</h1>
-    </div>
-  );
-}
-
-function TransactionsPage() {
-  return (
-    <div className="flex items-center justify-center py-16">
-      <h1 className="text-2xl font-bold">รายการ (P2.5)</h1>
     </div>
   );
 }
