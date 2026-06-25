@@ -4,18 +4,9 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import { LoadingFullPage } from "@/components/common/LoadingSpinner";
 import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
+import DashboardPage from "@/pages/DashboardPage";
 import CategoriesPage from "@/pages/CategoriesPage";
 import TransactionsPage from "@/pages/TransactionsPage";
-
-// ── Protected placeholder pages ─────────────────────────────────────────────
-
-function DashboardPage() {
-  return (
-    <div className="flex items-center justify-center py-16">
-      <h1 className="text-2xl font-bold">แดชบอร์ด (P2.6)</h1>
-    </div>
-  );
-}
 
 // ── RequireAuth wrapper ─────────────────────────────────────────────────────
 
