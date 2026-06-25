@@ -1,334 +1,311 @@
 # Graph Report - .  (2026-06-25)
 
 ## Corpus Check
-- 194 files · ~102,204 words
+- 203 files · ~110,867 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 888 nodes · 1641 edges · 107 communities (50 shown, 57 thin omitted)
-- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 21 edges (avg confidence: 0.84)
+- 1109 nodes · 2212 edges · 85 communities (63 shown, 22 thin omitted)
+- Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 93 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
-- [[_COMMUNITY_Integration Tests|Integration Tests]]
-- [[_COMMUNITY_.NET NuGet Dependencies|.NET NuGet Dependencies]]
-- [[_COMMUNITY_Category Unit Tests|Category Unit Tests]]
-- [[_COMMUNITY_Authentication Services|Authentication Services]]
-- [[_COMMUNITY_Frontend Runtime Dependencies|Frontend Runtime Dependencies]]
-- [[_COMMUNITY_Refresh Token & EF Migrations|Refresh Token & EF Migrations]]
-- [[_COMMUNITY_User & Entity Configurations|User & Entity Configurations]]
-- [[_COMMUNITY_Category Repository & Password Hashing|Category Repository & Password Hashing]]
-- [[_COMMUNITY_Frontend Dev Dependencies|Frontend Dev Dependencies]]
-- [[_COMMUNITY_Dashboard Services|Dashboard Services]]
-- [[_COMMUNITY_Development Standards & Agents|Development Standards & Agents]]
-- [[_COMMUNITY_Transaction Repository|Transaction Repository]]
-- [[_COMMUNITY_API Controllers|API Controllers]]
-- [[_COMMUNITY_Frontend TypeScript Config|Frontend TypeScript Config]]
-- [[_COMMUNITY_Transaction Services|Transaction Services]]
-- [[_COMMUNITY_Category Services|Category Services]]
-- [[_COMMUNITY_Frontend UI Configuration|Frontend UI Configuration]]
-- [[_COMMUNITY_API Launch Settings|API Launch Settings]]
-- [[_COMMUNITY_Exception Handling Middleware|Exception Handling Middleware]]
-- [[_COMMUNITY_Test Infrastructure|Test Infrastructure]]
-- [[_COMMUNITY_Node TypeScript Config|Node TypeScript Config]]
-- [[_COMMUNITY_Observability & Performance|Observability & Performance]]
-- [[_COMMUNITY_Project Architecture & Docs|Project Architecture & Docs]]
-- [[_COMMUNITY_FluentValidation Rules|FluentValidation Rules]]
-- [[_COMMUNITY_Dashboard & Current User|Dashboard & Current User]]
-- [[_COMMUNITY_Idea Refinement Methods|Idea Refinement Methods]]
-- [[_COMMUNITY_Security Patterns|Security Patterns]]
-- [[_COMMUNITY_Ideation Frameworks|Ideation Frameworks]]
-- [[_COMMUNITY_Interview Me Skill|Interview Me Skill]]
-- [[_COMMUNITY_API Design Principles|API Design Principles]]
-- [[_COMMUNITY_Testing Patterns & Workflows|Testing Patterns & Workflows]]
-- [[_COMMUNITY_Frontend Assets|Frontend Assets]]
-- [[_COMMUNITY_EF Core Initial Migration|EF Core Initial Migration]]
-- [[_COMMUNITY_Web Performance Agent|Web Performance Agent]]
-- [[_COMMUNITY_API Contract Documentation|API Contract Documentation]]
-- [[_COMMUNITY_Planning Workflow|Planning Workflow]]
-- [[_COMMUNITY_Incremental Implementation Patterns|Incremental Implementation Patterns]]
-- [[_COMMUNITY_Docker CE Setup Script|Docker CE Setup Script]]
-- [[_COMMUNITY_Transaction Domain Tests|Transaction Domain Tests]]
-- [[_COMMUNITY_Code Simplification Skill|Code Simplification Skill]]
-- [[_COMMUNITY_Category Domain Tests|Category Domain Tests]]
-- [[_COMMUNITY_TypeScript Root Config|TypeScript Root Config]]
-- [[_COMMUNITY_Frontend UI Engineering Skill|Frontend UI Engineering Skill]]
-- [[_COMMUNITY_Source Driven Development Skill|Source Driven Development Skill]]
-- [[_COMMUNITY_Idea Refine Script|Idea Refine Script]]
-- [[_COMMUNITY_AuthProvider Component|AuthProvider Component]]
-- [[_COMMUNITY_useAuth Hook|useAuth Hook]]
-- [[_COMMUNITY_createCategory API|createCategory API]]
-- [[_COMMUNITY_deleteCategory API|deleteCategory API]]
-- [[_COMMUNITY_listCategories API|listCategories API]]
-- [[_COMMUNITY_updateCategory API|updateCategory API]]
-- [[_COMMUNITY_useCategories Hook|useCategories Hook]]
-- [[_COMMUNITY_useCreateCategory Hook|useCreateCategory Hook]]
-- [[_COMMUNITY_useDeleteCategory Hook|useDeleteCategory Hook]]
-- [[_COMMUNITY_useUpdateCategory Hook|useUpdateCategory Hook]]
-- [[_COMMUNITY_EmptyState Component|EmptyState Component]]
-- [[_COMMUNITY_EmptyState Props|EmptyState Props]]
-- [[_COMMUNITY_ErrorState Props|ErrorState Props]]
-- [[_COMMUNITY_LoadingFullPage Component|LoadingFullPage Component]]
-- [[_COMMUNITY_LoadingSpinner Component|LoadingSpinner Component]]
-- [[_COMMUNITY_LoadingSpinner Props|LoadingSpinner Props]]
-- [[_COMMUNITY_DashboardFilter Component|DashboardFilter Component]]
-- [[_COMMUNITY_getDashboardSummary API|getDashboardSummary API]]
-- [[_COMMUNITY_useDashboardSummary Hook|useDashboardSummary Hook]]
-- [[_COMMUNITY_Frontend HTML Entry|Frontend HTML Entry]]
-- [[_COMMUNITY_Frontend README|Frontend README]]
-- [[_COMMUNITY_useLogout Hook|useLogout Hook]]
-- [[_COMMUNITY_Logout Hook Result|Logout Hook Result]]
-- [[_COMMUNITY_AppLayout Component|AppLayout Component]]
-- [[_COMMUNITY_Header Component|Header Component]]
-- [[_COMMUNITY_Header Props|Header Props]]
-- [[_COMMUNITY_Sidebar Component|Sidebar Component]]
-- [[_COMMUNITY_Sidebar Props|Sidebar Props]]
-- [[_COMMUNITY_UserMenu Component|UserMenu Component]]
-- [[_COMMUNITY_setTokenGetter Utility|setTokenGetter Utility]]
-- [[_COMMUNITY_formatThaiDate Utility|formatThaiDate Utility]]
-- [[_COMMUNITY_formatTHB Utility|formatTHB Utility]]
-- [[_COMMUNITY_parseAmount Utility|parseAmount Utility]]
-- [[_COMMUNITY_cn Utility (Class Names)|cn Utility (Class Names)]]
-- [[_COMMUNITY_AppRoutes Component|AppRoutes Component]]
-- [[_COMMUNITY_createTransaction API|createTransaction API]]
-- [[_COMMUNITY_deleteTransaction API|deleteTransaction API]]
-- [[_COMMUNITY_getTransaction API|getTransaction API]]
-- [[_COMMUNITY_listTransactions API|listTransactions API]]
-- [[_COMMUNITY_updateTransaction API|updateTransaction API]]
-- [[_COMMUNITY_useCreateTransaction Hook|useCreateTransaction Hook]]
-- [[_COMMUNITY_useDeleteTransaction Hook|useDeleteTransaction Hook]]
-- [[_COMMUNITY_useTransaction Hook|useTransaction Hook]]
-- [[_COMMUNITY_useTransactions Hook|useTransactions Hook]]
-- [[_COMMUNITY_useUpdateTransaction Hook|useUpdateTransaction Hook]]
-- [[_COMMUNITY_AccessTokenDto|AccessTokenDto]]
-- [[_COMMUNITY_CategoryTotalDto|CategoryTotalDto]]
-- [[_COMMUNITY_CurrentMonthDto|CurrentMonthDto]]
-- [[_COMMUNITY_MonthlyTotalDto|MonthlyTotalDto]]
-- [[_COMMUNITY_ProblemDetails DTO|ProblemDetails DTO]]
-- [[_COMMUNITY_AllProviders Component|AllProviders Component]]
-- [[_COMMUNITY_RouterWrapper Component|RouterWrapper Component]]
-- [[_COMMUNITY_Test Plugin Installation CI|Test Plugin Installation CI]]
+- [[_COMMUNITY_api  transactionsEndpoint Tests|api / transactionsEndpoint Tests]]
+- [[_COMMUNITY_backend  tests|backend / tests]]
+- [[_COMMUNITY_transactions  api|transactions / api]]
+- [[_COMMUNITY_exports  exportServicetests|exports / exportServicetests]]
+- [[_COMMUNITY_persistence  testdbcontextfactory|persistence / testdbcontextfactory]]
+- [[_COMMUNITY_Controllers authController|Controllers// authController]]
+- [[_COMMUNITY_hooks  uselogout|hooks / uselogout]]
+- [[_COMMUNITY_abstractions  iuserRepository|abstractions / iuserRepository]]
+- [[_COMMUNITY_persistence  categoryRepository|persistence / categoryRepository]]
+- [[_COMMUNITY_Services  refreshtokenService|Services / refreshtokenService]]
+- [[_COMMUNITY_abstractions  itransactionRepository|abstractions / itransactionRepository]]
+- [[_COMMUNITY_frontend  package|frontend / package]]
+- [[_COMMUNITY_Controllers categoriesController|Controllers// categoriesController]]
+- [[_COMMUNITY_transactions  transactionService|transactions / transactionService]]
+- [[_COMMUNITY_api  exportsEndpoint Tests|api / exportsEndpoint Tests]]
+- [[_COMMUNITY_dashboard  idashboardRepository|dashboard / idashboardRepository]]
+- [[_COMMUNITY_components  transactionspage|components / transactionspage]]
+- [[_COMMUNITY_frontend  tsconfig|frontend / tsconfig]]
+- [[_COMMUNITY_frontend  components|frontend / components]]
+- [[_COMMUNITY_ui  select|ui / select]]
+- [[_COMMUNITY_properties  launchsettings|properties / launchsettings]]
+- [[_COMMUNITY_frontend  package|frontend / package]]
+- [[_COMMUNITY_middleware  globalexceptionmiddleware|middleware / globalexceptionmiddleware]]
+- [[_COMMUNITY_exports  exportService|exports / exportService]]
+- [[_COMMUNITY_components  transactionformdialog|components / transactionformdialog]]
+- [[_COMMUNITY_Controllers exportsController|Controllers// exportsController]]
+- [[_COMMUNITY_frontend  tsconfig|frontend / tsconfig]]
+- [[_COMMUNITY_components  categoriespage|components / categoriespage]]
+- [[_COMMUNITY_ui  dropdown|ui / dropdown]]
+- [[_COMMUNITY_dashboard  api|dashboard / api]]
+- [[_COMMUNITY_ui  alert|ui / alert]]
+- [[_COMMUNITY_ui  form|ui / form]]
+- [[_COMMUNITY_ui  dialog|ui / dialog]]
+- [[_COMMUNITY_ui  sheet|ui / sheet]]
+- [[_COMMUNITY_Controllers transactionsController|Controllers// transactionsController]]
+- [[_COMMUNITY_frontend  package|frontend / package]]
+- [[_COMMUNITY_ui  table|ui / table]]
+- [[_COMMUNITY_lib  apiclient|lib / apiclient]]
+- [[_COMMUNITY_components  dashboardpage|components / dashboardpage]]
+- [[_COMMUNITY_dashboard  dashboardService|dashboard / dashboardService]]
+- [[_COMMUNITY_frontend  package|frontend / package]]
+- [[_COMMUNITY_migrations  20260624052221|migrations / 20260624052221]]
+- [[_COMMUNITY_ui  avatar|ui / avatar]]
+- [[_COMMUNITY_exports  api|exports / api]]
+- [[_COMMUNITY_ui  button|ui / button]]
+- [[_COMMUNITY_layout  sidebar|layout / sidebar]]
+- [[_COMMUNITY_common  loadingspinner|common / loadingspinner]]
+- [[_COMMUNITY_docker  install|docker / install]]
+- [[_COMMUNITY_domain  transactiontests|domain / transactiontests]]
+- [[_COMMUNITY_unit  test|unit / test]]
+- [[_COMMUNITY_common  emptystate|common / emptystate]]
+- [[_COMMUNITY_common  errorstate|common / errorstate]]
+- [[_COMMUNITY_components  applayout|components / applayout]]
+- [[_COMMUNITY_dashboard  api|dashboard / api]]
+- [[_COMMUNITY_domain  categorytests|domain / categorytests]]
+- [[_COMMUNITY_frontend  tsconfig|frontend / tsconfig]]
+- [[_COMMUNITY_layout  header|layout / header]]
+- [[_COMMUNITY_scripts  verify|scripts / verify]]
+- [[_COMMUNITY_ui  badge|ui / badge]]
+- [[_COMMUNITY_unit  apiclient|unit / apiclient]]
+- [[_COMMUNITY_unit  loginpage|unit / loginpage]]
+- [[_COMMUNITY_unit  registerpage|unit / registerpage]]
+- [[_COMMUNITY_github  skills|github / skills]]
+- [[_COMMUNITY_exports  api|exports / api]]
+- [[_COMMUNITY_ui  input|ui / input]]
+- [[_COMMUNITY_ui  label|ui / label]]
+- [[_COMMUNITY_ui  skeleton|ui / skeleton]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `TransactionsEndpointsTests` - 39 edges
-2. `TransactionServiceTests` - 24 edges
-3. `CategoryServiceTests` - 23 edges
-4. `Category` - 22 edges
-5. `AuthServiceTests` - 22 edges
-6. `compilerOptions` - 20 edges
-7. `Transaction` - 19 edges
-8. `DashboardEndpointsTests` - 19 edges
-9. `AuthEndpointsTests` - 17 edges
-10. `CategoriesEndpointsTests` - 17 edges
+1. `cn()` - 74 edges
+2. `TransactionsEndpointsTests` - 39 edges
+3. `ExportServiceTests` - 32 edges
+4. `ExportsEndpointsTests` - 30 edges
+5. `TransactionServiceTests` - 24 edges
+6. `CategoryServiceTests` - 23 edges
+7. `Category` - 22 edges
+8. `AuthServiceTests` - 22 edges
+9. `TransactionType` - 22 edges
+10. `compilerOptions` - 20 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Documentation and ADRs Skill` --conceptually_related_to--> `Implementation Plan Expense Tracker`  [INFERRED]
-  .github/skills/documentation-and-adrs/SKILL.md → docs/PLAN.md
-- `Contract First Slicing` --references--> `API Contract Phase 1`  [INFERRED]
-  .github/skills/incremental-implementation/SKILL.md → docs/api-contract.md
 - `CreateCategoryRequestValidator` --references--> `CreateCategoryRequest`  [EXTRACTED]
   backend/src/ExpenseTracker.Application/Categories/Validators/CategoryValidators.cs → frontend/src/types/api.ts
 - `UpdateCategoryRequestValidator` --references--> `UpdateCategoryRequest`  [EXTRACTED]
   backend/src/ExpenseTracker.Application/Categories/Validators/CategoryValidators.cs → frontend/src/types/api.ts
 - `CreateTransactionRequestValidator` --references--> `CreateTransactionRequest`  [EXTRACTED]
   backend/src/ExpenseTracker.Application/Transactions/Validators/TransactionValidators.cs → frontend/src/types/api.ts
+- `UpdateTransactionRequestValidator` --references--> `UpdateTransactionRequest`  [EXTRACTED]
+  backend/src/ExpenseTracker.Application/Transactions/Validators/TransactionValidators.cs → frontend/src/types/api.ts
+- `EmptyState()` --calls--> `cn()`  [INFERRED]
+  frontend/src/components/common/EmptyState.tsx → frontend/src/lib/utils.ts
 
 ## Import Cycles
 - None detected.
 
-## Hyperedges (group relationships)
-- **Ship Agents Suite** — agents_code_reviewer_agent, agents_security_auditor_agent, agents_test_engineer_agent [EXTRACTED 1.00]
-- **Ideation Toolkit** — idea_refine_skill, idea_refine_examples, idea_refine_frameworks [EXTRACTED 1.00]
-- **Quality Gates Pipeline** — ci_cd_and_automation_quality_gate_pipeline, ci_cd_and_automation_shift_left, code_review_and_quality_skill, _github_copilot_instructions_five_axis_review [INFERRED 0.85]
-- **Define Phase Skills** — skills_interview_me_skill, idea_refine_refinement_criteria, skills_spec_driven_development_skill [EXTRACTED 1.00]
-- **Verify and Review Skills** — skills_test_driven_development_skill, skills_security_and_hardening_skill, skills_performance_optimization_skill, skills_observability_and_instrumentation_skill [EXTRACTED 1.00]
-- **Expense Tracker Architecture Decisions** — docs_plan_clean_architecture, docs_plan_refresh_token_jwt, docs_plan_per_user_data_isolation, docs_plan_system_custom_categories [EXTRACTED 1.00]
+## Communities (85 total, 22 thin omitted)
 
-## Communities (107 total, 57 thin omitted)
+### Community 0 - "api / transactionsEndpoint Tests"
+Cohesion: 0.05
+Nodes (18): AuthEndpointsTests, CategoriesEndpointsTests, DashboardEndpointsTests, TransactionsEndpointsTests, AuthServiceTests, CategoryServiceTests, DashboardServiceTests, DateTimeOffset (+10 more)
 
-### Community 0 - "Integration Tests"
+### Community 1 - "backend / tests"
+Cohesion: 0.05
+Nodes (38): BCrypt.Net-Next (4.2.0), Microsoft.EntityFrameworkCore.Design (10.0.0), Microsoft.NET.Sdk, Microsoft.NET.Sdk, BCrypt.Net-Next (4.2.0), Microsoft.EntityFrameworkCore (10.0.0), Microsoft.EntityFrameworkCore.Design (10.0.0), Microsoft.NET.Sdk (+30 more)
+
+### Community 2 - "transactions / api"
+Cohesion: 0.05
+Nodes (24): categoryKeys, useCategories(), useCreateCategory(), useDeleteCategory(), useUpdateCategory(), CategoryFormDialog(), CategoryFormDialogProps, CategoryFormInput (+16 more)
+
+### Community 3 - "exports / exportServicetests"
+Cohesion: 0.13
+Nodes (5): ExportServiceTests, InlineData, Theory, TransactionAmountParserTests, MonthlyTotalDto
+
+### Community 4 - "persistence / testdbcontextfactory"
+Cohesion: 0.06
+Nodes (18): bool, DbContext, IAsyncLifetime, IDisposable, IServiceScope, IServiceScopeFactory, ExpenseTracker.Infrastructure.Migrations, InitialCreate (+10 more)
+
+### Community 5 - "Controllers// authController"
+Cohesion: 0.11
+Nodes (11): AllowAnonymous, AuthService, IAuthService, Authorize, AuthController, HttpPost, IConfiguration, AuthResponse (+3 more)
+
+### Community 6 - "hooks / uselogout"
 Cohesion: 0.07
-Nodes (13): AuthEndpointsTests, CategoriesEndpointsTests, DashboardEndpointsTests, TransactionsEndpointsTests, AuthServiceTests, DateTimeOffset, Fact, HttpClient (+5 more)
+Nodes (20): AuthContext, AuthContextValue, useAuth(), Harness(), mockLogout, mockNavigate, useLogout(), UseLogoutResult (+12 more)
 
-### Community 1 - ".NET NuGet Dependencies"
-Cohesion: 0.05
-Nodes (37): BCrypt.Net-Next (4.2.0), Microsoft.EntityFrameworkCore.Design (10.0.0), Microsoft.NET.Sdk, Microsoft.NET.Sdk, BCrypt.Net-Next (4.2.0), Microsoft.EntityFrameworkCore (10.0.0), Microsoft.EntityFrameworkCore.Design (10.0.0), Microsoft.NET.Sdk (+29 more)
-
-### Community 2 - "Category Unit Tests"
-Cohesion: 0.10
-Nodes (6): CategoryServiceTests, InlineData, Theory, Trait, TransactionAmountParserTests, TransactionServiceTests
-
-### Community 3 - "Authentication Services"
-Cohesion: 0.08
-Nodes (17): IJwtTokenService, AllowAnonymous, AuthService, IAuthService, Authorize, JwtSettings, RefreshTokenSettings, AuthController (+9 more)
-
-### Community 4 - "Frontend Runtime Dependencies"
-Cohesion: 0.05
-Nodes (37): dependencies, axios, @base-ui/react, class-variance-authority, clsx, date-fns, @hookform/resolvers, lucide-react (+29 more)
-
-### Community 5 - "Refresh Token & EF Migrations"
-Cohesion: 0.09
-Nodes (12): IRefreshTokenService, DbContext, RefreshToken, ExpenseTracker.Infrastructure.Migrations, InitialCreate, ExpenseTracker.Infrastructure.Migrations, ExpenseTrackerDbContextModelSnapshot, ModelBuilder (+4 more)
-
-### Community 6 - "User & Entity Configurations"
+### Community 7 - "abstractions / iuserRepository"
 Cohesion: 0.09
 Nodes (10): IUserRepository, CategoryConfiguration, RefreshTokenConfiguration, TransactionConfiguration, UserConfiguration, User, EntityTypeBuilder, IEntityTypeConfiguration (+2 more)
 
-### Community 7 - "Category Repository & Password Hashing"
+### Community 8 - "persistence / categoryRepository"
 Cohesion: 0.09
 Nodes (6): ICategoryRepository, IPasswordHasher, Category, int, CategoryRepository, BCryptPasswordHasher
 
-### Community 8 - "Frontend Dev Dependencies"
+### Community 9 - "Services / refreshtokenService"
+Cohesion: 0.10
+Nodes (10): IJwtTokenService, IRefreshTokenService, JwtSettings, RefreshTokenSettings, RefreshToken, JwtTokenResult, PlaintextToken, JwtTokenService (+2 more)
+
+### Community 10 - "abstractions / itransactionRepository"
+Cohesion: 0.10
+Nodes (12): ITransactionRepository, AbstractValidator, decimal, Transaction, Items, TransactionRepository, TotalCount, CreateCategoryRequestValidator (+4 more)
+
+### Community 11 - "frontend / package"
 Cohesion: 0.07
 Nodes (28): devDependencies, autoprefixer, dotenv, eslint, @eslint/js, eslint-plugin-react-hooks, eslint-plugin-react-refresh, globals (+20 more)
 
-### Community 9 - "Dashboard Services"
+### Community 12 - "Controllers// categoriesController"
 Cohesion: 0.13
-Nodes (11): AggregateByCategoryAndMonth, CategoryAggregate, CurrentMonthTotals, DashboardService, IDashboardRepository, IDashboardService, IReadOnlyList, MonthlyAggregate (+3 more)
+Nodes (8): CategoryService, ICategoryService, CategoriesController, HttpDelete, HttpPut, CategoryDto, CreateCategoryRequest, UpdateCategoryRequest
 
-### Community 10 - "Development Standards & Agents"
-Cohesion: 0.11
-Nodes (24): Project Coding Standards, Five-Axis Review, Graphify, Incremental Implementation, Prove-It Pattern, Test-Driven Development, Code Reviewer Agent, Security Auditor Agent (+16 more)
-
-### Community 11 - "Transaction Repository"
+### Community 13 - "transactions / transactionService"
 Cohesion: 0.14
-Nodes (6): ITransactionRepository, DateOnly, Transaction, Items, TransactionRepository, TotalCount
+Nodes (11): ITransactionService, TransactionService, AccessTokenDto, CategoryTotalDto, CreateTransactionRequest, CurrentMonthDto, PagedResult, ProblemDetails (+3 more)
 
-### Community 12 - "API Controllers"
-Cohesion: 0.18
-Nodes (8): ActionResult, CategoriesController, TransactionsController, HttpDelete, HttpGet, HttpPut, IActionResult, UpdateCategoryRequest
+### Community 15 - "dashboard / idashboardRepository"
+Cohesion: 0.17
+Nodes (10): AggregateByCategoryAndMonth, CategoryAggregate, CurrentMonthTotals, IDashboardRepository, Guid, IReadOnlyList, MonthlyAggregate, DashboardRepository (+2 more)
 
-### Community 13 - "Frontend TypeScript Config"
+### Community 16 - "components / transactionspage"
+Cohesion: 0.09
+Nodes (7): categories, handlers, harvestItems(), { mockDownloadTransactionsCsv, mockDownloadSummaryCsv }, sampleTransactions, Select(), server
+
+### Community 17 - "frontend / tsconfig"
 Cohesion: 0.09
 Nodes (22): compilerOptions, allowImportingTsExtensions, baseUrl, erasableSyntaxOnly, ignoreDeprecations, jsx, lib, module (+14 more)
 
-### Community 14 - "Transaction Services"
-Cohesion: 0.17
-Nodes (8): ITransactionService, TransactionService, CreateTransactionRequest, PagedResult, TransactionDto, TransactionFilter, UpdateTransactionRequest, ValidationResult
-
-### Community 15 - "Category Services"
-Cohesion: 0.16
-Nodes (7): CategoryService, ICategoryService, Guid, IValidator, SystemCategories, CategoryDto, CreateCategoryRequest
-
-### Community 16 - "Frontend UI Configuration"
+### Community 18 - "frontend / components"
 Cohesion: 0.09
 Nodes (21): aliases, components, hooks, lib, ui, utils, iconLibrary, menuAccent (+13 more)
 
-### Community 17 - "API Launch Settings"
+### Community 19 - "ui / select"
+Cohesion: 0.15
+Nodes (18): cn(), Card(), CardAction(), CardContent(), CardDescription(), CardFooter(), CardHeader(), CardTitle() (+10 more)
+
+### Community 20 - "properties / launchsettings"
 Cohesion: 0.10
 Nodes (21): ASPNETCORE_ENVIRONMENT, applicationUrl, commandName, dotnetRunMessages, environmentVariables, launchBrowser, launchUrl, commandName (+13 more)
 
-### Community 18 - "Exception Handling Middleware"
+### Community 21 - "frontend / package"
+Cohesion: 0.10
+Nodes (21): dependencies, axios, @base-ui/react, class-variance-authority, clsx, date-fns, @hookform/resolvers, lucide-react (+13 more)
+
+### Community 22 - "middleware / globalexceptionmiddleware"
 Cohesion: 0.12
 Nodes (11): Exception, DomainException, DomainValidationException, ForbiddenException, NotFoundException, RefreshTokenValidationException, HttpContext, HttpStatusCode (+3 more)
 
-### Community 19 - "Test Infrastructure"
-Cohesion: 0.13
-Nodes (10): bool, IAsyncLifetime, IDisposable, IServiceScope, IServiceScopeFactory, MigrationsApplyToFreshDatabase, FakeCurrentUserService, TestDbContextFactory (+2 more)
+### Community 23 - "exports / exportService"
+Cohesion: 0.16
+Nodes (6): DateOnly, ExportService, IExportService, MemoryStream, T, TransactionFilter
 
-### Community 20 - "Node TypeScript Config"
+### Community 24 - "components / transactionformdialog"
+Cohesion: 0.11
+Nodes (7): categories, createSpy, harvestItems(), sampleEditingTransaction, Select(), server, updateSpy
+
+### Community 25 - "Controllers// exportsController"
+Cohesion: 0.17
+Nodes (8): ICurrentUserService, ControllerBase, DashboardController, ExportsController, HttpGet, IActionResult, IHttpContextAccessor, CurrentUserService
+
+### Community 26 - "frontend / tsconfig"
 Cohesion: 0.11
 Nodes (17): compilerOptions, allowImportingTsExtensions, erasableSyntaxOnly, lib, module, moduleDetection, moduleResolution, noEmit (+9 more)
 
-### Community 21 - "Observability & Performance"
+### Community 27 - "components / categoriespage"
 Cohesion: 0.12
-Nodes (16): Observability and Instrumentation, Correlation ID, Distributed Tracing, RED Metrics, Structured Logging, Symptom Based Alerting, Performance Optimization, Core Web Vitals (+8 more)
+Nodes (5): handlers, server, systemExpenseCategories, systemIncomeCategories, userCategories
 
-### Community 22 - "Project Architecture & Docs"
-Cohesion: 0.14
-Nodes (14): Docker Postgres 16, Implementation Plan Expense Tracker, Clean Architecture Light, CSV Export, Per User Data Isolation, Refresh Token JWT Strategy, System Plus Custom Categories, Vertical Slicing Phased Breakdown (+6 more)
+### Community 28 - "ui / dropdown"
+Cohesion: 0.12
+Nodes (9): DropdownMenuCheckboxItem(), DropdownMenuContent(), DropdownMenuItem(), DropdownMenuLabel(), DropdownMenuRadioItem(), DropdownMenuSeparator(), DropdownMenuShortcut(), DropdownMenuSubContent() (+1 more)
 
-### Community 23 - "FluentValidation Rules"
-Cohesion: 0.24
-Nodes (7): AbstractValidator, decimal, CreateCategoryRequestValidator, UpdateCategoryRequestValidator, CreateTransactionRequestValidator, TransactionAmountParser, UpdateTransactionRequestValidator
+### Community 29 - "dashboard / api"
+Cohesion: 0.15
+Nodes (8): DashboardFilter, dashboardKeys, useDashboardSummary(), formatTHB(), CHART_COLORS, DashboardPage(), formatMonthLabel(), thaiShortMonths
 
-### Community 24 - "Dashboard & Current User"
-Cohesion: 0.22
-Nodes (5): ICurrentUserService, ControllerBase, DashboardController, IHttpContextAccessor, CurrentUserService
+### Community 30 - "ui / alert"
+Cohesion: 0.15
+Nodes (9): AlertDialogAction(), AlertDialogCancel(), AlertDialogContent(), AlertDialogDescription(), AlertDialogFooter(), AlertDialogHeader(), AlertDialogMedia(), AlertDialogOverlay() (+1 more)
 
-### Community 25 - "Idea Refinement Methods"
+### Community 31 - "ui / form"
+Cohesion: 0.17
+Nodes (9): FormControl, FormDescription, FormFieldContext, FormFieldContextValue, FormItem, FormItemContext, FormItemContextValue, FormLabel (+1 more)
+
+### Community 32 - "ui / dialog"
+Cohesion: 0.18
+Nodes (6): DialogContent(), DialogDescription(), DialogFooter(), DialogHeader(), DialogOverlay(), DialogTitle()
+
+### Community 33 - "ui / sheet"
+Cohesion: 0.18
+Nodes (6): SheetContent(), SheetDescription(), SheetFooter(), SheetHeader(), SheetOverlay(), SheetTitle()
+
+### Community 35 - "frontend / package"
 Cohesion: 0.20
-Nodes (10): Refinement and Evaluation Criteria, Assumption Audit, Decision Framework, Differentiation, Feasibility, MVP Scoping Principles, User Value, Core Operating Behaviors (+2 more)
+Nodes (10): scripts, build, dev, format, format:fix, lint, preview, test (+2 more)
 
-### Community 26 - "Security Patterns"
-Cohesion: 0.20
-Nodes (10): Security and Hardening, Input Validation Patterns, npm Audit Triage, OWASP Top 10 Prevention Patterns, Rate Limiting, Secrets Management, SSRF Protection, Threat Model STRIDE (+2 more)
-
-### Community 27 - "Ideation Frameworks"
+### Community 36 - "ui / table"
 Cohesion: 0.22
-Nodes (9): Diverge-Converge Process, Ideation Session Examples, First Principles Thinking, Ideation Frameworks Reference, How Might We, Jobs to Be Done, Pre-Mortem, SCAMPER (+1 more)
+Nodes (8): Table(), TableBody(), TableCaption(), TableCell(), TableFooter(), TableHead(), TableHeader(), TableRow()
 
-### Community 28 - "Interview Me Skill"
-Cohesion: 0.22
-Nodes (9): Interview Me, 95 Percent Confidence Stop, Hypothesis with Confidence Number, One Question at a Time, Restate Intent, Want vs Should Want, Spec Driven Development, Spec Template (+1 more)
-
-### Community 29 - "API Design Principles"
-Cohesion: 0.32
-Nodes (8): Contract First, Hyrum's Law, API and Interface Design Skill, Validate at Boundaries, Code Is a Liability, Deprecation and Migration Skill, Strangler Pattern, Zombie Code
-
-### Community 30 - "Testing Patterns & Workflows"
+### Community 37 - "lib / apiclient"
 Cohesion: 0.25
-Nodes (8): Increment Cycle, Gated Workflow Specify Plan Tasks Implement, Test Driven Development, Arrange Act Assert Pattern, DAMP Over DRY in Tests, Prove It Pattern for Bug Fixes, Red Green Refactor Cycle, Test Pyramid
+Nodes (3): apiClient, _onRefreshed, _onRefreshFailed
 
-### Community 31 - "Frontend Assets"
-Cohesion: 0.48
-Nodes (7): ExpenseTracker App Logo, Bluesky Social Icon, Discord Icon, Documentation Icon, GitHub Icon, Social/Profile Icon, X (Twitter) Icon
+### Community 38 - "components / dashboardpage"
+Cohesion: 0.29
+Nodes (5): emptyDashboardData, handlers, mockDashboardData, { mockDownloadTransactionsCsv, mockDownloadSummaryCsv }, server
 
-### Community 32 - "EF Core Initial Migration"
+### Community 39 - "dashboard / dashboardService"
+Cohesion: 0.33
+Nodes (3): DashboardService, IDashboardService, DashboardSummaryDto
+
+### Community 40 - "frontend / package"
+Cohesion: 0.29
+Nodes (6): engines, node, name, private, type, version
+
+### Community 41 - "migrations / 20260624052221"
 Cohesion: 0.33
 Nodes (4): Migration, MigrationBuilder, ExpenseTracker.Infrastructure.Migrations, InitialCreate
 
-### Community 33 - "Web Performance Agent"
-Cohesion: 0.33
-Nodes (6): Web Performance Auditor Agent, Core Web Vitals, Metric-Honesty Rule, Content Boundary Markers, Profile Isolation, Browser Testing with DevTools Skill
+### Community 42 - "ui / avatar"
+Cohesion: 0.29
+Nodes (6): Avatar(), AvatarBadge(), AvatarFallback(), AvatarGroup(), AvatarGroupCount(), AvatarImage()
 
-### Community 34 - "API Contract Documentation"
-Cohesion: 0.33
-Nodes (6): Auth Flow Reference, API Conventions, RFC 7807 Error Envelope, Test Coverage Map, API Contract Phase 1, Contract First Slicing
+### Community 43 - "exports / api"
+Cohesion: 0.67
+Nodes (5): buildTransactionsQuery(), downloadSummaryCsv(), downloadTransactionsCsv(), extractFilename(), triggerDownload()
 
-### Community 35 - "Planning Workflow"
-Cohesion: 0.33
-Nodes (6): Vertical Slicing, Planning and Task Breakdown, Verification Checkpoint, Dependency Graph, Task Template, Vertical Slicing Planning
-
-### Community 36 - "Incremental Implementation Patterns"
+### Community 44 - "ui / button"
 Cohesion: 0.40
-Nodes (5): Incremental Implementation, Feature Flags for Incomplete Features, Risk First Slicing, Scope Discipline Rule Zero Point Five, Simplicity First Rule Zero
+Nodes (4): Button(), buttonVariants, Calendar(), CalendarDayButton()
 
-### Community 37 - "Docker CE Setup Script"
+### Community 45 - "layout / sidebar"
+Cohesion: 0.40
+Nodes (4): NAV_ITEMS, NavItem, Sidebar(), SidebarProps
+
+### Community 47 - "docker / install"
 Cohesion: 0.67
 Nodes (3): install-docker-ce-wsl.sh script, DEBIAN_FRONTEND, log()
 
-### Community 39 - "Code Simplification Skill"
-Cohesion: 0.67
-Nodes (3): Chesterton's Fence, Clarity Over Cleverness, Code Simplification Skill
-
-### Community 42 - "Frontend UI Engineering Skill"
-Cohesion: 0.67
-Nodes (3): AI Aesthetic Anti-Patterns, Separate Data from Presentation, Frontend UI Engineering Skill
-
-### Community 43 - "Source Driven Development Skill"
-Cohesion: 0.67
-Nodes (3): Source Driven Development, Detect Fetch Implement Cite Process, Source Hierarchy
-
 ## Knowledge Gaps
-- **249 isolated node(s):** `idea-refine.sh script`, `BCrypt.Net-Next (4.2.0)`, `FluentValidation.AspNetCore (11.3.1)`, `Microsoft.AspNetCore.Authentication.JwtBearer (10.0.0)`, `Microsoft.EntityFrameworkCore.Design (10.0.0)` (+244 more)
+- **252 isolated node(s):** `idea-refine.sh script`, `BCrypt.Net-Next (4.2.0)`, `FluentValidation.AspNetCore (11.3.1)`, `Microsoft.AspNetCore.Authentication.JwtBearer (10.0.0)`, `Microsoft.EntityFrameworkCore.Design (10.0.0)` (+247 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **57 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **22 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `ExpenseTrackerDbContext` connect `Refresh Token & EF Migrations` to `User & Entity Configurations`, `Category Repository & Password Hashing`, `Dashboard Services`, `Transaction Repository`, `Test Infrastructure`, `Dashboard & Current User`?**
-  _High betweenness centrality (0.018) - this node is a cross-community bridge._
-- **Why does `AuthServiceTests` connect `Integration Tests` to `Authentication Services`, `Refresh Token & EF Migrations`, `User & Entity Configurations`, `Category Repository & Password Hashing`, `Category Services`?**
+- **Why does `ExpenseTrackerDbContext` connect `persistence / testdbcontextfactory` to `abstractions / iuserRepository`, `persistence / categoryRepository`, `Services / refreshtokenService`, `abstractions / itransactionRepository`, `dashboard / idashboardRepository`, `Controllers// exportsController`?**
+  _High betweenness centrality (0.023) - this node is a cross-community bridge._
+- **Why does `AuthServiceTests` connect `api / transactionsEndpoint Tests` to `Controllers// authController`, `abstractions / iuserRepository`, `persistence / categoryRepository`, `Services / refreshtokenService`, `dashboard / idashboardRepository`?**
   _High betweenness centrality (0.014) - this node is a cross-community bridge._
-- **Why does `Category` connect `Category Repository & Password Hashing` to `Category Unit Tests`, `Transaction Services`, `User & Entity Configurations`, `Category Services`?**
-  _High betweenness centrality (0.012) - this node is a cross-community bridge._
+- **Why does `cn()` connect `ui / select` to `ui / dialog`, `ui / input`, `ui / label`, `ui / sheet`, `ui / skeleton`, `ui / table`, `ui / avatar`, `ui / button`, `layout / sidebar`, `common / loadingspinner`, `common / emptystate`, `common / errorstate`, `ui / badge`, `ui / dropdown`, `dashboard / api`, `ui / alert`?**
+  _High betweenness centrality (0.013) - this node is a cross-community bridge._
+- **Are the 73 inferred relationships involving `cn()` (e.g. with `EmptyState()` and `ErrorState()`) actually correct?**
+  _`cn()` has 73 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `idea-refine.sh script`, `BCrypt.Net-Next (4.2.0)`, `FluentValidation.AspNetCore (11.3.1)` to the rest of the system?**
-  _312 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `Integration Tests` be split into smaller, more focused modules?**
-  _Cohesion score 0.06740104555638536 - nodes in this community are weakly interconnected._
-- **Should `.NET NuGet Dependencies` be split into smaller, more focused modules?**
-  _Cohesion score 0.05217391304347826 - nodes in this community are weakly interconnected._
-- **Should `Category Unit Tests` be split into smaller, more focused modules?**
-  _Cohesion score 0.1 - nodes in this community are weakly interconnected._
+  _252 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `api / transactionsEndpoint Tests` be split into smaller, more focused modules?**
+  _Cohesion score 0.05009578544061303 - nodes in this community are weakly interconnected._
+- **Should `backend / tests` be split into smaller, more focused modules?**
+  _Cohesion score 0.05087881591119334 - nodes in this community are weakly interconnected._
