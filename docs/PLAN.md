@@ -887,6 +887,12 @@ Next: **Phase 4** — backend hardening (rate limit, CORS, Serilog, health endpo
 
 **P4.4 smoke script**: `scripts/smoke-test.py` (Python stdlib, no pip dependencies) — 39 assertions across health, register, auth, categories, transactions, dashboard, CSV export, logout, rate limiting, and cross-user isolation.
 
+#### Known follow-ups (after P4.4 re-verification on 2026-06-26)
+
+- **CI Frontend Test step fails on remote** (10 tests in `DashboardPage.test.tsx` + `CategoriesPage.test.tsx` — all show the `ErrorState` boundary in the DOM, indicating a render-time exception). Local `npm test` passes 146/146. CI uses Node 22 on `ubuntu-latest` with `happy-dom` + `pool: "threads"`; the difference vs local Node 26 + Windows is the likely cause. Verbose log artifact is now uploaded (`frontend-test-output.log`) for diagnosis.
+- **CI Backend Test step fails on remote** after 1m 23s (pre-pull of `postgres:16` is in place; failure is in the actual test run, not the bootstrap). Local `dotnet test` passes 199/199 stably across 3 consecutive runs. The `GetSummaryAsync_does_not_run_repository_calls_in_parallel` test was hardened with `TaskCompletionSource` latches; the remaining failure is a different test or environment-specific. TRX file is uploaded as `backend-test-results` artifact for diagnosis.
+- **Lighthouse ≥ 90 on dashboard** is a Phase 2 success criterion (not P4.4) and is still unchecked — requires a real browser (Chrome/Chromium) and a running frontend dev server with seeded data. Not part of the P4.4 verification scope.
+
 ---
 
 ### Phase 5 — E2E Testing with Playwright CLI + Playwright-MCP
