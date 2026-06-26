@@ -38,18 +38,6 @@ export class ErrorBoundary extends Component<
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("ErrorBoundary caught an error:", error, errorInfo)
-    // Also log the message alone on its own line so test annotation
-    // parsers can pick it up (and so the test reporter can surface it
-    // as a clear failure cause).
-    if (error?.message) {
-      console.error("ErrorBoundary message:", error.message)
-    }
-    if (errorInfo?.componentStack) {
-      const firstFrame = errorInfo.componentStack.split("\n")[1]?.trim()
-      if (firstFrame) {
-        console.error("ErrorBoundary component:", firstFrame)
-      }
-    }
   }
 
   handleRetry = () => {
