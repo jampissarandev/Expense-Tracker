@@ -1,4 +1,4 @@
-.PHONY: db-up db-down db-reset db-wsl-ip db-portproxy db-portproxy-remove
+.PHONY: db-up db-down db-reset db-wsl-ip db-portproxy db-portproxy-remove e2e e2e-build
 
 # --- Docker Postgres lifecycle -------------------------------------------------
 
@@ -33,3 +33,18 @@ db-portproxy:
 
 db-portproxy-remove:
 	@powershell -NoProfile -ExecutionPolicy Bypass -File scripts/db-portproxy.ps1 remove
+
+# --- E2E tests (Playwright) --------------------------------------------------
+# Prerequisites:
+#   make db-up          (Postgres running)
+#   Backend running on  http://localhost:5117
+#
+# Usage:
+#   make e2e             — run Playwright specs against the live stack
+#   make e2e-build       — install browsers + rebuild (after Playwright update)
+
+e2e:
+	cd frontend && npx playwright test
+
+e2e-build:
+	cd frontend && npx playwright install --with-deps chromium
