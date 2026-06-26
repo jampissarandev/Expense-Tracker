@@ -27,8 +27,8 @@
 | Pagination | `?page=1&pageSize=20` — `pageSize` is capped at 100 (`TransactionFilter.MaxPageSize`). |
 | Sorting | Transactions list defaults to `occurredOn DESC, createdAt DESC`. No client-side sort. |
 | Cookies | Refresh cookie is `et_rt`, `HttpOnly`, `SameSite=Strict`, `Path=/api/auth`, 7-day expiry, `Secure` only over HTTPS. |
-| Rate limiting | Not yet enforced in Phase 1 (planned for P4.1). |
-| CORS | Not yet configured (planned for P4.1 — dev origin `http://localhost:5173`). |
+| Rate limiting | 5 requests/minute on `/api/auth/*` endpoints (per IP). Other endpoints: no limit. |
+| CORS | Configured for `http://localhost:5173` (Vite dev origin) with credentials. |
 
 ---
 
@@ -56,8 +56,9 @@ All routes under `/api`. Auth column: `public` = no token; `cookie` = refresh co
 | 16 | GET | `/dashboard/summary` | bearer | Aggregations: current month, last 6 months, top-10 by category |
 | 17 | GET | `/exports/transactions.csv` | bearer | Filtered transactions CSV (P3.1) |
 | 18 | GET | `/exports/summary.csv` | bearer | Monthly summary CSV (P3.1) |
+| 19 | GET | `/health` | public | Health check — DB ping + timestamp |
 
-Health check `/health` is **deferred to P4.1** — Phase 1 does not yet expose it.
+> Note: `/health` is mounted outside the `/api` prefix (at root).
 
 ---
 
@@ -125,7 +126,7 @@ Health check `/health` is **deferred to P4.1** — Phase 1 does not yet expose i
 |---|---|
 | 400 | Validation failed |
 | 401 | Wrong email or password (RFC 7807 problem+json; **identical** detail for both to avoid user-enumeration) |
-| 429 | Rate limit (planned P4.1, not yet enforced) |
+| 429 | Rate limit exceeded (5 req/min on `/api/auth/*`) |
 
 ### 3. POST /api/auth/refresh
 
@@ -482,6 +483,28 @@ Same request body as create. Same validation rules.
 
 ---
 
+### 19. GET /health
+
+No auth required. Mounted at root (`/health`), not under `/api`.
+
+**Response — 200 OK**
+
+```json
+{
+  "status": "Healthy",
+  "database": "Healthy",
+  "timestamp": "2026-06-26T12:00:00Z"
+}
+```
+
+- `status`: Overall health status (`Healthy`, `Degraded`, `Unhealthy`)
+- `database`: Database connectivity status (from `AddDbContextCheck`)
+- `timestamp`: Current UTC time
+
+**Errors**: Returns 503 if database is unreachable.
+
+---
+
 ## Error envelope (RFC 7807)
 
 Every non-2xx response (except 204) is `application/problem+json`:
@@ -556,13 +579,13 @@ When a route or shape changes here, update the corresponding test in the same ch
 
 ---
 
-## Deferred (P4.1 / P5)
+## Implemented in P4.1
 
-- `GET /api/health` — health check endpoint with DB ping
-- `GET /api/exports/transactions.csv` — ✅ Done (P3.1)
-- `GET /api/exports/summary.csv` — ✅ Done (P3.1)
-- `GET /api/exports/summary.csv` — Phase 3
-- Rate limiting on `/api/auth/*` (5 req/min/IP)
-- CORS for the Vite dev origin
+- `GET /health` — health check endpoint with DB ping ✅
+- Rate limiting on `/api/auth/*` (5 req/min/IP) ✅
+- CORS for the Vite dev origin (`http://localhost:5173`) ✅
+
+## Deferred (P5+ / future)
+
 - Pagination metadata `hasNext` / `hasPrevious` (currently derivable from `page` + `totalPages`)
 - ETags / `If-Match` for optimistic concurrency on updates

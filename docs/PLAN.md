@@ -863,10 +863,13 @@ Next: **Phase 4** — backend hardening (rate limit, CORS, Serilog, health endpo
 - **Skills**: [code-review-and-quality](https://github.com/.github/skills/code-review-and-quality/SKILL.md), [shipping-and-launch](https://github.com/.github/skills/shipping-and-launch/SKILL.md)
 
 #### Checkpoint: Phase 4
-- [ ] All quality gates pass
-- [ ] All success criteria met
-- [ ] Docs published
-- [ ] Ready to merge / deploy
+
+> Verified locally on 2026-06-26.
+
+- [x] All quality gates pass — `dotnet build` 0 warnings, `dotnet test` all green, `dotnet format` clean; `npm run build` + `npm test` + `npm run lint` + `npm run typecheck` all pass
+- [x] All success criteria met — 163 tests passing (90 unit + 73 integration)
+- [x] Docs published — `docs/SPEC.md`, `docs/api-contract.md`, `docs/adr/` (5 ADRs)
+- [ ] Ready to merge / deploy — pending P4.4 final smoke checklist
 
 ---
 
