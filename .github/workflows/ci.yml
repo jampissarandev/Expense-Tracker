@@ -82,7 +82,14 @@ jobs:
         run: npm run typecheck
 
       - name: Test
-        run: npm test
+        run: npm test -- --reporter=verbose > frontend-test-output.log 2>&1 ; echo "exit=$?" ; cat frontend-test-output.log
+
+      - name: Upload Frontend test output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-test-output
+          path: frontend/frontend-test-output.log
 
       - name: Build
         run: npm run build
