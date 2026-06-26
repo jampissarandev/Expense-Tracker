@@ -1,4 +1,6 @@
 using System.Text;
+using System.Text.Json;
+using System.Threading.RateLimiting;
 using ExpenseTracker.Application.Abstractions;
 using ExpenseTracker.Application.Auth;
 using ExpenseTracker.Application.Categories;
@@ -12,10 +14,18 @@ using ExpenseTracker.Api.Middleware;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Serilog structured logging
+builder.Host.UseSerilog((context, services, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration));
 
 // Add services to the container.
 builder.Services.AddHttpContextAccessor();
@@ -73,7 +83,34 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero // No tolerance for expired tokens
     };
 });
+// CORS — allow frontend dev server with credentials
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowCredentials()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
+// Rate limiting — strict limit on auth endpoints
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("AuthRateLimit", config =>
+    {
+        config.PermitLimit = 5;
+        config.Window = TimeSpan.FromMinutes(1);
+        config.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        config.QueueLimit = 0;
+    });
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+});
+
+// Health checks — EF Core DbContext ping
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<ExpenseTrackerDbContext>("database");
 builder.Services.AddDbContext<ExpenseTrackerDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -89,6 +126,12 @@ var app = builder.Build();
 // Global exception handler (must be first)
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
+// Serilog request logging (after exception handler so errors are captured)
+app.UseSerilogRequestLogging();
+
+// CORS — must be before auth for preflight requests
+app.UseCors("AllowFrontend");
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -96,9 +139,31 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Rate limiting — before auth to block excessive requests early
+app.UseRateLimiter();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Health check endpoint (no auth)
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = async (context, report) =>
+    {
+        context.Response.ContentType = "application/json";
+        var databaseEntry = report.Entries.TryGetValue("database", out var dbEntry)
+            ? dbEntry.Status.ToString()
+            : "Unknown";
+        var result = JsonSerializer.Serialize(new
+        {
+            status = report.Status.ToString(),
+            database = databaseEntry,
+            timestamp = DateTime.UtcNow
+        });
+        await context.Response.WriteAsync(result);
+    }
+});
 
 app.Run();
