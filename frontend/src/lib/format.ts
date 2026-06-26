@@ -12,33 +12,44 @@ export function formatTHB(amount: string | number): string {
   }).format(num)
 }
 
+const thaiShortMonths = [
+  "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
+  "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.",
+] as const
+
+/**
+ * Parse a date string into its components, safely handling both
+ * ISO date-only ("2026-06-24") and ISO datetime ("2026-06-24T18:00:00+00:00")
+ * formats without timezone-induced date shifts.
+ */
+function parseDateParts(date: string): { day: number; month: number; year: number } {
+  // Try date-only format first: "2026-06-24"
+  const dateOnlyMatch = date.match(/^(\d{4})-(\d{2})-(\d{2})/)
+  if (dateOnlyMatch) {
+    return {
+      year: Number.parseInt(dateOnlyMatch[1], 10),
+      month: Number.parseInt(dateOnlyMatch[2], 10),
+      day: Number.parseInt(dateOnlyMatch[3], 10),
+    }
+  }
+  // Fallback to Date parsing for ISO datetimes
+  const d = new Date(date)
+  return {
+    year: d.getFullYear(),
+    month: d.getMonth() + 1,
+    day: d.getDate(),
+  }
+}
+
 /**
  * Format an ISO date string to a Thai-friendly date.
- * e.g. "2026-06-24T18:00:00+00:00" → "24 มิ.ย. 2569"
+ * e.g. "2026-06-24" → "24 มิ.ย. 2569"
  */
 export function formatThaiDate(date: string): string {
-  const d = new Date(date)
+  const { day, month, year } = parseDateParts(date)
   // Use Buddhist year (Thai calendar)
-  const buddhistYear = d.getFullYear() + 543
-  const day = d.getDate()
-  const month = d.getMonth() // 0-indexed
-
-  const thaiMonths = [
-    "ม.ค.",
-    "ก.พ.",
-    "มี.ค.",
-    "เม.ย.",
-    "พ.ค.",
-    "มิ.ย.",
-    "ก.ค.",
-    "ส.ค.",
-    "ก.ย.",
-    "ต.ค.",
-    "พ.ย.",
-    "ธ.ค.",
-  ]
-
-  return `${day} ${thaiMonths[month]} ${buddhistYear}`
+  const buddhistYear = year + 543
+  return `${day} ${thaiShortMonths[month - 1]} ${buddhistYear}`
 }
 
 /**

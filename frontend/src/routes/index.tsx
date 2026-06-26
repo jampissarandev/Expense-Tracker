@@ -7,6 +7,7 @@ import RegisterPage from "@/pages/RegisterPage";
 import DashboardPage from "@/pages/DashboardPage";
 import CategoriesPage from "@/pages/CategoriesPage";
 import TransactionsPage from "@/pages/TransactionsPage";
+import NotFoundPage from "@/pages/NotFoundPage";
 
 // ── RequireAuth wrapper ─────────────────────────────────────────────────────
 
@@ -46,8 +47,8 @@ export default function AppRoutes() {
         <Route path="/categories" element={<CategoriesPage />} />
       </Route>
 
-      {/* Catch-all redirect to dashboard */}
-      <Route path="*" element={<Navigate to="/" replace />} />
+      {/* 404 page for unmatched routes */}
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }

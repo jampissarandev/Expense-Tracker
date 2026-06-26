@@ -1,6 +1,7 @@
 import { MenuIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { UserMenu } from "@/components/layout/UserMenu";
+import { ModeToggle } from "@/components/common/ModeToggle";
 
 export interface HeaderProps {
   /** Opens the mobile navigation sheet. */
@@ -24,6 +25,7 @@ export function Header({ onMenuClick, children }: HeaderProps) {
         </Button>
       ) : null}
       <div className="flex-1">{children}</div>
+      <ModeToggle />
       <UserMenu />
     </header>
   );

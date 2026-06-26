@@ -60,7 +60,7 @@ import {
   downloadTransactionsCsv,
   downloadSummaryCsv,
 } from "@/features/exports/api"
-import { formatTHB } from "@/lib/format"
+import { formatTHB, formatThaiDate } from "@/lib/format"
 import { TransactionType } from "@/types/api"
 import type { TransactionDto, TransactionFilter } from "@/types/api"
 
@@ -433,7 +433,7 @@ export default function TransactionsPage() {
                 {transactions.map((tx) => (
                   <TableRow key={tx.id}>
                     <TableCell className="font-medium">
-                      {tx.occurredOn}
+                      {formatThaiDate(tx.occurredOn)}
                     </TableCell>
                     <TableCell>
                       <Badge variant={typeBadgeVariant(tx.type)}>

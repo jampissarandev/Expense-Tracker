@@ -664,7 +664,7 @@ describe("TransactionsPage", () => {
     renderWithProviders(<TransactionsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText("2026-06-25")).toBeInTheDocument()
+      expect(screen.getByText("25 มิ.ย. 2569")).toBeInTheDocument()
     })
 
     expect(screen.getByText("Lunch")).toBeInTheDocument()
@@ -693,7 +693,7 @@ describe("TransactionsPage", () => {
     renderWithProviders(<TransactionsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText("2026-06-25")).toBeInTheDocument()
+      expect(screen.getByText("25 มิ.ย. 2569")).toBeInTheDocument()
     })
 
     const badges = screen.getAllByText("รายจ่าย")
@@ -707,7 +707,7 @@ describe("TransactionsPage", () => {
     renderWithProviders(<TransactionsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText("2026-06-25")).toBeInTheDocument()
+      expect(screen.getByText("25 มิ.ย. 2569")).toBeInTheDocument()
     })
 
     // All 3 transactions visible initially — scope to table
@@ -773,7 +773,7 @@ describe("TransactionsPage", () => {
     renderWithProviders(<TransactionsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText("2026-06-25")).toBeInTheDocument()
+      expect(screen.getByText("25 มิ.ย. 2569")).toBeInTheDocument()
     })
 
     // Click add button — the header has the "เพิ่มรายการ" button
@@ -793,7 +793,7 @@ describe("TransactionsPage", () => {
     renderWithProviders(<TransactionsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText("2026-06-25")).toBeInTheDocument()
+      expect(screen.getByText("25 มิ.ย. 2569")).toBeInTheDocument()
     })
 
     // Click edit on the first transaction row
@@ -815,7 +815,7 @@ describe("TransactionsPage", () => {
     renderWithProviders(<TransactionsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText("2026-06-25")).toBeInTheDocument()
+      expect(screen.getByText("25 มิ.ย. 2569")).toBeInTheDocument()
     })
 
     // Click delete on the first transaction row
@@ -899,7 +899,7 @@ describe("TransactionsPage", () => {
     renderWithProviders(<TransactionsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText("2026-06-25")).toBeInTheDocument()
+      expect(screen.getByText("25 มิ.ย. 2569")).toBeInTheDocument()
     })
 
     // Apply a type filter using the mocked select button (filter-type)
@@ -935,7 +935,7 @@ describe("TransactionsPage", () => {
     renderWithProviders(<TransactionsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText("2026-06-25")).toBeInTheDocument()
+      expect(screen.getByText("25 มิ.ย. 2569")).toBeInTheDocument()
     })
 
     // Open the form dialog
@@ -965,7 +965,7 @@ describe("TransactionsPage", () => {
     renderWithProviders(<TransactionsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText("2026-06-25")).toBeInTheDocument()
+      expect(screen.getByText("25 มิ.ย. 2569")).toBeInTheDocument()
     })
 
     // Click edit on the first transaction row
@@ -999,7 +999,7 @@ describe("TransactionsPage", () => {
     renderWithProviders(<TransactionsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText("2026-06-25")).toBeInTheDocument()
+      expect(screen.getByText("25 มิ.ย. 2569")).toBeInTheDocument()
     })
 
     expect(screen.getByRole("button", { name: /ส่งออก/i })).toBeInTheDocument()
@@ -1010,7 +1010,7 @@ describe("TransactionsPage", () => {
     renderWithProviders(<TransactionsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText("2026-06-25")).toBeInTheDocument()
+      expect(screen.getByText("25 มิ.ย. 2569")).toBeInTheDocument()
     })
 
     // Open the export dropdown
@@ -1030,7 +1030,7 @@ describe("TransactionsPage", () => {
     renderWithProviders(<TransactionsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText("2026-06-25")).toBeInTheDocument()
+      expect(screen.getByText("25 มิ.ย. 2569")).toBeInTheDocument()
     })
 
     // Apply a type filter — click the type select to cycle from "all" → "รายรับ"
@@ -1063,7 +1063,7 @@ describe("TransactionsPage", () => {
     renderWithProviders(<TransactionsPage />)
 
     await waitFor(() => {
-      expect(screen.getByText("2026-06-25")).toBeInTheDocument()
+      expect(screen.getByText("25 มิ.ย. 2569")).toBeInTheDocument()
     })
 
     // Open the export dropdown

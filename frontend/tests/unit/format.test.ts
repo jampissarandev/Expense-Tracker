@@ -25,17 +25,26 @@ describe("formatTHB", () => {
 })
 
 describe("formatThaiDate", () => {
-  it("formats an ISO date to Thai date with Buddhist year", () => {
-    // 18:00 UTC = 01:00 UTC+7 (next day in Thai timezone)
-    expect(formatThaiDate("2026-06-24T18:00:00+00:00")).toBe("25 มิ.ย. 2569")
+  it("formats a date-only string to Thai date with Buddhist year", () => {
+    expect(formatThaiDate("2026-06-24")).toBe("24 มิ.ย. 2569")
+  })
+
+  it("handles date part of ISO datetime strings", () => {
+    // Only the date portion is used, timezone is ignored
+    expect(formatThaiDate("2026-06-24T18:00:00+00:00")).toBe("24 มิ.ย. 2569")
   })
 
   it("formats January correctly", () => {
-    expect(formatThaiDate("2026-01-01T00:00:00+00:00")).toBe("1 ม.ค. 2569")
+    expect(formatThaiDate("2026-01-15")).toBe("15 ม.ค. 2569")
   })
 
-  it("formats December correctly", () => {
-    expect(formatThaiDate("2026-12-31T00:00:00+00:00")).toBe("31 ธ.ค. 2569")
+  it("formats December with Buddhist year", () => {
+    expect(formatThaiDate("2026-12-31")).toBe("31 ธ.ค. 2569")
+  })
+
+  it("formats date-only strings from the backend", () => {
+    // occurredOn is sent as DateOnly "2026-06-01"
+    expect(formatThaiDate("2026-06-01")).toBe("1 มิ.ย. 2569")
   })
 })
 
