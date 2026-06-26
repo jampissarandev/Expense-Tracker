@@ -202,6 +202,11 @@ jobs:
           # Use a repository secret if configured, otherwise leave empty
           # so the shell script below generates a runtime throwaway key.
           Jwt__SecretKey: ${{ secrets.JWT_SECRET }}
+          # Bypass the auth rate limiter (5 req/min default) so the 15
+          # Playwright specs that each register a fresh user do not hit
+          # 429s. The Api Program.cs skips AddRateLimiter / UseRateLimiter
+          # when this env is "true". Throwaway, lives only in this runner.
+          E2E_TESTS: "true"
         run: |
           # Resolve JWT secret at runtime. Priority:
           #   1. JWT_SECRET GitHub Actions secret (if configured)
