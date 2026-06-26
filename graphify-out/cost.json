@@ -18,6 +18,13 @@
       "input_tokens": 0,
       "output_tokens": 0,
       "files": 208
+    },
+    {
+      "date": "2026-06-26T09:38:26.583447+00:00",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "files": 223,
+      "note": "AST-only this run (semantic subagents unavailable in host)"
     }
   ],
   "total_input_tokens": 0,
