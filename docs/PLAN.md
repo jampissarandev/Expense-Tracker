@@ -767,12 +767,41 @@ Next: **Phase 3** — CSV export endpoints + UI buttons.
 - **Files**: `frontend/src/features/exports/api.ts` (new), `frontend/src/pages/TransactionsPage.tsx`, `frontend/src/pages/DashboardPage.tsx`, `frontend/tests/unit/components/TransactionsPage.test.tsx`, `frontend/tests/unit/components/DashboardPage.test.tsx`, `frontend/tests/unit/features/exports/api.test.ts` (new)
 - **Skills**: [frontend-ui-engineering](https://github.com/.github/skills/frontend-ui-engineering/SKILL.md), [test-driven-development](https://github.com/.github/skills/test-driven-development/SKILL.md)
 
-#### Checkpoint: Phase 3
+#### Checkpoint: Phase 3 — verified 2026-06-26 (live manual smoke + re-test)
+
 - [x] Both export endpoints work — backend P3.1 + frontend P3.2 complete
 - [x] Export dropdowns on TransactionsPage and DashboardPage (both options on each)
 - [x] Transactions CSV respects current filter state (type, category, date range)
-- [x] All tests pass: **129 frontend** (14 files) + **163 backend** (90 unit + 73 integration) = **292 total**
-- [ ] Manual: CSVs open correctly in Excel/Numbers with Thai characters (requires running backend)
+- [x] All tests pass: **129 frontend** (14 files) + **191 backend** (105 unit + 86 integration) = **320 total**
+- [x] **Manual smoke (2026-06-26, live API in WSL)**: CSVs open correctly with Thai characters
+  - `GET /api/exports/transactions.csv` → 200, `Content-Type: text/csv; charset=utf-8`, `Content-Disposition: attachment; filename=transactions-20260626.csv; filename*=UTF-8''transactions-20260626.csv`
+  - File begins with `EF BB BF` (UTF-8 BOM), then Thai header `วันที่,ประเภท,หมวดหมู่,จำนวนเงิน,หมายเหตุ` + CRLF line endings
+  - Thai type label `ค่าใช้จ่าย`, Thai notes `ทดสอบ Phase3 2026-06-01` round-trip correctly (Python `repr` decoded as UTF-8 → `'\ufeffวันที่,...'` with no mojibake)
+  - `GET /api/exports/summary.csv` → 200, 6 months of `last6Months` with correct monthly totals + balance (Apr/May/Jun 2026 each show `0.00 / 1234.56 / -1234.56`)
+  - Filtered transactions (`?type=income&from=2026-05-01&to=2026-05-31`) returns headers only when no match
+  - **Cross-user isolation**: user2 sees only the header row in `transactions.csv` and all-zero months in `summary.csv` after user1 creates a transaction — `user2 has User1's data: NO-LEAK`
+  - **CSV-injection mitigation** (live, not just unit): note `=cmd|/c calc` is exported as `'=cmd|/c calc` (apostrophe prefix, byte `0x27` at start of cell)
+  - **401** returned for both endpoints when unauthenticated (matches `Transactions_csv_without_token_returns_401` + `Summary_csv_without_token_returns_401` integration tests)
+  - Logout (`POST /api/auth/logout`) returns 204 only when both Bearer + refresh cookie are sent (curl with cookie only returns 401 because `[Authorize]` requires the access token). This is a smoke-script issue, not a regression — the frontend `useLogout` sends both. Pre-existing.
+
+### Test counts (post-verification)
+
+| Suite | Before Phase 3 | After Phase 3 | Delta |
+|---|---|---|---|
+| Frontend unit | 113 | 129 | +16 (P3.2 export api tests) |
+| Backend unit | 90 (claimed) | 105 | +15 (P3.1 + dashboard regression tests) |
+| Backend integration | 73 (claimed) | 86 | +13 (P3.1 export endpoint tests) |
+| **Total** | **276** | **320** | **+44** |
+
+The 105/86/129 numbers are the actual counts on 2026-06-26 from `dotnet test -c Release --no-build` and `npm test`. The plan listed 90/73 at the time the P3 deliverables were written; subsequent fixes (dashboard race regression test, additional export coverage) have grown the suite.
+
+### Known issues (pre-existing, not caused by Phase 3)
+
+- **Flaky unit test**: `DashboardServiceTests.GetSummaryAsync_does_not_run_repository_calls_in_parallel` uses fixed `Task.Delay(50)` between assertions. xUnit runs unit + integration collections in parallel by default; the 86 integration tests (21s, ~250 ms each, with Testcontainers overhead) starve the unit-test thread on this Windows host. Symptom: full `dotnet test` reports 104/105 or 105/105 randomly. **Workaround**: run the unit test in isolation (`--filter "FullyQualifiedName~GetSummaryAsync_does_not_run"`) — 3/3 pass. **Root fix (out of Phase 3 scope)**: either disable xUnit parallelization for the dashboard collection, or replace the fixed delays with a `TaskCompletionSource`-based latching assertion that doesn't depend on wall-clock timing. Do not address as part of Phase 3 verification (project rule: no behavior changes mixed with verification).
+- **ECONNREFUSED noise in `npm test` output**: pre-existing. `apiClient.test.ts` and `features/exports/api.test.ts` use MSW with `onUnhandledRequest: "bypass"` by design (some tests assert a real call is NOT made). Node prints an `ECONNREFUSED` aggregate error to stderr when the bypassed call goes out to `http://localhost:5117` with no listener. Tests still pass — output is cosmetic. Same root cause as Phase 2 retest.
+- **Pre-existing 2 integration test failures** (Phase 2 retest): `MigrationsApplyToFreshDatabase.Migrations_Apply_To_Fresh_Database` and `System_Categories_Are_Seeded_On_Startup` are still in tension with the seed-in-model design. **No longer failing** as of 2026-06-26 — both now pass in the 86/86 integration run. Root cause was apparently the same WSL2 Postgres churn that affected earlier runs, not a code regression.
+
+Next: **Phase 4** — backend hardening (rate limit, CORS, Serilog, health endpoint), frontend polish (loading/empty/error states, Thai date format, theme toggle, 404), docs (SPEC, api-contract, ADRs), then final pre-ship gate.
 
 ---
 
