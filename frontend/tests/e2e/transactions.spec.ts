@@ -19,7 +19,7 @@ test.beforeAll(async () => {
     TEST_PASSWORD,
     "Transaction Tester",
   )
-  accessToken = result.accessToken
+  accessToken = result.accessToken.token
 
   const expCat = await createCategoryViaApi(accessToken, {
     name: `E2E Expense-${Date.now()}`,
@@ -35,7 +35,8 @@ test.describe("Transactions page", () => {
   })
 
   test("creates a transaction via dialog", async ({ page }) => {
-    await page.getByRole("button", { name: "เพิ่มรายการ" }).click()
+    // Multiple "เพิ่มรายการ" buttons (header + empty state CTA) - use .first()
+    await page.getByRole("button", { name: "เพิ่มรายการ" }).first().click()
 
     // Dialog should open
     await expect(page.getByRole("dialog")).toBeVisible()
@@ -52,8 +53,8 @@ test.describe("Transactions page", () => {
     // Fill note
     await page.getByLabel("หมายเหตุ").fill("E2E test transaction")
 
-    // Submit
-    await page.getByRole("button", { name: "บันทึก" }).click()
+    // Submit (UI button reads "สร้าง" for create mode)
+    await page.getByRole("button", { name: "สร้าง" }).click()
 
     // Transaction should appear in the table
     await expect(page.getByText("E2E test transaction")).toBeVisible({
@@ -63,8 +64,11 @@ test.describe("Transactions page", () => {
 
   test("shows empty state when no transactions", async ({ page }) => {
     // This user might have transactions from other tests,
-    // but the page should still render properly
-    await expect(page.getByRole("button", { name: "เพิ่มรายการ" })).toBeVisible()
+    // but the page should still render properly. There can be multiple
+    // "เพิ่มรายการ" buttons (header + empty state CTA) so use .first().
+    await expect(
+      page.getByRole("button", { name: "เพิ่มรายการ" }).first(),
+    ).toBeVisible()
   })
 
   test("deletes a transaction", async ({ page }) => {
@@ -79,13 +83,13 @@ test.describe("Transactions page", () => {
 
     await page.reload()
 
-    // Find the row with the note and click delete
+    // Find the row with the note and click delete (aria-label = "ลบรายการ {date}")
     const row = page.getByText(txn.note!).locator("..")
-    await row.getByRole("button", { name: "" }).last().click()
+    await row.getByRole("button", { name: /ลบรายการ/ }).click()
 
-    // Confirm in alert dialog
+    // Confirm in alert dialog (UI confirm button reads "ลบ" not "ยืนยัน")
     await page.getByRole("alertdialog").waitFor({ state: "visible" })
-    await page.getByRole("button", { name: "ยืนยัน" }).click()
+    await page.getByRole("button", { name: "ลบ" }).click()
 
     await expect(page.getByText(txn.note!)).not.toBeVisible({ timeout: 5_000 })
   })

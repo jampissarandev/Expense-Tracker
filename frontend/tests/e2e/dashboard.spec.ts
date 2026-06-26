@@ -17,7 +17,7 @@ test.beforeAll(async () => {
     TEST_PASSWORD,
     "Dashboard Tester",
   )
-  const accessToken = result.accessToken
+  const accessToken = result.accessToken.token
 
   // Seed data for the dashboard
   const expCat = await createCategoryViaApi(accessToken, {

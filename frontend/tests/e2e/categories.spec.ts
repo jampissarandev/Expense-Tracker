@@ -13,7 +13,7 @@ let accessToken: string
 test.beforeAll(async () => {
   userEmail = uniqueEmail("cat")
   const result = await registerViaApi(userEmail, TEST_PASSWORD, "Category Tester")
-  accessToken = result.accessToken
+  accessToken = result.accessToken.token
 })
 
 test.describe("Categories page", () => {
@@ -46,8 +46,8 @@ test.describe("Categories page", () => {
     await page.getByLabel("ชื่อหมวดหมู่").fill(catName)
 
     // Type is already set to "รายจ่าย" (expense) by default
-    // Submit
-    await page.getByRole("button", { name: "บันทึก" }).click()
+    // Submit (UI button reads "สร้าง" for create mode)
+    await page.getByRole("button", { name: "สร้าง" }).click()
 
     // Dialog should close and new category should appear
     await expect(page.getByText(catName)).toBeVisible({ timeout: 5_000 })
@@ -66,13 +66,16 @@ test.describe("Categories page", () => {
       (res) => res.url().includes("/api/categories") && res.status() === 200,
     )
 
-    // Find the category and click its delete button
+    // Find the category and click its delete button (aria-label = "ลบ {name}")
     const row = page.getByText(cat.name).locator("..")
-    await row.getByRole("button", { name: "" }).last().click()
+    await row.getByRole("button", { name: new RegExp(`^ลบ ${cat.name}$`) }).click()
 
-    // Confirm in alert dialog
+    // Confirm in alert dialog (UI confirm button reads "ลบ" not "ยืนยัน")
     await page.getByRole("alertdialog").waitFor({ state: "visible" })
-    await page.getByRole("button", { name: "ยืนยัน" }).click()
+    await page.getByRole("button", { name: "ลบ" }).click()
+    // Wait for the dialog to dismiss first (it still shows the category name
+    // in its description while open) before asserting the row is gone.
+    await page.getByRole("alertdialog").waitFor({ state: "hidden" })
 
     // Category should disappear
     await expect(page.getByText(cat.name)).not.toBeVisible({ timeout: 5_000 })

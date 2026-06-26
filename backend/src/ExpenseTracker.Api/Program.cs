@@ -96,17 +96,22 @@ builder.Services.AddCors(options =>
 });
 
 // Rate limiting — strict limit on auth endpoints
-builder.Services.AddRateLimiter(options =>
+// Disabled in E2E test environments (set E2E_TESTS=true) so Playwright
+// suites that register many users in quick succession are not blocked.
+if (!string.Equals(builder.Configuration["E2E_TESTS"], "true", StringComparison.OrdinalIgnoreCase))
 {
-    options.AddFixedWindowLimiter("AuthRateLimit", config =>
+    builder.Services.AddRateLimiter(options =>
     {
-        config.PermitLimit = 5;
-        config.Window = TimeSpan.FromMinutes(1);
-        config.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-        config.QueueLimit = 0;
+        options.AddFixedWindowLimiter("AuthRateLimit", config =>
+        {
+            config.PermitLimit = 5;
+            config.Window = TimeSpan.FromMinutes(1);
+            config.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+            config.QueueLimit = 0;
+        });
+        options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
     });
-    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-});
+}
 
 // Health checks — EF Core DbContext ping
 builder.Services.AddHealthChecks()
@@ -140,7 +145,11 @@ if (app.Environment.IsDevelopment())
 }
 
 // Rate limiting — before auth to block excessive requests early
-app.UseRateLimiter();
+// Skipped when E2E_TESTS=true (no rate limiter registered in that case).
+if (!string.Equals(builder.Configuration["E2E_TESTS"], "true", StringComparison.OrdinalIgnoreCase))
+{
+    app.UseRateLimiter();
+}
 
 app.UseAuthentication();
 app.UseAuthorization();

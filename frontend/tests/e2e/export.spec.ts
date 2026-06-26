@@ -18,7 +18,7 @@ test.beforeAll(async () => {
     TEST_PASSWORD,
     "Export Tester",
   )
-  const accessToken = result.accessToken
+  const accessToken = result.accessToken.token
 
   const cat = await createCategoryViaApi(accessToken, {
     name: `Export Cat-${Date.now()}`,

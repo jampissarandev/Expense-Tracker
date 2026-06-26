@@ -15,9 +15,18 @@ export function uniqueEmail(prefix = "e2e"): string {
 // ── API helpers (bypass UI for speed where appropriate) ─────────────────────
 
 interface ApiAuthResult {
-  accessToken: string
+  /** The raw response from /api/auth/{register,login} — accessToken is a
+   *  {token, expiresAt} object. Callers should use `result.accessToken.token`
+   *  to get the bearer token, matching how AuthContext does it. */
+  accessToken: { token: string; expiresAt: string }
   refreshToken: string
+  refreshTokenExpiresAt: string
   user: { id: string; email: string; displayName: string }
+}
+
+/** Convenience: extract the bearer token string from an auth result. */
+export function bearer(result: ApiAuthResult): string {
+  return result.accessToken.token
 }
 
 /** Register a user via the API and return tokens + user. */
