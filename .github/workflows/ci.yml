@@ -182,12 +182,18 @@ jobs:
         # Re-restore so `dotnet ef` (which loads assemblies from the global
         # packages cache) sees the same 10.0.9 EF Core packages the build
         # just produced, avoiding any "Could not load assembly" mismatches.
+        # NOTE: For `database update`, the short flag `-c` is interpreted by
+        # `dotnet ef` as `--environment` (not `--configuration`). Using
+        # `-c Release` made EF look for a DbContext named "Release" and
+        # fail with "No DbContext named 'Release' was found." Pass
+        # `--configuration` explicitly to keep this in sync with the
+        # `dotnet build -c Release` step above.
         run: |
           dotnet restore
           dotnet ef database update \
             --project src/ExpenseTracker.Infrastructure \
             --startup-project src/ExpenseTracker.Api \
-            -c Release
+            --configuration Release
         working-directory: backend
 
       # ── Start backend ───────────────────────────────────────────────────
