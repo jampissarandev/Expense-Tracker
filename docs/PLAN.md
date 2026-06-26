@@ -949,6 +949,41 @@ This phase is **post-MVP** and can run in parallel with Phase 4. It adds confide
 - [ ] `playwright-mcp` is configured for VS Code and reachable
 - [ ] At least one bug found and fixed via MCP-driven browser session (proves the value)
 
+#### P5.2 — Add Playwright CLI to CI ✅
+
+> Implementation verified locally on 2026-06-26; CI verification pending first push.
+
+- [x] **`.github/workflows/ci.yml` has a new `e2e-ci` job** (line 96+) that runs Playwright against a real stack
+  - `actions/setup-node@v5` with `node-version-file: frontend/.nvmrc`
+  - `actions/setup-dotnet@v5` (10.0.x)
+  - `npm ci` + `npx playwright install --with-deps chromium`
+  - `dotnet restore` + `dotnet build -c Release --no-restore` for the API
+  - `dotnet tool install --global dotnet-ef --version 10.*` + `dotnet ef database update`
+  - **Postgres 16 service container** with healthcheck (`pg_isready -U expense -d expensetracker`)
+  - **Backend startup** with health-check loop (`curl /health` 30×2s) before running tests
+  - `npx playwright test --reporter=html,github`
+  - Artifacts: `playwright-report/` (14d retention), `playwright-test-results/` (7d)
+  - **No hard-coded secrets**: `Jwt__SecretKey` is sourced from `secrets.JWT_SECRET` (if configured) and falls back to a runtime `openssl rand -hex 32` throwaway key per runner. The `Development` env (`ASPNETCORE_ENVIRONMENT=Development`) reads it from the env, so local-machine runs are unaffected.
+- [x] **`frontend/playwright.config.ts`** — `fullyParallel: false`, `workers: 1`, `retries: 2` in CI, `webServer.reuseExistingServer: !process.env.CI` (so CI = Playwright starts the dev server)
+- [x] **`frontend/tests/e2e/`** — 5 spec files, **15 tests** total:
+  - `auth.spec.ts` (5): register → dashboard, login → dashboard, wrong password, logout, unauthenticated redirect
+  - `categories.spec.ts` (3): system read-only, create custom, delete custom
+  - `dashboard.spec.ts` (2): KPI cards render, charts render (Recharts SVGs)
+  - `transactions.spec.ts` (3): create via dialog, empty state, delete
+  - `export.spec.ts` (2): transactions CSV download (BOM + Thai headers), summary CSV download
+- [x] **`Makefile`** adds `e2e` and `e2e-build` targets (convention: `make e2e` runs Playwright against the live stack)
+- [x] **`package.json` scripts** — `test:e2e` and `test:e2e:ui` for local invocation
+- [x] **`@playwright/test@^1.61.1`** added to `devDependencies`
+- [x] **Local smoke**: `npx playwright test --list` reports all 15 tests discoverable; `npm test` (Vitest) still **146/146 green** (no regression); YAML parses via `yaml.safe_load`; `webServer.url: http://localhost:5173` + `webServer.command: npm run dev` correctly wired
+- [ ] **CI verification on a real PR** — requires push to remote. Will be validated when the next PR is opened (the current run on `main` cannot trigger `pull_request` workflows without a PR). Expected to pass: 15 tests × ~5–10s each = ~2 min total, well under the 15-min `timeout-minutes` budget.
+- [ ] **P5.1 and P5.3** — still unchecked. P5.1 is implemented (15 tests exist) but the "all specs pass locally" sub-criterion has not been run end-to-end against a live backend on this host (depends on WSL2 Postgres being up). P5.3 (MCP) is not yet started.
+
+**Risks / follow-ups for P5.2**:
+
+- **Cold-start timeout**: first `dotnet run` on a fresh runner takes ~15s to JIT; the 30×2s `curl /health` loop provides a 60s budget which is sufficient, but tightly so. If tests start flaking with "Backend failed to start", bump to `seq 1 60` (120s budget).
+- **`webServer.reuseExistingServer: false` in CI** means Playwright will start `npm run dev` in a child process. The job-level `env` block (including `VITE_API_URL=http://localhost:5117`) is inherited by child processes, so the dev server picks up the backend URL — confirmed by reading `vite.config.ts` (no explicit `loadEnv`, relies on default Vite behavior of injecting `VITE_*` process env into the client).
+- **Action items still open from P4.4**: CI Frontend Test step and CI Backend Test step fail on remote. The e2e-ci job is structured to be independent of those — it uses a separate Postgres service container, separate build steps, and a separate `timeout-minutes`. If `backend-ci` or `frontend-ci` fail on the same PR, e2e-ci should still be evaluable in isolation.
+
 ---
 
 ## Relevant Files / Patterns to Reuse

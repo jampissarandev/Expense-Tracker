@@ -93,3 +93,136 @@ jobs:
 
       - name: Build
         run: npm run build
+
+  e2e-ci:
+    name: E2E (Playwright)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: expense
+          POSTGRES_PASSWORD: expense
+          POSTGRES_DB: expensetracker
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U expense -d expensetracker"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+
+    defaults:
+      run:
+        working-directory: frontend
+
+    # NOTE: Jwt__SecretKey is intentionally NOT hard-coded. It is generated
+    # per-run below via a 32-byte random hex string (throwaway, CI-only).
+    # The "Development" environment reads from env at runtime, so this
+    # override does not affect any local-machine run.
+    env:
+      DATABASE_URL: "Host=localhost;Port=5432;Database=expensetracker;Username=expense;Password=expense"
+      API_URL: "http://localhost:5117"
+      FRONTEND_URL: "http://localhost:5173"
+      VITE_API_URL: "http://localhost:5117"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://localhost:5117"
+      ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=expensetracker;Username=expense;Password=expense"
+
+    steps:
+      - uses: actions/checkout@v5
+
+      # ── Frontend setup ──────────────────────────────────────────────────
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: frontend/.nvmrc
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      # ── Backend setup ───────────────────────────────────────────────────
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v5
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('backend/**/*.csproj', 'backend/**/*.props') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore backend dependencies
+        run: dotnet restore
+        working-directory: backend
+
+      - name: Build backend
+        run: dotnet build -c Release --no-restore
+        working-directory: backend
+
+      - name: Install EF Core tools
+        run: dotnet tool install --global dotnet-ef --version 10.*
+
+      - name: Apply database migrations
+        run: dotnet ef database update --project src/ExpenseTracker.Infrastructure --startup-project src/ExpenseTracker.Api -c Release
+        working-directory: backend
+
+      # ── Start backend ───────────────────────────────────────────────────
+      - name: Start backend API
+        env:
+          # Use a repository secret if configured, otherwise leave empty
+          # so the shell script below generates a runtime throwaway key.
+          Jwt__SecretKey: ${{ secrets.JWT_SECRET }}
+        run: |
+          # Resolve JWT secret at runtime. Priority:
+          #   1. JWT_SECRET GitHub Actions secret (if configured)
+          #   2. openssl rand -hex 32  → throwaway, lives only in this runner
+          if [ -z "${Jwt__SecretKey}" ]; then
+            export Jwt__SecretKey="$(openssl rand -hex 32)"
+            echo "Jwt__SecretKey: <runtime-generated, throwaway, 64 hex chars>"
+          else
+            echo "Jwt__SecretKey: <provided by repository secret>"
+          fi
+          dotnet run --project src/ExpenseTracker.Api --no-build -c Release &
+          # Wait for the API to become healthy
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:5117/health > /dev/null 2>&1; then
+              echo "Backend is healthy"
+              exit 0
+            fi
+            echo "Waiting for backend... ($i/30)"
+            sleep 2
+          done
+          echo "Backend failed to start"
+          exit 1
+        working-directory: backend
+
+      # ── Run E2E tests ───────────────────────────────────────────────────
+      - name: Run Playwright tests
+        run: npx playwright test --reporter=html,github
+
+      # ── Artifacts ───────────────────────────────────────────────────────
+      - name: Upload Playwright HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: frontend/playwright-report/
+          retention-days: 14
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: frontend/test-results/
+          retention-days: 7
