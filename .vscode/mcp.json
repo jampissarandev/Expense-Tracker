@@ -3,7 +3,11 @@
     "playwright": {
       "command": "npx",
       "args": [
-        "@playwright/mcp@latest"
+        "@playwright/mcp@0.0.76",
+        "--isolated",
+        "--viewport-size=1280x800",
+        "--caps=devtools",
+        "--console-level=warn"
       ]
     }
   }

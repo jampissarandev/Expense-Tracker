@@ -944,10 +944,10 @@ This phase is **post-MVP** and can run in parallel with Phase 4. It adds confide
 - **Skills**: [browser-testing-with-devtools](https://github.com/.github/skills/browser-testing-with-devtools/SKILL.md)
 
 #### Checkpoint: Phase 5
-- [ ] All Playwright specs pass locally + in CI
-- [ ] `playwright-cli` is the CI runner
-- [ ] `playwright-mcp` is configured for VS Code and reachable
-- [ ] At least one bug found and fixed via MCP-driven browser session (proves the value)
+- [x] All Playwright specs pass locally + in CI ✅ (P5.1 + P5.2)
+- [x] `playwright-cli` is the CI runner ✅ (`e2e-ci` job in ci.yml)
+- [x] `playwright-mcp` is configured for VS Code and reachable ✅ (`.vscode/mcp.json` + `frontend/tests/e2e/README.md`)
+- [ ] At least one bug found and fixed via MCP-driven browser session (proves the value) — deferred to first manual QA session
 
 #### P5.2 — Add Playwright CLI to CI ✅
 
@@ -979,7 +979,8 @@ This phase is **post-MVP** and can run in parallel with Phase 4. It adds confide
   1. `e75d3ba` — pin `dotnet-ef` tool to `10.0.9` (was `10.*`, resolved to 10.0.0 and produced "Could not load Microsoft.EntityFrameworkCore.Design Version=10.0.0.0").
   2. `9daad7c` — switch from `-c Release` to `--configuration Release` on `dotnet ef database update` (the short flag is `--environment` for that subcommand, so EF was looking for a DbContext named "Release" and failing with "No DbContext named 'Release' was found.").
   3. `34516ef` — pass `E2E_TESTS=true` into the "Start backend API" step so the auth rate limiter (5 req/min) is bypassed. The 15 specs each register a fresh user via `registerViaApi`; without the bypass they hit 429 and fail with `Error: registerViaApi failed (429)`.
-- [ ] **P5.1 and P5.3** — still unchecked. P5.1 is implemented and **all 15 specs pass locally + in CI**; only the formal "Phase 5 checkpoint" sub-criteria remain. P5.3 (MCP) is not yet started.
+- [x] **P5.1** — implemented and all 15 specs pass locally + in CI (run 28244724266).
+- [x] **P5.3** — Playwright-MCP configured in `.vscode/mcp.json` with `@playwright/mcp@0.0.76` (pinned), `--isolated`, `--viewport-size=1280x800`, `--caps=devtools`, `--console-level=warn`; documented in `frontend/tests/e2e/README.md` with 6 recipes (register→category→transaction, dashboard check, login error, responsive, export CSV, accessibility audit) + chromium install + stack-start commands; reachable from VS Code Copilot Chat MCP panel.
 
 **Risks / follow-ups for P5.2**:
 
