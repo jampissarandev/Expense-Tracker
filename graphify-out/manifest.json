@@ -1735,9 +1735,9 @@
     "semantic_hash": "52f9fb3895c2c79bd865c7c95331df79"
   },
   "D:\\JamProject\\ExpenseTracker\\.github\\copilot-instructions.md": {
-    "mtime": 1782380321.3184116,
-    "ast_hash": "c255f9304ab86b652446549502cdd4bc",
-    "semantic_hash": "c255f9304ab86b652446549502cdd4bc"
+    "mtime": 1782389814.1497753,
+    "ast_hash": "09ea40eecffe3961e70ef809a01ed1b7",
+    "semantic_hash": "09ea40eecffe3961e70ef809a01ed1b7"
   },
   "D:\\JamProject\\ExpenseTracker\\.github\\skills\\api-and-interface-design\\SKILL.md": {
     "mtime": 1781999800.0,
@@ -1895,9 +1895,9 @@
     "semantic_hash": "780ef7e9acc5d9bc5bb960ea02f4c6b2"
   },
   "D:\\JamProject\\ExpenseTracker\\docs\\PLAN.md": {
-    "mtime": 1782388175.1560733,
-    "ast_hash": "4ef4300439f9d61107831e6aa392fbba",
-    "semantic_hash": "4ef4300439f9d61107831e6aa392fbba"
+    "mtime": 1782449928.4109397,
+    "ast_hash": "9d2cbd7f9edb7f25e6962989ed823bb6",
+    "semantic_hash": "9d2cbd7f9edb7f25e6962989ed823bb6"
   },
   "D:\\JamProject\\ExpenseTracker\\docs\\api-contract.md": {
     "mtime": 1782377248.5471067,
@@ -1968,5 +1968,30 @@
     "mtime": 1782388175.154515,
     "ast_hash": "a84dfd967de4382920383c011d0d87f8",
     "semantic_hash": "a84dfd967de4382920383c011d0d87f8"
+  },
+  "D:\\JamProject\\ExpenseTracker\\scripts\\phase3-smoke-cross-user.sh": {
+    "mtime": 1782450244.7035868,
+    "ast_hash": "7c64ac95ceb5c436c9e35384e9638f0d",
+    "semantic_hash": "7c64ac95ceb5c436c9e35384e9638f0d"
+  },
+  "D:\\JamProject\\ExpenseTracker\\scripts\\phase3-smoke-csv-injection.sh": {
+    "mtime": 1782450244.7035868,
+    "ast_hash": "d4b9ab2d8836a9d261e7090f41a067fb",
+    "semantic_hash": "d4b9ab2d8836a9d261e7090f41a067fb"
+  },
+  "D:\\JamProject\\ExpenseTracker\\scripts\\phase3-smoke.sh": {
+    "mtime": 1782450244.7035868,
+    "ast_hash": "be3b11b1e5b1051e1de4c7656881282c",
+    "semantic_hash": "be3b11b1e5b1051e1de4c7656881282c"
+  },
+  "D:\\JamProject\\ExpenseTracker\\scripts\\wait-api.sh": {
+    "mtime": 1782450608.2048132,
+    "ast_hash": "61b1cac9d85a4c097f9001200562535c",
+    "semantic_hash": "61b1cac9d85a4c097f9001200562535c"
+  },
+  "D:\\JamProject\\ExpenseTracker\\scripts\\README.md": {
+    "mtime": 1782450608.2048132,
+    "ast_hash": "f32a3e359d353a682272f4cce3b16014",
+    "semantic_hash": "f32a3e359d353a682272f4cce3b16014"
   }
 }
