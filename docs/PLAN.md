@@ -951,16 +951,16 @@ This phase is **post-MVP** and can run in parallel with Phase 4. It adds confide
 
 #### P5.2 — Add Playwright CLI to CI ✅
 
-> Implementation verified locally on 2026-06-26; CI verification pending first push.
+> Implementation complete; CI verified green on 2026-06-26 (run 28244724266, E2E (Playwright) job: 22/22 steps success).
 
 - [x] **`.github/workflows/ci.yml` has a new `e2e-ci` job** (line 96+) that runs Playwright against a real stack
   - `actions/setup-node@v5` with `node-version-file: frontend/.nvmrc`
   - `actions/setup-dotnet@v5` (10.0.x)
   - `npm ci` + `npx playwright install --with-deps chromium`
   - `dotnet restore` + `dotnet build -c Release --no-restore` for the API
-  - `dotnet tool install --global dotnet-ef --version 10.*` + `dotnet ef database update`
+  - `dotnet tool install --global dotnet-ef --version 10.0.9` + `dotnet ef database update --configuration Release` (pinned to match EF Core 10.0.9 in csproj files; `--configuration` is required because `dotnet ef database update -c X` interprets `-c` as `--environment`, not `--configuration`)
   - **Postgres 16 service container** with healthcheck (`pg_isready -U expense -d expensetracker`)
-  - **Backend startup** with health-check loop (`curl /health` 30×2s) before running tests
+  - **Backend startup** with `E2E_TESTS=true` env (bypasses auth rate limiter) and health-check loop (`curl /health` 30×2s) before running tests
   - `npx playwright test --reporter=html,github`
   - Artifacts: `playwright-report/` (14d retention), `playwright-test-results/` (7d)
   - **No hard-coded secrets**: `Jwt__SecretKey` is sourced from `secrets.JWT_SECRET` (if configured) and falls back to a runtime `openssl rand -hex 32` throwaway key per runner. The `Development` env (`ASPNETCORE_ENVIRONMENT=Development`) reads it from the env, so local-machine runs are unaffected.
@@ -974,15 +974,18 @@ This phase is **post-MVP** and can run in parallel with Phase 4. It adds confide
 - [x] **`Makefile`** adds `e2e` and `e2e-build` targets (convention: `make e2e` runs Playwright against the live stack)
 - [x] **`package.json` scripts** — `test:e2e` and `test:e2e:ui` for local invocation
 - [x] **`@playwright/test@^1.61.1`** added to `devDependencies`
-- [x] **Local smoke**: `npx playwright test --list` reports all 15 tests discoverable; `npm test` (Vitest) still **146/146 green** (no regression); YAML parses via `yaml.safe_load`; `webServer.url: http://localhost:5173` + `webServer.command: npm run dev` correctly wired
-- [ ] **CI verification on a real PR** — requires push to remote. Will be validated when the next PR is opened (the current run on `main` cannot trigger `pull_request` workflows without a PR). Expected to pass: 15 tests × ~5–10s each = ~2 min total, well under the 15-min `timeout-minutes` budget.
-- [ ] **P5.1 and P5.3** — still unchecked. P5.1 is implemented (15 tests exist) but the "all specs pass locally" sub-criterion has not been run end-to-end against a live backend on this host (depends on WSL2 Postgres being up). P5.3 (MCP) is not yet started.
+- [x] **Local smoke**: 15/15 tests pass against the WSL2 backend in 50.1s; Vitest still **146/146 green** (no regression)
+- [x] **CI verification on push to `main`** — run 28244724266 (commit `34516ef`): **`E2E (Playwright)` job green, 22/22 steps success**. Three CI fixes were required to get there:
+  1. `e75d3ba` — pin `dotnet-ef` tool to `10.0.9` (was `10.*`, resolved to 10.0.0 and produced "Could not load Microsoft.EntityFrameworkCore.Design Version=10.0.0.0").
+  2. `9daad7c` — switch from `-c Release` to `--configuration Release` on `dotnet ef database update` (the short flag is `--environment` for that subcommand, so EF was looking for a DbContext named "Release" and failing with "No DbContext named 'Release' was found.").
+  3. `34516ef` — pass `E2E_TESTS=true` into the "Start backend API" step so the auth rate limiter (5 req/min) is bypassed. The 15 specs each register a fresh user via `registerViaApi`; without the bypass they hit 429 and fail with `Error: registerViaApi failed (429)`.
+- [ ] **P5.1 and P5.3** — still unchecked. P5.1 is implemented and **all 15 specs pass locally + in CI**; only the formal "Phase 5 checkpoint" sub-criteria remain. P5.3 (MCP) is not yet started.
 
 **Risks / follow-ups for P5.2**:
 
-- **Cold-start timeout**: first `dotnet run` on a fresh runner takes ~15s to JIT; the 30×2s `curl /health` loop provides a 60s budget which is sufficient, but tightly so. If tests start flaking with "Backend failed to start", bump to `seq 1 60` (120s budget).
+- **Cold-start timeout**: first `dotnet run` on a fresh runner takes ~15s to JIT; the 30×2s `curl /health` loop provides a 60s budget which is sufficient (current run came up in ~10s, first test started at ~6 min mark). If tests start flaking with "Backend failed to start", bump to `seq 1 60` (120s budget).
 - **`webServer.reuseExistingServer: false` in CI** means Playwright will start `npm run dev` in a child process. The job-level `env` block (including `VITE_API_URL=http://localhost:5117`) is inherited by child processes, so the dev server picks up the backend URL — confirmed by reading `vite.config.ts` (no explicit `loadEnv`, relies on default Vite behavior of injecting `VITE_*` process env into the client).
-- **Action items still open from P4.4**: CI Frontend Test step and CI Backend Test step fail on remote. The e2e-ci job is structured to be independent of those — it uses a separate Postgres service container, separate build steps, and a separate `timeout-minutes`. If `backend-ci` or `frontend-ci` fail on the same PR, e2e-ci should still be evaluable in isolation.
+- **P4.4 follow-ups still open (separate from P5.2)**: CI Frontend Test step and CI Backend Test step fail on remote (run 28244724266: `Backend CI` and `Frontend CI` jobs both `failure` at the `Test` step). These are pre-existing P4.4 issues tracked under commit `ab69645` ("CI Frontend/Backend test follow-ups + Lighthouse after P4.4"), NOT regressions from the P5.2 work. The `e2e-ci` job is independent of those — it uses a separate Postgres service container, separate build steps, and a separate `timeout-minutes`.
 
 ---
 
