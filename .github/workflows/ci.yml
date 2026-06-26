@@ -170,10 +170,24 @@ jobs:
         working-directory: backend
 
       - name: Install EF Core tools
-        run: dotnet tool install --global dotnet-ef --version 10.*
+        # Pin the tool to EXACTLY match the EF Core runtime that the project
+        # references (currently 10.0.9 across all csproj files). Using a
+        # wildcard ("10.*") makes `dotnet tool install` resolve to the lowest
+        # 10.0.x (often 10.0.0), which then fails with
+        # "Could not load file or assembly 'Microsoft.EntityFrameworkCore.Design, Version=10.0.0.0'"
+        # at migration time because it does not match the restored 10.0.9.
+        run: dotnet tool install --global dotnet-ef --version 10.0.9
 
       - name: Apply database migrations
-        run: dotnet ef database update --project src/ExpenseTracker.Infrastructure --startup-project src/ExpenseTracker.Api -c Release
+        # Re-restore so `dotnet ef` (which loads assemblies from the global
+        # packages cache) sees the same 10.0.9 EF Core packages the build
+        # just produced, avoiding any "Could not load assembly" mismatches.
+        run: |
+          dotnet restore
+          dotnet ef database update \
+            --project src/ExpenseTracker.Infrastructure \
+            --startup-project src/ExpenseTracker.Api \
+            -c Release
         working-directory: backend
 
       # ── Start backend ───────────────────────────────────────────────────
