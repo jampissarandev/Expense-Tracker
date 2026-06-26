@@ -101,11 +101,21 @@ public class DashboardServiceTests
     public async Task GetSummaryAsync_does_not_run_repository_calls_in_parallel()
     {
         // Use TaskCompletionSources so the test can hold each call open
-        // and observe the call order. The "started" recorder is appended
-        // to *before* the call awaits, so a parallel implementation would
-        // record [currentMonth, last6Months, byCategory] immediately.
+        // and observe the call order deterministically (no Task.Delay).
+        // A "started" latch is signalled the moment a call begins; the
+        // assertion code awaits the next-call latch *after* releasing the
+        // previous one, which proves the next call did not start until
+        // the previous one completed. A parallel implementation would
+        // record all three "start" signals before any of them is
+        // released, which the assertions detect.
         var callOrder = new List<string>();
-        var locks = new Dictionary<string, TaskCompletionSource>
+        var startedLatches = new Dictionary<string, TaskCompletionSource>
+        {
+            ["currentMonth"] = new(TaskCreationOptions.RunContinuationsAsynchronously),
+            ["last6Months"] = new(TaskCreationOptions.RunContinuationsAsynchronously),
+            ["byCategory"] = new(TaskCreationOptions.RunContinuationsAsynchronously),
+        };
+        var releaseLatches = new Dictionary<string, TaskCompletionSource>
         {
             ["currentMonth"] = new(TaskCreationOptions.RunContinuationsAsynchronously),
             ["last6Months"] = new(TaskCreationOptions.RunContinuationsAsynchronously),
@@ -116,44 +126,57 @@ public class DashboardServiceTests
         repo.GetCurrentMonthTotalsAsync(TestUserId).Returns(async _ =>
         {
             lock (callOrder) { callOrder.Add("currentMonth:start"); }
-            await locks["currentMonth"].Task.ConfigureAwait(false);
+            startedLatches["currentMonth"].TrySetResult();
+            await releaseLatches["currentMonth"].Task.ConfigureAwait(false);
             return new CurrentMonthTotals(0m, 0m, 2026, 6);
         });
         repo.GetLast6MonthsAsync(TestUserId).Returns(async _ =>
         {
             lock (callOrder) { callOrder.Add("last6Months:start"); }
-            await locks["last6Months"].Task.ConfigureAwait(false);
+            startedLatches["last6Months"].TrySetResult();
+            await releaseLatches["last6Months"].Task.ConfigureAwait(false);
             return (IReadOnlyList<MonthlyAggregate>)new List<MonthlyAggregate>();
         });
         repo.GetByCategoryAsync(TestUserId, TransactionType.Expense).Returns(async _ =>
         {
             lock (callOrder) { callOrder.Add("byCategory:start"); }
-            await locks["byCategory"].Task.ConfigureAwait(false);
+            startedLatches["byCategory"].TrySetResult();
+            await releaseLatches["byCategory"].Task.ConfigureAwait(false);
             return (IReadOnlyList<CategoryAggregate>)new List<CategoryAggregate>();
         });
 
         var sut = new DashboardService(repo);
         var summaryTask = sut.GetSummaryAsync(TestUserId);
 
-        // Give the first call time to start.
-        await Task.Delay(50);
-        lock (callOrder) { callOrder.Count.Should().Be(1, "only the first call should have started"); }
-        callOrder[0].Should().Be("currentMonth:start");
+        // Wait deterministically for the first call to start.
+        await startedLatches["currentMonth"].Task;
+        lock (callOrder)
+        {
+            callOrder.Count.Should().Be(1, "only the first call should have started");
+            callOrder[0].Should().Be("currentMonth:start");
+        }
 
-        // Release the first call. Only THEN should the second call start.
-        locks["currentMonth"].SetResult();
-        await Task.Delay(50);
-        lock (callOrder) { callOrder.Should().Contain("last6Months:start"); }
-        callOrder.Count.Should().Be(2, "the second call should start only after the first completes");
+        // Release the first call. The second call is then allowed to
+        // start; wait deterministically for it.
+        releaseLatches["currentMonth"].TrySetResult();
+        await startedLatches["last6Months"].Task;
+        lock (callOrder)
+        {
+            callOrder.Should().Contain("last6Months:start");
+            callOrder.Count.Should().Be(2, "the second call should start only after the first completes");
+        }
 
-        // Release the second. The third should then start.
-        locks["last6Months"].SetResult();
-        await Task.Delay(50);
-        lock (callOrder) { callOrder.Should().Contain("byCategory:start"); }
-        callOrder.Count.Should().Be(3, "the third call should start only after the second completes");
+        // Release the second. The third is then allowed to start.
+        releaseLatches["last6Months"].TrySetResult();
+        await startedLatches["byCategory"].Task;
+        lock (callOrder)
+        {
+            callOrder.Should().Contain("byCategory:start");
+            callOrder.Count.Should().Be(3, "the third call should start only after the second completes");
+        }
 
         // Release the third and let the service return.
-        locks["byCategory"].SetResult();
+        releaseLatches["byCategory"].TrySetResult();
         var summary = await summaryTask;
         summary.Should().NotBeNull();
     }
