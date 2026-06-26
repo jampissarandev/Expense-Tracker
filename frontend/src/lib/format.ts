@@ -1,15 +1,28 @@
 /**
  * Format a decimal string as THB currency.
  * e.g. "85500.5" → "฿85,500.50"
+ *
+ * Falls back to a manual formatter when the runtime lacks full ICU data
+ * (some minimal Linux CI images ship Node with small-icu). The fallback
+ * matches the Intl output as closely as possible for th-TH.
  */
 export function formatTHB(amount: string | number): string {
   const num = typeof amount === "string" ? parseFloat(amount) : amount
-  return new Intl.NumberFormat("th-TH", {
-    style: "currency",
-    currency: "THB",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(num)
+  try {
+    return new Intl.NumberFormat("th-TH", {
+      style: "currency",
+      currency: "THB",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(num)
+  } catch {
+    // Manual fallback for environments without th-TH locale data
+    const sign = num < 0 ? "-" : ""
+    const abs = Math.abs(num).toFixed(2)
+    const [intPart, decPart] = abs.split(".")
+    const withSeparators = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    return `${sign}\u0E3F${withSeparators}.${decPart}`
+  }
 }
 
 const thaiShortMonths = [
