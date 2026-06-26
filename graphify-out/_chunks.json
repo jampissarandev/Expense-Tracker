@@ -1,0 +1,82 @@
+{
+  "chunks": [
+    {
+      "num": 0,
+      "total": 5,
+      "files": [
+        "README.md",
+        ".github/copilot-instructions.md",
+        ".github/agents/code-reviewer.agent.md",
+        ".github/agents/security-auditor.agent.md",
+        ".github/agents/test-engineer.agent.md",
+        ".github/agents/web-performance-auditor.agent.md",
+        ".github/skills/api-and-interface-design/SKILL.md",
+        ".github/skills/browser-testing-with-devtools/SKILL.md",
+        ".github/skills/ci-cd-and-automation/SKILL.md",
+        ".github/skills/code-review-and-quality/SKILL.md",
+        ".github/skills/code-simplification/SKILL.md",
+        ".github/skills/context-engineering/SKILL.md",
+        ".github/skills/debugging-and-error-recovery/SKILL.md",
+        ".github/skills/deprecation-and-migration/SKILL.md",
+        ".github/skills/documentation-and-adrs/SKILL.md",
+        ".github/skills/doubt-driven-development/SKILL.md",
+        ".github/skills/frontend-ui-engineering/SKILL.md",
+        ".github/skills/git-workflow-and-versioning/SKILL.md",
+        ".github/skills/idea-refine/SKILL.md",
+        ".github/skills/idea-refine/examples.md",
+        ".github/skills/idea-refine/frameworks.md",
+        ".github/skills/idea-refine/refinement-criteria.md"
+      ],
+      "output": "graphify-out/.graphify_chunk_00.json"
+    },
+    {
+      "num": 1,
+      "total": 5,
+      "files": [
+        ".github/skills/incremental-implementation/SKILL.md",
+        ".github/skills/interview-me/SKILL.md",
+        ".github/skills/observability-and-instrumentation/SKILL.md",
+        ".github/skills/performance-optimization/SKILL.md",
+        ".github/skills/planning-and-task-breakdown/SKILL.md",
+        ".github/skills/security-and-hardening/SKILL.md",
+        ".github/skills/shipping-and-launch/SKILL.md",
+        ".github/skills/source-driven-development/SKILL.md",
+        ".github/skills/spec-driven-development/SKILL.md",
+        ".github/skills/test-driven-development/SKILL.md",
+        ".github/skills/using-agent-skills/SKILL.md",
+        ".github/workflows/ci.yml",
+        ".github/workflows/test-plugin-install.yml",
+        "docker/postgres.yml",
+        "docs/PLAN.md",
+        "docs/api-contract.md",
+        "frontend/README.md",
+        "frontend/index.html"
+      ],
+      "output": "graphify-out/.graphify_chunk_01.json"
+    },
+    {
+      "num": 2,
+      "total": 5,
+      "files": [
+        "frontend/public/favicon.svg"
+      ],
+      "output": "graphify-out/.graphify_chunk_02.json"
+    },
+    {
+      "num": 3,
+      "total": 5,
+      "files": [
+        "frontend/public/icons.svg"
+      ],
+      "output": "graphify-out/.graphify_chunk_03.json"
+    },
+    {
+      "num": 4,
+      "total": 5,
+      "files": [
+        "scripts/README.md"
+      ],
+      "output": "graphify-out/.graphify_chunk_04.json"
+    }
+  ]
+}

@@ -1,13 +1,17 @@
 # Graph Report - .  (2026-06-26)
 
 ## Corpus Check
-- 211 files · ~113,855 words
-- Verdict: corpus is large enough that graph structure adds value.
+- cluster-only mode — file stats not available
 
 ## Summary
-- 1299 nodes · 2430 edges · 107 communities (78 shown, 29 thin omitted)
+- 1299 nodes · 2430 edges · 108 communities (78 shown, 30 thin omitted)
 - Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 109 edges (avg confidence: 0.82)
 - Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `b4dc7792`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - [[_COMMUNITY_CSV Export Service (Backend)|CSV Export Service (Backend)]]
@@ -100,6 +104,7 @@
 - [[_COMMUNITY_Community 90|Community 90]]
 - [[_COMMUNITY_Community 92|Community 92]]
 - [[_COMMUNITY_Community 103|Community 103]]
+- [[_COMMUNITY_Community 107|Community 107]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `cn()` - 74 edges
@@ -135,7 +140,7 @@
 - **Idea Refine Supplemental Documentation** — idea_refine_examples, idea_refine_frameworks, idea_refine_refinement_criteria [EXTRACTED 1.00]
 - **Core Expense Tracker Features** — readme_multi_user_auth, readme_jwt_refresh_tokens, readme_transactions, readme_categories, readme_dashboard_charts, readme_csv_export, readme_rfc7807 [EXTRACTED 1.00]
 
-## Communities (107 total, 29 thin omitted)
+## Communities (108 total, 30 thin omitted)
 
 ### Community 0 - "CSV Export Service (Backend)"
 Cohesion: 0.09
@@ -199,11 +204,11 @@ Nodes (28): devDependencies, autoprefixer, dotenv, eslint, @eslint/js, eslint-pl
 
 ### Community 16 - "Transactions Service & AccessToken DTO"
 Cohesion: 0.14
-Nodes (12): ITransactionService, TransactionService, AccessTokenDto, CategoryTotalDto, CreateTransactionRequest, CurrentMonthDto, PagedResult, ProblemDetails (+4 more)
+Nodes (11): ITransactionService, TransactionService, AccessTokenDto, CategoryTotalDto, CreateTransactionRequest, CurrentMonthDto, PagedResult, ProblemDetails (+3 more)
 
 ### Community 18 - "Transactions Domain & Repository"
 Cohesion: 0.14
-Nodes (6): ITransactionRepository, DateOnly, Transaction, Items, TransactionRepository, TotalCount
+Nodes (7): ITransactionRepository, DateOnly, Transaction, Items, TransactionRepository, TotalCount, TransactionFilter
 
 ### Community 19 - "Transactions Page Component Tests"
 Cohesion: 0.09
@@ -214,8 +219,8 @@ Cohesion: 0.09
 Nodes (22): compilerOptions, allowImportingTsExtensions, baseUrl, erasableSyntaxOnly, ignoreDeprecations, jsx, lib, module (+14 more)
 
 ### Community 21 - "Dashboard Repository & Aggregates"
-Cohesion: 0.14
-Nodes (9): AggregateByCategoryAndMonth, CategoryAggregate, CurrentMonthTotals, IDashboardRepository, TransactionTests, IReadOnlyList, MonthlyAggregate, DashboardRepository (+1 more)
+Cohesion: 0.19
+Nodes (8): AggregateByCategoryAndMonth, CategoryAggregate, CurrentMonthTotals, IDashboardRepository, IReadOnlyList, MonthlyAggregate, DashboardRepository, TransactionType
 
 ### Community 22 - "shadcn/ui Components Alias Config"
 Cohesion: 0.09
@@ -384,7 +389,7 @@ Nodes (3): ADR Lifecycle — Proposed → Accepted → Superseded/Deprecated, AD
 ## Knowledge Gaps
 - **357 isolated node(s):** `idea-refine.sh script`, `BCrypt.Net-Next (4.2.0)`, `FluentValidation.AspNetCore (11.3.1)`, `Microsoft.AspNetCore.Authentication.JwtBearer (10.0.0)`, `Microsoft.EntityFrameworkCore.Design (10.0.9)` (+352 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **29 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **30 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
