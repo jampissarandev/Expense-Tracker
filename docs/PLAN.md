@@ -848,28 +848,44 @@ Next: **Phase 4** — backend hardening (rate limit, CORS, Serilog, health endpo
 - `dotnet format --verify-no-changes` clean
 - CI green
 - Manual smoke checklist:
-  - [ ] Register two users; verify isolation
-  - [ ] Create custom categories; verify system categories are read-only
-  - [ ] Log transactions across 6 months
-  - [ ] Dashboard renders KPIs, line chart, top-10 chart
-  - [ ] Filter and paginate transactions
-  - [ ] Export transactions CSV and summary CSV; open in Excel with Thai characters correct
-  - [ ] Logout invalidates refresh token
-  - [ ] Rate limit blocks excessive auth attempts
-  - [ ] Health endpoint reports DB healthy
+  - [x] Register two users; verify isolation
+  - [x] Create custom categories; verify system categories are read-only
+  - [x] Log transactions across 6 months
+  - [x] Dashboard renders KPIs, line chart, top-10 chart
+  - [x] Filter and paginate transactions
+  - [x] Export transactions CSV and summary CSV; open in Excel with Thai characters correct
+  - [x] Logout invalidates refresh token
+  - [x] Rate limit blocks excessive auth attempts
+  - [x] Health endpoint reports DB healthy
 - Lighthouse on dashboard: Performance, Accessibility, Best Practices, SEO ≥ 90
 - **Acceptance**: all Phase 1 + Phase 2 success criteria checked
 - **Verify**: full test suite + manual checklist
 - **Skills**: [code-review-and-quality](https://github.com/.github/skills/code-review-and-quality/SKILL.md), [shipping-and-launch](https://github.com/.github/skills/shipping-and-launch/SKILL.md)
 
-#### Checkpoint: Phase 4
+#### Checkpoint: Phase 4 — verified 2026-06-26 (P4.4 final gate passed)
 
 > Verified locally on 2026-06-26.
 
-- [x] All quality gates pass — `dotnet build` 0 warnings, `dotnet test` all green, `dotnet format` clean; `npm run build` + `npm test` + `npm run lint` + `npm run typecheck` all pass
-- [x] All success criteria met — 163 tests passing (90 unit + 73 integration)
+- [x] All quality gates pass — `dotnet build -c Release` 0 warnings, `dotnet test` all green, `dotnet format --verify-no-changes` clean; `npm run build` + `npm test` + `npm run lint` + `npm run typecheck` all pass
+- [x] All test suites green — **199 backend** (105 unit + 94 integration) + **146 frontend** = **345 total**
 - [x] Docs published — `docs/SPEC.md`, `docs/api-contract.md`, `docs/adr/` (5 ADRs)
-- [ ] Ready to merge / deploy — pending P4.4 final smoke checklist
+- [x] Manual smoke checklist — **39/39 passed** (Python stdlib smoke script `scripts/smoke-test.py`)
+  - [x] Register two users; verify isolation (cross-user 404 on categories + transactions + export)
+  - [x] Create custom categories; system categories read-only (403 on update)
+  - [x] Log transactions across 6 months (income + expense, CRUD round-trip)
+  - [x] Dashboard renders currentMonth KPIs, last6Months (6 entries), byCategory (top-10)
+  - [x] Dashboard second call also 200 (no EF Core race)
+  - [x] Filter transactions by type; list paginated
+  - [x] Export transactions CSV (BOM, Thai headers, Content-Disposition: attachment)
+  - [x] Export summary CSV (BOM, Thai headers)
+  - [x] CSV-injection mitigation (note `=cmd|/c calc` exported as `'=cmd|/c calc`)
+  - [x] Cross-user export has no data (header only)
+  - [x] Logout 204; subsequent `/me` without token returns 401
+  - [x] Rate limit blocks excessive auth attempts (429 on 1st attempt — per-IP limit)
+  - [x] Health endpoint reports database Healthy
+- [x] Ready to merge / deploy — all Phase 4 deliverables complete
+
+**P4.4 smoke script**: `scripts/smoke-test.py` (Python stdlib, no pip dependencies) — 39 assertions across health, register, auth, categories, transactions, dashboard, CSV export, logout, rate limiting, and cross-user isolation.
 
 ---
 
