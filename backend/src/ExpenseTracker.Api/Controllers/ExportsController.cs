@@ -1,9 +1,8 @@
-using System.Globalization;
 using ExpenseTracker.Application.Abstractions;
+using ExpenseTracker.Application.Common;
 using ExpenseTracker.Application.Exports;
 using ExpenseTracker.Application.Transactions.Filters;
 using ExpenseTracker.Domain.Enums;
-using ExpenseTracker.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,8 +38,8 @@ public class ExportsController : ControllerBase
         {
             Type = type,
             CategoryId = categoryId,
-            From = ParseDate(from),
-            To = ParseDate(to)
+            From = DateOnlyParser.Parse(from),
+            To = DateOnlyParser.Parse(to)
         };
 
         var stream = await _exportService.BuildTransactionsCsvAsync(userId, filter);
@@ -58,7 +57,7 @@ public class ExportsController : ControllerBase
         [FromQuery] string? to = null)
     {
         var userId = GetRequiredUserId();
-        var stream = await _exportService.BuildSummaryCsvAsync(userId, ParseDate(from), ParseDate(to));
+        var stream = await _exportService.BuildSummaryCsvAsync(userId, DateOnlyParser.Parse(from), DateOnlyParser.Parse(to));
         var fileName = $"summary-{DateTime.UtcNow:yyyyMMdd}.csv";
         return File(stream, "text/csv; charset=utf-8", fileName);
     }
@@ -66,17 +65,4 @@ public class ExportsController : ControllerBase
     private Guid GetRequiredUserId() =>
         _currentUserService.UserId
             ?? throw new UnauthorizedAccessException("User is not authenticated.");
-
-    private static DateOnly? ParseDate(string? raw)
-    {
-        if (string.IsNullOrWhiteSpace(raw)) return null;
-        if (DateOnly.TryParseExact(raw, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var d))
-            return d;
-        if (DateOnly.TryParse(raw, CultureInfo.InvariantCulture, DateTimeStyles.None, out d))
-            return d;
-        // Throw a domain validation exception so the global exception
-        // middleware maps it to HTTP 400 (Bad Request) instead of 500.
-        throw new DomainValidationException(
-            $"Date '{raw}' is not in a recognized format. Use yyyy-MM-dd.");
-    }
 }

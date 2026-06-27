@@ -1,5 +1,5 @@
-using System.Globalization;
 using ExpenseTracker.Application.Abstractions;
+using ExpenseTracker.Application.Common;
 using ExpenseTracker.Application.Transactions;
 using ExpenseTracker.Application.Transactions.DTOs;
 using ExpenseTracker.Application.Transactions.Filters;
@@ -39,8 +39,8 @@ public class TransactionsController : ControllerBase
         {
             Type = type,
             CategoryId = categoryId,
-            From = ParseDate(from),
-            To = ParseDate(to),
+            From = DateOnlyParser.Parse(from),
+            To = DateOnlyParser.Parse(to),
             Page = page,
             PageSize = pageSize
         };
@@ -83,17 +83,4 @@ public class TransactionsController : ControllerBase
     private Guid GetRequiredUserId() =>
         _currentUserService.UserId
             ?? throw new UnauthorizedAccessException("User is not authenticated.");
-
-    private static DateOnly? ParseDate(string? raw)
-    {
-        if (string.IsNullOrWhiteSpace(raw)) return null;
-        // Accept either ISO date (yyyy-MM-dd) or full ISO 8601 datetime.
-        if (DateOnly.TryParseExact(raw, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var d))
-            return d;
-        if (DateOnly.TryParse(raw, CultureInfo.InvariantCulture, DateTimeStyles.None, out d))
-            return d;
-        throw new ArgumentException(
-            $"Date '{raw}' is not in a recognized format. Use yyyy-MM-dd.",
-            nameof(raw));
-    }
 }
