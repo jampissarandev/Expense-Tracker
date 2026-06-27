@@ -200,3 +200,8 @@ graphify-out/cache/
 # The dev secret in appsettings.Development.json is intentional for
 # local dev only.  Production must override via env var Jwt__SecretKey
 # (see ADR-0006).
+
+# ── Copilot agent local memory ────────────────────────────────
+# Per-session notes written by the GitHub Copilot agent into
+# .github/copilot-memory/. Not part of the project — never commit.
+.github/copilot-memory/
