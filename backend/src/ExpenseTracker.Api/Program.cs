@@ -187,21 +187,41 @@ app.UseAuthorization();
 app.MapControllers();
 
 // Health check endpoint (no auth)
+// A3 / R3: In Production, return only { "status": "…" } (≤ 30 bytes) so
+// scanners cannot fingerprint the backing store.  Development keeps the
+// full payload (database status + timestamp) for debugging.
 app.MapHealthChecks("/health", new HealthCheckOptions
 {
     ResponseWriter = async (context, report) =>
     {
         context.Response.ContentType = "application/json";
-        var databaseEntry = report.Entries.TryGetValue("database", out var dbEntry)
-            ? dbEntry.Status.ToString()
-            : "Unknown";
-        var result = JsonSerializer.Serialize(new
+
+        if (app.Environment.IsDevelopment())
         {
-            status = report.Status.ToString(),
-            database = databaseEntry,
-            timestamp = DateTime.UtcNow
-        });
-        await context.Response.WriteAsync(result);
+            // Development: rich payload for debugging
+            var databaseEntry = report.Entries.TryGetValue("database", out var dbEntry)
+                ? dbEntry.Status.ToString()
+                : "Unknown";
+            var result = JsonSerializer.Serialize(new
+            {
+                status = report.Status.ToString(),
+                database = databaseEntry,
+                timestamp = DateTime.UtcNow
+            });
+            await context.Response.WriteAsync(result);
+        }
+        else
+        {
+            // Production / Staging: minimal payload — status only
+            if (report.Status != HealthStatus.Healthy)
+                context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+
+            var result = JsonSerializer.Serialize(new
+            {
+                status = report.Status.ToString()
+            });
+            await context.Response.WriteAsync(result);
+        }
     }
 });
 
