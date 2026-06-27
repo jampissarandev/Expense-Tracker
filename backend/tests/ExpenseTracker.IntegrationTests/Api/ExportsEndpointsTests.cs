@@ -33,6 +33,7 @@ public class ExportsEndpointsTests : IClassFixture<WebApplicationFactory<Program
         _factory = factory.WithWebHostBuilder(builder =>
         {
             builder.UseSetting("Environment", "Development");
+            builder.UseSetting("Jwt:SecretKey", TestSettings.JwtSecretKey);
 
             builder.ConfigureServices(services =>
             {

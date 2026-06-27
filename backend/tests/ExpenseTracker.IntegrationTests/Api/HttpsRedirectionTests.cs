@@ -18,8 +18,6 @@ namespace ExpenseTracker.IntegrationTests.Api;
 [Trait("Category", "HttpsRedirection")]
 public class HttpsRedirectionTests : IClassFixture<WebApplicationFactory<Program>>
 {
-    private const string ValidJwtSecret = "ThisIsAValidSecretKey_32Chars!!!";
-
     private readonly WebApplicationFactory<Program> _factory;
 
     public HttpsRedirectionTests(WebApplicationFactory<Program> factory)
@@ -27,7 +25,7 @@ public class HttpsRedirectionTests : IClassFixture<WebApplicationFactory<Program
         _factory = factory.WithWebHostBuilder(builder =>
         {
             builder.UseSetting("Environment", "Development");
-            builder.UseSetting("Jwt:SecretKey", ValidJwtSecret);
+            builder.UseSetting("Jwt:SecretKey", TestSettings.JwtSecretKey);
 
             builder.ConfigureServices(services =>
             {
@@ -56,7 +54,7 @@ public class HttpsRedirectionTests : IClassFixture<WebApplicationFactory<Program
             .WithWebHostBuilder(builder =>
             {
                 builder.UseSetting("Environment", "Production");
-                builder.UseSetting("Jwt:SecretKey", ValidJwtSecret);
+                builder.UseSetting("Jwt:SecretKey", TestSettings.JwtSecretKey);
                 builder.UseSetting("Jwt:Issuer", "Test");
                 builder.UseSetting("Jwt:Audience", "Test");
                 builder.UseSetting("ConnectionStrings:DefaultConnection", "Host=localhost;Database=unused");

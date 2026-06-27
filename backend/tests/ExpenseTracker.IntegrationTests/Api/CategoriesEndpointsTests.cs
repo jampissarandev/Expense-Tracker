@@ -32,6 +32,7 @@ public class CategoriesEndpointsTests : IClassFixture<WebApplicationFactory<Prog
         _factory = factory.WithWebHostBuilder(builder =>
         {
             builder.UseSetting("Environment", "Development");
+            builder.UseSetting("Jwt:SecretKey", TestSettings.JwtSecretKey);
 
             builder.ConfigureServices(services =>
             {

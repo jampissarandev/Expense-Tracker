@@ -1,5 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
+  <PropertyGroup>
+    <!-- UserSecretsId is required for `dotnet user-secrets` to know where
+         to store per-developer secrets on this machine. It is NOT a secret
+         itself — it's a stable per-project GUID that names the local file
+         under %APPDATA%\Microsoft\UserSecrets\<id>\secrets.json. -->
+    <UserSecretsId>1ed6da43-a72a-4481-b011-ce3d6ed9006d</UserSecretsId>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />

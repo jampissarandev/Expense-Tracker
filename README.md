@@ -73,14 +73,18 @@ cd ExpenseTracker
 # 2. Start Postgres (detached, with healthcheck)
 make db-up
 
-# 3. Backend: install tools, apply migrations, run
+# 3. One-time: populate per-developer user-secrets (Jwt:SecretKey + connection string).
+#    Secrets are stored OUTSIDE the repo, never in tracked files.
+make dev-secrets
+
+# 4. Backend: install tools, apply migrations, run
 cd backend
 dotnet tool restore
 dotnet ef database update --project src/ExpenseTracker.Infrastructure --startup-project src/ExpenseTracker.Api
 dotnet run --project src/ExpenseTracker.Api
 # → API at http://localhost:5000  ·  Swagger at http://localhost:5000/swagger
 
-# 4. Frontend: install deps, run dev server (in a new terminal)
+# 5. Frontend: install deps, run dev server (in a new terminal)
 cd ../frontend
 nvm use             # auto-switches to Node 22 LTS
 npm ci

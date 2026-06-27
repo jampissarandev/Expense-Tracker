@@ -31,6 +31,7 @@ public class AuthEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
         {
             // UseSetting to ensure Development environment with valid JWT settings
             builder.UseSetting("Environment", "Development");
+            builder.UseSetting("Jwt:SecretKey", TestSettings.JwtSecretKey);
 
             builder.ConfigureServices(services =>
             {

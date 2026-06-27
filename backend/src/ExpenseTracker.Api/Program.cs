@@ -70,7 +70,9 @@ if (!builder.Environment.IsDevelopment())
     if (string.IsNullOrWhiteSpace(jwtSettings.SecretKey) || jwtSettings.SecretKey.Length < 32)
         throw new InvalidOperationException(
             "Jwt:SecretKey must be at least 32 characters in non-Development environments. " +
-            "Set it via environment variable (Jwt__SecretKey), user-secrets, or a secrets manager.");
+            "Set it via environment variable (Jwt__SecretKey), " +
+            "via `dotnet user-secrets set Jwt:SecretKey <value> --project backend/src/ExpenseTracker.Api`, " +
+            "or via a secrets manager.");
 }
 builder.Services.AddAuthentication(options =>
 {

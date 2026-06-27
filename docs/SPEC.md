@@ -71,6 +71,10 @@ Expense Tracker is a **multi-user personal finance web application** that lets u
 # Start Postgres
 make db-up
 
+# One-time: populate per-developer user-secrets (Jwt:SecretKey + connection string).
+# This stores secrets outside the repo (see appsettings.Development.README.md).
+make dev-secrets
+
 # Backend
 cd backend
 dotnet tool restore

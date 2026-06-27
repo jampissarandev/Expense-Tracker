@@ -25,6 +25,8 @@ public class CorsEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
     {
         _factory = factory.WithWebHostBuilder(builder =>
         {
+            builder.UseSetting("Jwt:SecretKey", TestSettings.JwtSecretKey);
+
             builder.ConfigureServices(services =>
             {
                 // Replace DbContext with InMemory so actual POST requests don't hit real DB

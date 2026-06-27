@@ -1,4 +1,4 @@
-.PHONY: db-up db-down db-reset db-wsl-ip db-portproxy db-portproxy-remove e2e e2e-build
+.PHONY: db-up db-down db-reset db-wsl-ip db-portproxy db-portproxy-remove dev-secrets e2e e2e-build
 
 # --- Docker Postgres lifecycle -------------------------------------------------
 
@@ -33,6 +33,25 @@ db-portproxy:
 
 db-portproxy-remove:
 	@powershell -NoProfile -ExecutionPolicy Bypass -File scripts/db-portproxy.ps1 remove
+
+# --- Local dev secrets (dotnet user-secrets) ---------------------------------
+# Populates the per-developer user-secrets store with Jwt:SecretKey and the
+# local Postgres connection string. Idempotent: `set` overwrites, `init` is
+# safe to re-run (it only writes the UserSecretsId into the csproj if absent).
+#
+# Usage:
+#   make dev-secrets   # one-time, per developer machine
+#
+# Stored at (outside the repo):
+#   Windows : %APPDATA%\Microsoft\UserSecrets\<id>\secrets.json
+#   macOS   : ~/.microsoft/usersecrets/<id>/secrets.json
+#   Linux   : ~/.microsoft/usersecrets/<id>/secrets.json
+
+dev-secrets:
+	dotnet user-secrets init --project backend/src/ExpenseTracker.Api
+	dotnet user-secrets set "Jwt:SecretKey" "DevSuperSecretKey_ThisIsAtLeast32CharsLong!" --project backend/src/ExpenseTracker.Api
+	dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=expensetracker;Username=expense;Password=expense" --project backend/src/ExpenseTracker.Api
+	@echo "dev-secrets: populated. Verify with: dotnet user-secrets list --project backend/src/ExpenseTracker.Api"
 
 # --- E2E tests (Playwright) --------------------------------------------------
 # Prerequisites:

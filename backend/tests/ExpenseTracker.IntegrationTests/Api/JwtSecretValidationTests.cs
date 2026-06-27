@@ -57,4 +57,44 @@ public class JwtSecretValidationTests
 
         act.Should().NotThrow<InvalidOperationException>();
     }
+
+    // --- A4 (R5): the fail-fast message must guide operators to user-secrets ----
+
+    [Fact]
+    public void Production_fail_fast_message_mentions_user_secrets()
+    {
+        var factory = CreateFactory("");
+
+        var act = () => factory.CreateClient();
+
+        act.Should().Throw<InvalidOperationException>()
+           .WithMessage("*user-secrets*");
+    }
+
+    [Fact]
+    public void Production_fail_fast_message_mentions_environment_variable()
+    {
+        var factory = CreateFactory("");
+
+        var act = () => factory.CreateClient();
+
+        // Env-var name on the message (Windows-style, double underscore) so an
+        // operator on a container host knows the override key.
+        act.Should().Throw<InvalidOperationException>()
+           .WithMessage("*Jwt__SecretKey*");
+    }
+
+    [Fact]
+    public void Production_fail_fast_message_mentions_user_secrets_set_command()
+    {
+        var factory = CreateFactory("");
+
+        var act = () => factory.CreateClient();
+
+        // The actionable command: "dotnet user-secrets set Jwt:SecretKey ...".
+        // Just checking the substring "dotnet user-secrets set" pins the verb —
+        // the operator must see an actual command, not just a hint.
+        act.Should().Throw<InvalidOperationException>()
+           .WithMessage("*dotnet user-secrets set*Jwt*SecretKey*");
+    }
 }
