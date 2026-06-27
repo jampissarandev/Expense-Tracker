@@ -274,6 +274,7 @@ Two parallel jobs:
 - **Password hashing**: BCrypt with work factor 12. Passwords are never stored in plaintext.
 - **CSV injection**: User-generated text fields prefixed with `'` when they start with `=`, `+`, `-`, `@`, `\t`, or `\r`.
 - **Rate limiting**: 5 requests/minute on auth endpoints (P4.1).
+- **Transport security**: HTTPS enforcement + HSTS in Production (A2). See §Deployment.
 
 ### API Boundaries
 
@@ -291,6 +292,23 @@ Two parallel jobs:
 | Docker | Local Postgres + CI Testcontainers | Yes |
 | .NET 10 SDK | Backend compilation | Yes |
 | Node.js 22 LTS | Frontend compilation | Yes |
+
+### Deployment (A2)
+
+The API is designed to run behind a **reverse proxy** (Nginx, Caddy, cloud LB) that terminates TLS.
+
+| Setting | Development | Production |
+|---|---|---|
+| HTTPS redirect | Disabled | Enabled (`UseHttpsRedirection`) |
+| HSTS header | Not sent | `max-age=31536000; includeSubDomains; preload` |
+| `Jwt:SecretKey` | Via `dotnet user-secrets` | Via env var `Jwt__SecretKey` or secrets manager |
+
+**Reverse proxy requirements:**
+- Terminate TLS and forward traffic as HTTP to the app.
+- Set `X-Forwarded-Proto` header so the app knows the original protocol.
+- The app listens on HTTP only — `UseHttpsRedirection` handles the HTTP→HTTPS redirect when the app is exposed directly (not behind a proxy).
+
+**Local dev secrets:** Use `dotnet user-secrets` — never store secrets in tracked files. See `Makefile` for the `dev-secrets` target.
 
 ---
 

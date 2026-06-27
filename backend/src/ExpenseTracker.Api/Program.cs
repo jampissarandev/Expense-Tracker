@@ -143,6 +143,24 @@ var app = builder.Build();
 // Global exception handler (must be first)
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
+// HTTPS redirection (A2 / R2) — outside Development only.
+// HSTS is NOT emitted by UseHsts() here because that helper requires the
+// incoming request itself to be HTTPS, which fails behind a reverse proxy.
+// Instead, we add a small inline middleware that emits the header directly,
+// so it is present regardless of transport. `preload` is included so the
+// host is eligible for the HSTS preload list once the operator confirms
+// the requirements (https://hstspreload.org/#submission-requirements).
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+    app.Use(async (context, next) =>
+    {
+        context.Response.Headers["Strict-Transport-Security"] =
+            "max-age=31536000; includeSubDomains; preload";
+        await next();
+    });
+}
+
 // Serilog request logging (after exception handler so errors are captured)
 app.UseSerilogRequestLogging();
 
