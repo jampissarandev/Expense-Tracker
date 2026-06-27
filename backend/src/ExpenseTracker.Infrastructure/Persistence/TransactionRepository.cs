@@ -22,11 +22,11 @@ public class TransactionRepository : ITransactionRepository
             .AsNoTracking()
             .Include(t => t.Category);
 
-        // User isolation: global query filter already enforces this when
-        // ICurrentUserService is set. We also apply an explicit Where as a
-        // belt-and-braces measure for the unit test path where the filter
-        // is not configured.
-        query = query.Where(t => t.UserId == userId);
+        // User isolation is handled by the EF Core global query filter on
+        // Transaction (see ExpenseTrackerDbContext.OnModelCreating). No
+        // explicit Where(t => t.UserId == userId) here — the global filter
+        // is the single source of truth. Regression-proofed by
+        // GlobalQueryFilterTests.TransactionRepository_ListAsync_returns_only_current_users_data.
 
         if (filter.Type.HasValue)
             query = query.Where(t => t.Type == filter.Type.Value);

@@ -33,11 +33,13 @@ public class ExpenseTrackerDbContext : DbContext
         // Seed system categories
         modelBuilder.Entity<Category>().HasData(SystemCategories.Categories);
 
-        // Global query filters: per-user data isolation.
+        // Global query filters: per-user data isolation (single source of truth).
         // Categories: system categories (UserId IS NULL) are visible to everyone;
         // user categories are visible only to their owner.
         // Transactions: visible only to the owner.
-        // These filters use IgnoreQueryFilters() to be bypassed in admin/seed code.
+        // Repositories must NOT add redundant WHERE t.UserId == userId clauses —
+        // the global filter is authoritative. See GlobalQueryFilterTests for
+        // regression coverage.
         modelBuilder.Entity<Category>().HasQueryFilter(c =>
             c.UserId == null || c.UserId == _currentUserService.UserId);
 
