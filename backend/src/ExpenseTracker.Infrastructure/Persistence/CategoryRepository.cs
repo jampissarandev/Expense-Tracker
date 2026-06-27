@@ -43,9 +43,14 @@ public class CategoryRepository : ICategoryRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<bool> HasTransactionsAsync(Guid categoryId)
+    /// <summary>
+    /// Checks whether the given user owns any transactions referencing the
+    /// specified category.  Filters on both CategoryId and UserId explicitly
+    /// so the result does not depend on the EF global query filter (R-6).
+    /// </summary>
+    public async Task<bool> HasTransactionsForUserAsync(Guid categoryId, Guid userId)
     {
         return await _context.Transactions
-            .AnyAsync(t => t.CategoryId == categoryId);
+            .AnyAsync(t => t.CategoryId == categoryId && t.UserId == userId);
     }
 }

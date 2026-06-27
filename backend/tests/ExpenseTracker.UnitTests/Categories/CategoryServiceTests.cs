@@ -226,7 +226,7 @@ public class CategoryServiceTests
         // Arrange
         var userCategory = new Category("My Cat", TransactionType.Expense, TestUserId);
         _categoryRepository.FindByIdAsync(userCategory.Id).Returns(userCategory);
-        _categoryRepository.HasTransactionsAsync(userCategory.Id).Returns(true);
+        _categoryRepository.HasTransactionsForUserAsync(userCategory.Id, TestUserId).Returns(true);
 
         // Act & Assert
         await _sut.Invoking(s => s.DeleteAsync(TestUserId, userCategory.Id))
@@ -243,13 +243,34 @@ public class CategoryServiceTests
         // Arrange
         var userCategory = new Category("My Cat", TransactionType.Expense, TestUserId);
         _categoryRepository.FindByIdAsync(userCategory.Id).Returns(userCategory);
-        _categoryRepository.HasTransactionsAsync(userCategory.Id).Returns(false);
+        _categoryRepository.HasTransactionsForUserAsync(userCategory.Id, TestUserId).Returns(false);
 
         // Act
         await _sut.DeleteAsync(TestUserId, userCategory.Id);
 
         // Assert
         await _categoryRepository.Received(1).DeleteAsync(userCategory);
+    }
+
+    [Fact]
+    [Trait("Category", "Categories")]
+    public async Task Delete_can_be_deleted_by_another_user_who_has_no_transactions()
+    {
+        // R-6: per-user semantics — user B can delete a shared category
+        // even if user A has transactions in it, because user B's own
+        // transactions do not reference it.
+        var otherUserId = Guid.NewGuid();
+        var category = new Category("Shared Cat", TransactionType.Expense, otherUserId);
+        _categoryRepository.FindByIdAsync(category.Id).Returns(category);
+
+        // user B (otherUserId) has no transactions for this category
+        _categoryRepository.HasTransactionsForUserAsync(category.Id, otherUserId).Returns(false);
+
+        // Act — otherUserId deletes, not TestUserId
+        await _sut.DeleteAsync(otherUserId, category.Id);
+
+        // Assert
+        await _categoryRepository.Received(1).DeleteAsync(category);
     }
 
     [Fact]

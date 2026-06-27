@@ -79,7 +79,7 @@ public class CategoryService : ICategoryService
         if (category.UserId != userId)
             throw new NotFoundException("Category", id);
 
-        var hasTransactions = await _categoryRepository.HasTransactionsAsync(id);
+        var hasTransactions = await _categoryRepository.HasTransactionsForUserAsync(id, userId);
         if (hasTransactions)
             throw new DomainValidationException("Cannot delete a category that has transactions. Remove or reassign them first.");
 
