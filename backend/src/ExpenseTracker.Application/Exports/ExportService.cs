@@ -30,7 +30,7 @@ public class ExportService : IExportService
         var rows = result.Items.Select(tx => new TransactionCsvRow(
             Date: tx.OccurredOn.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
             Type: tx.Type == TransactionType.Income ? "รายรับ" : "ค่าใช้จ่าย",
-            Category: tx.CategoryName,
+            Category: SanitizeForCsvInjection(tx.CategoryName)!,
             Amount: tx.Amount,
             Note: SanitizeForCsvInjection(tx.Note)
         )).ToList();

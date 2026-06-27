@@ -284,6 +284,49 @@ public class ExportServiceTests
         csv.Should().NotContain("'Normal lunch note");
     }
 
+    [Theory]
+    [InlineData("=SUM(A1:A10)")]
+    [InlineData("+cmd|'/C calc'!A0")]
+    [InlineData("-2+3")]
+    [InlineData("@evil")]
+    public async Task Transactions_csv_sanitizes_injection_prone_category_names(string maliciousCategory)
+    {
+        // Per R-5: category names are user-generated text (free text on
+        // create/edit) and can therefore carry CSV-injection payloads, just
+        // like notes. The Category cell in the export must be sanitized.
+        var tx = MakeTx(categoryName: maliciousCategory, note: "benign");
+        _transactionService.ListAsync(TestUserId, Arg.Any<TransactionFilter>())
+            .Returns(new PagedResult<TransactionDto>(
+                new List<TransactionDto> { tx },
+                1, 20, 1, 1));
+
+        using var stream = await _sut.BuildTransactionsCsvAsync(TestUserId, new TransactionFilter());
+        var raw = Encoding.UTF8.GetString(stream.ToArray());
+
+        // The malicious category must appear prefixed with a single quote.
+        var expected = "\"" + "'" + maliciousCategory + "\"";
+        raw.Should().Contain(expected);
+        // And must NOT appear unprefixed in a cell (between two quotes).
+        var unprefixedQuoted = "\"" + maliciousCategory + "\"";
+        raw.Should().NotContain(unprefixedQuoted);
+    }
+
+    [Fact]
+    public async Task Transactions_csv_does_not_prefix_safe_category_names()
+    {
+        var tx = MakeTx(categoryName: "Food", note: "Lunch");
+        _transactionService.ListAsync(TestUserId, Arg.Any<TransactionFilter>())
+            .Returns(new PagedResult<TransactionDto>(
+                new List<TransactionDto> { tx },
+                1, 20, 1, 1));
+
+        using var stream = await _sut.BuildTransactionsCsvAsync(TestUserId, new TransactionFilter());
+        var csv = Csv(stream);
+
+        csv.Should().Contain("Food");
+        csv.Should().NotContain("'Food");
+    }
+
     [Fact]
     public async Task Transactions_csv_amount_not_prefixed_even_if_starts_with_minus()
     {
