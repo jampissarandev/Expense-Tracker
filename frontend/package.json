@@ -17,6 +17,8 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
+    "lighthouse": "lhci autorun --config=lighthouserc.cjs",
+    "lighthouse:collect": "lhci collect --config=lighthouserc.cjs",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -43,6 +45,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.61.1",
     "@tailwindcss/vite": "^4.3.1",
     "@testing-library/jest-dom": "^6.9.1",
@@ -60,15 +63,18 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
     "happy-dom": "^20.10.6",
+    "http-server": "^14.1.1",
     "jsdom": "^29.1.1",
     "msw": "^2.14.6",
     "postcss": "^8.5.15",
     "prettier": "^3.8.4",
     "prettier-plugin-tailwindcss": "^0.8.0",
+    "sirv-cli": "^3.0.1",
     "tailwindcss": "^4.3.1",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",
     "vite": "^8.0.12",
+    "vite-plugin-compression": "^0.5.1",
     "vitest": "^4.1.9"
   }
 }

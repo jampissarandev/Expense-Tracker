@@ -83,12 +83,15 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero // No tolerance for expired tokens
     };
 });
-// CORS — allow frontend dev server with credentials
+// CORS — allow frontend dev server (and Lighthouse preview port 4173) with credentials
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins(
+                "http://localhost:5173", // Vite dev server
+                "http://localhost:4173"  // Vite preview / sirv (used by Lighthouse CI)
+            )
               .AllowCredentials()
               .AllowAnyHeader()
               .AllowAnyMethod();

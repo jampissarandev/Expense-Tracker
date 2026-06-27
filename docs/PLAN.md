@@ -1035,11 +1035,11 @@ This phase is **post-MVP** and can run in parallel with Phase 4. It adds confide
 
 ## Success Criteria (Phase 2 = features, not just polish)
 
-- [ ] User can download `transactions.csv` filtered by date range, category, type
-- [ ] User can download `summary.csv` (monthly totals)
-- [ ] CSVs open correctly in Excel/Numbers with Thai characters (UTF-8 BOM)
-- [ ] Loading/error/empty states present on all pages
-- [ ] Lighthouse > 90 on dashboard
+- [x] User can download `transactions.csv` filtered by date range, category, type — `ExportsController` (Backend) + `downloadTransactionsCsv` in `features/exports/api.ts` (Frontend); 29 unit + 24 integration tests passing
+- [x] User can download `summary.csv` (monthly totals) — `BuildSummaryCsvAsync` returns `last6Months` from `DashboardService`; exportable from both Dashboard and Transactions pages
+- [x] CSVs open correctly in Excel/Numbers with Thai characters (UTF-8 BOM) — `ExportService.WriteCsv` emits `0xEF 0xBB 0xBF` BOM, `text/csv; charset=utf-8`, `Content-Disposition: attachment`; Thai type labels (`รายรับ`/`ค่าใช้จ่าย`) and notes round-trip cleanly; CSV-injection guard prefixes `=`, `+`, `-`, `@` cells with `'`; ADR-0004 documents the design
+- [x] Loading/error/empty states present on all pages — `LoadingSpinner`, `EmptyState`, `ErrorState` in `components/common/`; used on Dashboard, Transactions, Categories; `useLogout` always navigates; 146 frontend tests pass
+- [x] Lighthouse > 90 on dashboard — **achieved 2026-06-27 (Performance 100 / Accessibility 96 / Best Practices 100 / SEO 100)**; `@lhci/cli` configured in `lighthouserc.cjs` with `assert ≥ 0.9` on all 4 categories; `npm run lighthouse` runs the full pipeline; key wins: code-splitting via `manualChunks` (Recharts → 225 kB, React → 216 kB, main → 75 kB), `vite-plugin-compression` pre-generates `.gz` siblings, meta description + lang="th" in `index.html`, no blocking `robots.txt`. See `frontend/scripts/lighthouse/README.md` for bring-up steps. **Important**: audit must run against `dist/` served by `sirv`/`vite preview` on port 4173 (not `npm run dev`) because dev server is unminified and won't pass the performance audit. CORS in `Program.cs` must list `http://localhost:4173` alongside `http://localhost:5173`.
 
 ## Success Criteria (Phase 3 = E2E)
 

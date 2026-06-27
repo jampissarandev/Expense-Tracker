@@ -160,6 +160,19 @@ secrets/
 /playwright/.cache/
 blob-report/
 playwright/.cache/
+# Frontend-nested Playwright outputs (root patterns above don't match)
+/frontend/test-results/
+/frontend/playwright-report/
+/frontend/playwright/.cache/
+
+# Lighthouse CI
+/frontend/.lighthouseci/
+.lighthouseci/
+
+# Lighthouse seed credentials (produced by scripts/lh-seed.py; contains
+# email + password + JWT access token — never commit, regenerate locally).
+/lh-user.txt
+lh-user.txt
 
 # Coverage artifacts
 /coverage/

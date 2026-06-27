@@ -8,6 +8,14 @@ API = "http://localhost:5117"
 ok = []
 fail = []
 
+# Use a per-run suffix so re-running the script against the same DB
+# doesn't fail with "email already exists". Backend enforces 409 on
+# duplicate register, but the smoke test is meant to be idempotent.
+import os
+_RUN_SUFFIX = os.environ.get("SMOKE_RUN_SUFFIX", "01")
+U1 = f"p44_user1_{_RUN_SUFFIX}@test.com"
+U2 = f"p44_user2_{_RUN_SUFFIX}@test.com"
+
 def check(label, cond, detail=""):
     if cond:
         ok.append(label)
@@ -70,13 +78,13 @@ check("Database is Healthy", data.get("database") == "Healthy", str(data))
 # --- 2. Register User1 & User2 ---
 print("\n=== REGISTER ===")
 status, body, _, _ = s1.post("/api/auth/register", json_data={
-    "email": "p44_user1@test.com", "password": "TestPass123!", "displayName": "P44 User 1"
+    "email": U1, "password": "TestPass123!", "displayName": "P44 User 1"
 })
 check("User1 register 200", status == 200, f"got {status}")
 token1 = body["accessToken"]["token"]
 
 status, body, _, _ = s2.post("/api/auth/register", json_data={
-    "email": "p44_user2@test.com", "password": "TestPass123!", "displayName": "P44 User 2"
+    "email": U2, "password": "TestPass123!", "displayName": "P44 User 2"
 })
 check("User2 register 200", status == 200, f"got {status}")
 token2 = body["accessToken"]["token"]
@@ -88,7 +96,7 @@ s2.set_auth(token2)
 print("\n=== AUTH /me ===")
 status, me, _, _ = s1.get("/api/auth/me")
 check("/me returns 200", status == 200, f"got {status}")
-check("/me shows correct user", me.get("email") == "p44_user1@test.com", str(me))
+check("/me shows correct user", me.get("email") == U1, str(me))
 
 # --- 4. Categories ---
 print("\n=== CATEGORIES ===")
