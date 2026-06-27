@@ -280,6 +280,28 @@ Two parallel jobs:
 - **Rate limiting**: 5 requests/minute on auth endpoints (P4.1).
 - **Request body size limit**: 64 KB max (A5 / R6). Oversized bodies return `413 Payload Too Large`.
 - **Transport security**: HTTPS enforcement + HSTS in Production (A2). See §Deployment.
+- **Security-event audit log** (A6 / R10): every register, login, refresh, and logout attempt is emitted as a structured Serilog event with a stable correlation handle (see §Security Events).
+
+### Security Events (A6 / R10)
+
+Every authentication-lifecycle event is logged via `ISecurityEventLogger` (Serilog-backed) with the following schema. All events include `MachineName`, `ThreadId`, and (once C1 ships) `RequestId` via Serilog enrichers. Email addresses are **never** logged in raw form — only their SHA-256 hash (first 16 hex chars, lowercased + trimmed before hashing) appears, which is enough to correlate events for the same email without exposing the address.
+
+| Event id | Level | Fields | When |
+|---|---|---|---|
+| `auth.register.success` | Information | `UserId`, `EmailHash` | After `User` is persisted |
+| `auth.register.failure.duplicate` | Warning | `EmailHash` | `ExistsByEmailAsync` returns true |
+| `auth.login.success` | Information | `UserId`, `EmailHash` | After `VerifyPassword` returns true |
+| `auth.login.failure.unknown_user` | Warning | `EmailHash` | `FindByEmailAsync` returns null |
+| `auth.login.failure.bad_password` | Warning | `UserId`, `EmailHash` | `VerifyPassword` returns false |
+| `auth.refresh.success` | Information | `UserId`, `OldTokenId`, `NewTokenId` | After `RotateAsync` |
+| `auth.refresh.failure.invalid` | Warning | `TokenId` (if extractable), `Reason` | `ValidateAsync` throws |
+| `auth.logout.success` | Information | `UserId`, `TokenId` | After `RevokeAsync` |
+
+**Toggling**: `SecurityEvents:Enabled = false` in config (or `SecurityEvents__Enabled=false` env var) disables all events without code changes. Default: enabled.
+
+**Acceptance**:
+- `grep -i "email.*@" backend/src/ExpenseTracker.Api/logs/*.log` returns 0 matches.
+- `grep "auth.login.failure" logs/` returns structured Serilog output (one JSON line per failure with `UserId`, `EmailHash`, `Level=Warning`).
 
 ### API Boundaries
 

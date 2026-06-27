@@ -54,6 +54,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+builder.Services.AddScoped<ISecurityEventLogger, SecurityEventLogger>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 // Category services
@@ -78,6 +79,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateCategoryRequestValida
 // JWT settings
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.SectionName));
 builder.Services.Configure<RefreshTokenSettings>(builder.Configuration.GetSection(RefreshTokenSettings.SectionName));
+builder.Services.Configure<SecurityEventSettings>(builder.Configuration.GetSection(SecurityEventSettings.SectionName));
 
 // JWT Bearer Authentication
 var jwtSettings = builder.Configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>()!;

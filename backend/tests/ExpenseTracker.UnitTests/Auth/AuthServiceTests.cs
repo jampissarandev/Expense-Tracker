@@ -15,6 +15,7 @@ public class AuthServiceTests
     private readonly IPasswordHasher _passwordHasher = Substitute.For<IPasswordHasher>();
     private readonly IJwtTokenService _jwtTokenService = Substitute.For<IJwtTokenService>();
     private readonly IRefreshTokenService _refreshTokenService = Substitute.For<IRefreshTokenService>();
+    private readonly ISecurityEventLogger _securityEventLogger = Substitute.For<ISecurityEventLogger>();
     private readonly AuthService _sut;
 
     private static readonly Guid TestUserId = Guid.NewGuid();
@@ -23,7 +24,12 @@ public class AuthServiceTests
 
     public AuthServiceTests()
     {
-        _sut = new AuthService(_userRepository, _passwordHasher, _jwtTokenService, _refreshTokenService);
+        _sut = new AuthService(
+            _userRepository,
+            _passwordHasher,
+            _jwtTokenService,
+            _refreshTokenService,
+            _securityEventLogger);
     }
 
     private static RefreshToken CreateRefreshToken(

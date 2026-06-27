@@ -1,6 +1,7 @@
 using ExpenseTracker.Application.Abstractions;
 using ExpenseTracker.Application.Auth;
 using ExpenseTracker.Application.Auth.DTOs;
+using ExpenseTracker.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
@@ -15,6 +16,8 @@ public class AuthController : ControllerBase
     private readonly IAuthService _authService;
     private readonly ICurrentUserService _currentUserService;
     private readonly IConfiguration _configuration;
+    private readonly ISecurityEventLogger _securityEventLogger;
+    private readonly IRefreshTokenService _refreshTokenService;
 
     private const string RefreshTokenCookieName = "et_rt";
     private const string RefreshTokenCookiePath = "/api/auth";
@@ -22,11 +25,15 @@ public class AuthController : ControllerBase
     public AuthController(
         IAuthService authService,
         ICurrentUserService currentUserService,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        ISecurityEventLogger securityEventLogger,
+        IRefreshTokenService refreshTokenService)
     {
         _authService = authService;
         _currentUserService = currentUserService;
         _configuration = configuration;
+        _securityEventLogger = securityEventLogger;
+        _refreshTokenService = refreshTokenService;
     }
 
     [HttpPost("register")]
@@ -76,7 +83,20 @@ public class AuthController : ControllerBase
         var plaintextToken = ReadRefreshTokenCookie();
         if (plaintextToken is not null)
         {
-            await _authService.LogoutAsync(plaintextToken);
+            // Validate first to get the token id, then revoke. If validation
+            // fails (revoked/expired) we still want to clear the cookie, but
+            // we cannot log a successful logout because we don't have a token id.
+            try
+            {
+                var currentToken = await _refreshTokenService.ValidateAsync(plaintextToken);
+                await _authService.LogoutAsync(plaintextToken);
+                var userId = _currentUserService.UserId ?? currentToken.UserId;
+                await _securityEventLogger.LogLogoutSuccessAsync(userId, currentToken.Id);
+            }
+            catch (RefreshTokenValidationException ex)
+            {
+                await _securityEventLogger.LogRefreshFailureAsync(null, $"logout: {ex.Message}");
+            }
         }
 
         ClearRefreshTokenCookie();
