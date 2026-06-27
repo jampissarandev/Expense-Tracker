@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.Http.Features;
 using ExpenseTracker.Application.Abstractions;
 using ExpenseTracker.Application.Auth;
 using ExpenseTracker.Application.Categories;
@@ -22,6 +23,23 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// A5 / R6: Limit request body size to 64 KB (generous headroom for a transaction
+// with a long note). Kestrel's default is 30 MB — 600,000× larger than needed.
+// This is the global ceiling; individual endpoints also declare [RequestSizeLimit]
+// as defense-in-depth.
+builder.WebHost.ConfigureKestrel(opts =>
+{
+    opts.Limits.MaxRequestBodySize = 64_000;
+});
+
+// A5 / R6: Match multipart body limit to Kestrel's. The app has no multipart
+// endpoints today, but cheap defense-in-depth in case a future upload route
+// forgets to declare its own limit.
+builder.Services.Configure<FormOptions>(opts =>
+{
+    opts.MultipartBodyLengthLimit = 64_000;
+});
 
 // Serilog structured logging
 builder.Host.UseSerilog((context, services, configuration) =>

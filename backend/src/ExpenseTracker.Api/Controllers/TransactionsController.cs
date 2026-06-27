@@ -57,6 +57,7 @@ public class TransactionsController : ControllerBase
     }
 
     [HttpPost]
+    [RequestSizeLimit(64_000)]
     public async Task<ActionResult<TransactionDto>> Create([FromBody] CreateTransactionRequest request)
     {
         var userId = GetRequiredUserId();
@@ -65,6 +66,7 @@ public class TransactionsController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [RequestSizeLimit(64_000)]
     public async Task<ActionResult<TransactionDto>> Update(Guid id, [FromBody] UpdateTransactionRequest request)
     {
         var userId = GetRequiredUserId();

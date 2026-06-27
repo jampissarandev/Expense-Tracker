@@ -278,6 +278,7 @@ Two parallel jobs:
 - **Password hashing**: BCrypt with work factor 12. Passwords are never stored in plaintext.
 - **CSV injection**: User-generated text fields prefixed with `'` when they start with `=`, `+`, `-`, `@`, `\t`, or `\r`.
 - **Rate limiting**: 5 requests/minute on auth endpoints (P4.1).
+- **Request body size limit**: 64 KB max (A5 / R6). Oversized bodies return `413 Payload Too Large`.
 - **Transport security**: HTTPS enforcement + HSTS in Production (A2). See §Deployment.
 
 ### API Boundaries

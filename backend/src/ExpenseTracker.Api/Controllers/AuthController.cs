@@ -31,6 +31,7 @@ public class AuthController : ControllerBase
 
     [HttpPost("register")]
     [AllowAnonymous]
+    [RequestSizeLimit(64_000)]
     public async Task<ActionResult<AuthResponse>> Register([FromBody] RegisterRequest request)
     {
         var response = await _authService.RegisterAsync(request);
@@ -40,6 +41,7 @@ public class AuthController : ControllerBase
 
     [HttpPost("login")]
     [AllowAnonymous]
+    [RequestSizeLimit(64_000)]
     public async Task<ActionResult<AuthResponse>> Login([FromBody] LoginRequest request)
     {
         var response = await _authService.LoginAsync(request);

@@ -200,26 +200,37 @@
 
 **Files**:
 - `backend/src/ExpenseTracker.Api/Program.cs` (configure Kestrel limits + Form options)
-- `backend/src/ExpenseTracker.Api/Middleware/RequestSizeLimitMiddleware.cs` (new — for `application/json` on controllers)
-- `backend/tests/ExpenseTracker.IntegrationTests/RequestSizeLimitTests.cs` (new)
+- `backend/src/ExpenseTracker.Api/Middleware/GlobalExceptionMiddleware.cs` (map `BadHttpRequestException` → 413)
+- `backend/src/ExpenseTracker.Api/Controllers/{Auth,Transactions,Categories}Controller.cs` (`[RequestSizeLimit(64_000)]` on POST/PUT actions)
+- `backend/tests/ExpenseTracker.IntegrationTests/Api/RequestSizeLimitEndpointsTests.cs` (new)
+- `docs/SPEC.md`, `docs/api-contract.md` (document the limit)
 
 **Why**: A single 30 MB JSON body to `/api/transactions` (where `Note` is 500 chars and `Amount` is 14 chars) is an obvious DoS amplifier. Kestrel's default 30 MB is 600,000× larger than the largest legitimate request.
 
 **What we limit**:
 - `KestrelServerOptions.Limits.MaxRequestBodySize = 64_000` (64 KB — generous headroom for a transaction with a long note)
-- `FormOptions.MultipartBodyLengthLimit = 64_000` (no multipart in this app, but cheap to set)
-- Explicit `[RequestSizeLimit(64_000)]` on all `ApiController` action methods as defense-in-depth (Kestrel limit can be bypassed by misconfiguration)
+- `FormOptions.MultipartBodyLengthLimit = 64_000` (no multipart in this app today, but cheap defense-in-depth in case a future upload route forgets to declare its own limit)
+- Explicit `[RequestSizeLimit(64_000)]` on all POST/PUT action methods as defense-in-depth (Kestrel limit can be bypassed by misconfiguration)
+- `GlobalExceptionMiddleware` maps `BadHttpRequestException` → 413 `application/problem+json` so Kestrel body-size rejections return a structured RFC 7807 response instead of leaking a 500.
 
 **Sub-steps**:
-1. **Test first** — `RequestSizeLimitTests`:
-   - POST `/api/transactions` with 100 KB JSON body → 413 (or 400 from model binding); with 1 KB body → 201 (assuming valid).
+1. **Test first** — `RequestSizeLimitEndpointsTests`:
+   - POST `/api/transactions` with 100 KB JSON body → 413 (production Kestrel) or 400 (in-memory TestServer) — either proves the body is rejected.
+   - POST `/api/transactions` with a normal 1 KB body → 201.
+   - POST `/api/categories` with 100 KB body → 413 or 400.
 2. Configure Kestrel limits in `Program.cs` via `builder.WebHost.ConfigureKestrel(opts => { opts.Limits.MaxRequestBodySize = 64_000; })`.
-3. Add `[RequestSizeLimit(64_000)]` to **every** action method in `TransactionsController`, `CategoriesController`, `AuthController`, `ExportsController`. The 5 attribute additions are mechanical.
-4. Add a custom `IInputFormatterException` handler in `GlobalExceptionMiddleware` so an oversize body returns 413 with `application/problem+json` instead of 500.
+3. Configure `FormOptions.MultipartBodyLengthLimit = 64_000` via `builder.Services.Configure<FormOptions>(...)`.
+4. Add `[RequestSizeLimit(64_000)]` to every POST/PUT action method in `TransactionsController`, `CategoriesController`, `AuthController` (6 mechanical additions — `ExportsController` has only GET endpoints, so no attribute needed there). `DashboardController` likewise has no POST/PUT today.
+5. Add a `BadHttpRequestException` switch arm to `GlobalExceptionMiddleware.HandleExceptionAsync` so an oversize body returns 413 with `application/problem+json` instead of 500.
+
+> **Implementation note**: Originally the plan called for a dedicated `RequestSizeLimitMiddleware.cs`. The actual implementation reuses the existing `GlobalExceptionMiddleware` to translate the Kestrel-thrown `BadHttpRequestException` into a 413 problem+json. This avoids adding a new middleware file and keeps the response shape consistent with every other error in the API.
+
+> **Test caveat**: `WebApplicationFactory` (TestServer) does not enforce Kestrel's `MaxRequestBodySize` — oversized requests reach the model binder, which rejects them with a 400. The integration tests therefore assert `413 OR 400`. In a production Kestrel deployment, the 413 fires first and is the user-visible behavior.
 
 **Acceptance**:
-- 100 KB body → 413.
+- 100 KB body → 413 in production Kestrel, 400 in TestServer (both = rejected).
 - 1 KB valid body → 201.
+- 413 response is `application/problem+json` with RFC 7807 `ProblemDetails`.
 - Smoke test against `/health` still works (it has no body).
 
 **Branch**: `sec/a5-body-size-limit`

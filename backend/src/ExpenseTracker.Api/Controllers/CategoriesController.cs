@@ -31,6 +31,7 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpPost]
+    [RequestSizeLimit(64_000)]
     public async Task<ActionResult<CategoryDto>> Create([FromBody] CreateCategoryRequest request)
     {
         var userId = GetRequiredUserId();
@@ -50,6 +51,7 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [RequestSizeLimit(64_000)]
     public async Task<ActionResult<CategoryDto>> Update(Guid id, [FromBody] UpdateCategoryRequest request)
     {
         var userId = GetRequiredUserId();

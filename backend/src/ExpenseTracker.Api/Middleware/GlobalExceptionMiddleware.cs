@@ -35,6 +35,8 @@ public class GlobalExceptionMiddleware
 
         var (statusCode, detail) = exception switch
         {
+            BadHttpRequestException badRequest
+                => (HttpStatusCode.RequestEntityTooLarge, badRequest.Message),
             NotFoundException notFound
                 => (HttpStatusCode.NotFound, notFound.Message),
             ForbiddenException forbidden

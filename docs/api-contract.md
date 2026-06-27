@@ -28,6 +28,7 @@
 | Sorting | Transactions list defaults to `occurredOn DESC, createdAt DESC`. No client-side sort. |
 | Cookies | Refresh cookie is `et_rt`, `HttpOnly`, `SameSite=Strict`, `Path=/api/auth`, 7-day expiry, `Secure` only over HTTPS. |
 | Rate limiting | 5 requests/minute on `/api/auth/*` endpoints (per IP). Other endpoints: no limit. |
+| Body size limit | Maximum request body size is 64 KB. Oversized bodies are rejected with `413 Payload Too Large`. |
 | CORS | Configured for `http://localhost:5173` (Vite dev origin) with credentials. |
 
 ---
