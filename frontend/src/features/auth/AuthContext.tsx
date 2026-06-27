@@ -6,7 +6,7 @@ import {
   useCallback,
   type ReactNode,
 } from "react"
-import apiClient, { setTokenGetter } from "@/lib/apiClient"
+import apiClient, { setTokenGetter, setLogoutHandler } from "@/lib/apiClient"
 import type { UserDto, AuthResponse } from "@/types/api"
 
 // ── Context shape ───────────────────────────────────────────────────────────
@@ -37,6 +37,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     setTokenGetter(() => accessToken)
   }, [accessToken])
+
+  // Register a logout handler so apiClient can clear local auth state when
+  // the refresh-token flow has failed and there is no way to recover.
+  // We do not navigate here — the route guard handles redirect to /login.
+  useEffect(() => {
+    setLogoutHandler(() => {
+      setAccessToken(null)
+      setUser(null)
+    })
+  }, [])
 
   // On mount: attempt silent refresh
   useEffect(() => {

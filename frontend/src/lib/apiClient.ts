@@ -8,6 +8,18 @@ export function setTokenGetter(fn: () => string | null) {
   _getAccessToken = fn
 }
 
+// ── Singleton logout handler (R-7) ─────────────────────────────────────────
+// AuthContext registers a handler so apiClient can notify it when the
+// refresh-token flow has failed and there is no way to recover. The handler
+// is responsible for clearing local auth state. We do not import AuthContext
+// directly to avoid a circular dependency.
+
+let _logoutHandler: () => void = () => {}
+
+export function setLogoutHandler(fn: () => void) {
+  _logoutHandler = fn
+}
+
 // ── Axios instance ──────────────────────────────────────────────────────────
 
 const apiClient = axios.create({
@@ -34,17 +46,25 @@ apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 let _isRefreshing = false
 let _onRefreshed: ((token: string) => void)[] = []
 let _onRefreshFailed: (() => void)[] = []
+// Guards against firing the logout handler more than once per refresh
+// cycle when multiple requests are queued behind a single refresh attempt.
+let _logoutFiredForCycle = false
 
 function notifyRefreshed(token: string) {
   _onRefreshed.forEach((cb) => cb(token))
   _onRefreshed = []
   _onRefreshFailed = []
+  _logoutFiredForCycle = false
 }
 
 function notifyRefreshFailed() {
   _onRefreshFailed.forEach((cb) => cb())
   _onRefreshFailed = []
   _onRefreshed = []
+  if (!_logoutFiredForCycle) {
+    _logoutFiredForCycle = true
+    _logoutHandler()
+  }
 }
 
 apiClient.interceptors.response.use(

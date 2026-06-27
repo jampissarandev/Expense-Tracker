@@ -29,15 +29,23 @@ const handlers = [
 const server = setupServer(...handlers)
 
 beforeEach(() => server.listen({ onUnhandledRequest: "bypass" }))
-afterEach(() => server.close())
+afterEach(() => {
+  server.resetHandlers()
+  server.close()
+})
 
 // ── Import apiClient after env is stubbed ─────────────────────────────────────
 
-const { default: apiClient, setTokenGetter } = await import("@/lib/apiClient")
+const { default: apiClient, setTokenGetter, setLogoutHandler } = await import(
+  "@/lib/apiClient"
+)
 
 describe("apiClient", () => {
   beforeEach(() => {
     setTokenGetter(() => null)
+    // Reset the module-level logout-handler singleton so a previous test
+    // does not leak a handler into the next one.
+    setLogoutHandler(() => {})
   })
 
   it("attaches Authorization header when token is available", async () => {
@@ -123,5 +131,55 @@ describe("apiClient", () => {
     })
 
     expect(capturedCredentials).toBe("include")
+  })
+
+  // ── Logout handler (R-7) ──────────────────────────────────────────────────
+
+  it("calls the logout handler exactly once when the refresh itself fails", async () => {
+    // Make BOTH the protected call AND the refresh call return 401.
+    // The protected call should trigger a refresh; the refresh will then
+    // fail, which must call the logout handler so AuthContext can clear
+    // local state.
+    server.use(
+      http.get("http://localhost:5117/api/protected", () => {
+        return new HttpResponse(null, { status: 401 })
+      }),
+      http.post("http://localhost:5117/api/auth/refresh", () => {
+        return new HttpResponse(null, { status: 401 })
+      }),
+    )
+
+    const logoutHandler = vi.fn()
+    setLogoutHandler(logoutHandler)
+    setTokenGetter(() => "expired-token")
+
+    await expect(apiClient.get("/api/protected")).rejects.toThrow()
+
+    // The handler is the bridge from "refresh failed" to "clear local auth
+    // state". If it does not fire, the user stays in a zombie-logged-in
+    // state with a dead access token and no way to recover.
+    expect(logoutHandler).toHaveBeenCalledTimes(1)
+  })
+
+  it("does NOT call the logout handler when refresh succeeds", async () => {
+    // First protected call returns 401, refresh succeeds, retry returns 200.
+    let callCount = 0
+    server.use(
+      http.get("http://localhost:5117/api/protected", () => {
+        callCount++
+        if (callCount === 1) {
+          return new HttpResponse(null, { status: 401 })
+        }
+        return HttpResponse.json({ ok: true })
+      }),
+    )
+
+    const logoutHandler = vi.fn()
+    setLogoutHandler(logoutHandler)
+    setTokenGetter(() => "test-token")
+
+    const response = await apiClient.get("/api/protected")
+    expect(response.status).toBe(200)
+    expect(logoutHandler).not.toHaveBeenCalled()
   })
 })
