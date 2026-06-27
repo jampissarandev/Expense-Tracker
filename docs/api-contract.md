@@ -106,9 +106,10 @@ All routes under `/api`. Auth column: `public` = no token; `cookie` = refresh co
 
 | Status | When |
 |---|---|
-| 400 | Validation failed (problem+json) |
-| 409 | Email already exists |
+| 400 | Validation failed (problem+json) **or** email already exists |
 | 500 | Unexpected (logged) |
+
+> **Security note — user enumeration:** the duplicate-email response is returned as `400 A user with email '<email>' already exists.`, which reveals whether an email is already registered. This is an **accepted trade-off for v1** — see [ADR-0007](../adr/0007-register-endpoint-enumeration.md). The 5 req/min/IP rate limit on `/api/auth/*` is the primary bulk-enumeration mitigation.
 
 ### 2. POST /api/auth/login
 
