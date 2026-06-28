@@ -187,6 +187,15 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// C1 / R17 — Request-ID propagation. Must run BEFORE the global exception
+// handler and Serilog request logging so:
+//   1. Errors caught by GlobalExceptionMiddleware can include the RequestId
+//      in the problem+json response (the `traceId` extension field).
+//   2. Every Serilog request-log entry is enriched with { RequestId = "…" }
+//      via the LogContext (FromLogContext enricher is already enabled in
+//      appsettings.json).
+app.UseMiddleware<RequestIdMiddleware>();
+
 // Global exception handler (must be first)
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
@@ -208,8 +217,30 @@ if (!app.Environment.IsDevelopment())
     });
 }
 
-// Serilog request logging (after exception handler so errors are captured)
-app.UseSerilogRequestLogging();
+// Serilog request logging (after exception handler so errors are captured).
+// C1 / R17: Enrich the per-request log line with the X-Request-Id
+// resolved by RequestIdMiddleware. We use EnrichDiagnosticContext
+// (not LogContext) because UseSerilogRequestLogging emits its completion
+// log AFTER the response has been sent, by which time the LogContext
+// scope from RequestIdMiddleware has been unwound. DiagnosticContext is
+// attached to the request log entry itself and survives the unwind.
+// The custom message template references the property by name so the
+// rendered line includes the RequestId alongside method/path/status.
+app.UseSerilogRequestLogging(opts =>
+{
+    opts.MessageTemplate =
+        "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms RequestId={RequestId}";
+
+    opts.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+    {
+        if (httpContext.Items.TryGetValue(RequestIdMiddleware.RequestIdItemKey, out var requestIdObj)
+            && requestIdObj is string requestId
+            && !string.IsNullOrEmpty(requestId))
+        {
+            diagnosticContext.Set(RequestIdMiddleware.LogPropertyName, requestId);
+        }
+    };
+});
 
 // CORS — must be before auth for preflight requests
 app.UseCors("AllowFrontend");

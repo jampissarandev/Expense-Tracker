@@ -284,7 +284,7 @@ Two parallel jobs:
 
 ### Security Events (A6 / R10)
 
-Every authentication-lifecycle event is logged via `ISecurityEventLogger` (Serilog-backed) with the following schema. All events include `MachineName`, `ThreadId`, and (once C1 ships) `RequestId` via Serilog enrichers. Email addresses are **never** logged in raw form — only their SHA-256 hash (first 16 hex chars, lowercased + trimmed before hashing) appears, which is enough to correlate events for the same email without exposing the address.
+Every authentication-lifecycle event is logged via `ISecurityEventLogger` (Serilog-backed) with the following schema. All events include `MachineName`, `ThreadId`, and `RequestId` (C1 / R17) via Serilog enrichers. Email addresses are **never** logged in raw form — only their SHA-256 hash (first 16 hex chars, lowercased + trimmed before hashing) appears, which is enough to correlate events for the same email without exposing the address.
 
 | Event id | Level | Fields | When |
 |---|---|---|---|
@@ -302,6 +302,25 @@ Every authentication-lifecycle event is logged via `ISecurityEventLogger` (Seril
 **Acceptance**:
 - `grep -i "email.*@" backend/src/ExpenseTracker.Api/logs/*.log` returns 0 matches.
 - `grep "auth.login.failure" logs/` returns structured Serilog output (one JSON line per failure with `UserId`, `EmailHash`, `Level=Warning`).
+
+### Request-ID propagation (C1 / R17)
+
+Every HTTP request flows through `RequestIdMiddleware` (registered before the global exception handler and Serilog request logging). The middleware:
+
+1. Reads the inbound `X-Request-Id` request header.
+2. If the header is missing, empty, whitespace, or longer than 128 characters (defense against log-flooding), generates a new 32-char hex id via `Guid.NewGuid().ToString("N")`.
+3. Publishes the resolved id on `HttpContext.Items["RequestId"]` so in-process consumers (exception handler, controllers, services) can read it.
+4. Pushes the id into the Serilog `LogContext` as `RequestId` so every log entry written during the request (including `ISecurityEventLogger` events) carries it.
+5. Sets the response `X-Request-Id` header (via `OnStarting`) so error responses (4xx/5xx) keep the header even if a downstream middleware short-circuits.
+
+The Serilog request-log completion event additionally attaches the id via `EnrichDiagnosticContext` (necessary because `UseSerilogRequestLogging` emits its completion log after the response has been sent, by which time the `LogContext` scope has been unwound). The custom `MessageTemplate` renders `RequestId=…` on the same line as method/path/status/elapsed for at-a-glance correlation.
+
+`GlobalExceptionMiddleware` reads the id from `HttpContext.Items["RequestId"]` (falling back to `HttpContext.TraceIdentifier`) and embeds it in the `traceId` extension field of the `application/problem+json` response, so an error report from a client includes the same correlation id the operator sees in the logs.
+
+**Acceptance**:
+- `curl -H "X-Request-Id: test-1" http://localhost:5117/health -I` echoes `X-Request-Id: test-1` on the response.
+- A request without the header receives a server-generated 32-char hex id in the response header.
+- Every Serilog request log line ends with `RequestId=<id>`.
 
 ### API Boundaries
 

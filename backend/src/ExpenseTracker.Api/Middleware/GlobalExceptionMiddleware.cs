@@ -62,10 +62,15 @@ public class GlobalExceptionMiddleware
             Instance = context.Request.Path
         };
 
-        // Include a traceId for debugging
-        if (context.TraceIdentifier != null)
+        // Include a correlation id for debugging. Prefer the X-Request-Id
+        // resolved by RequestIdMiddleware (echoed on the response so the
+        // client and operator share one handle); fall back to ASP.NET's
+        // TraceIdentifier if the middleware was somehow bypassed.
+        var correlationId = context.Items[RequestIdMiddleware.RequestIdItemKey] as string
+            ?? context.TraceIdentifier;
+        if (correlationId != null)
         {
-            problemDetails.Extensions["traceId"] = context.TraceIdentifier;
+            problemDetails.Extensions["traceId"] = correlationId;
         }
 
         var options = new JsonSerializerOptions

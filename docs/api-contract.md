@@ -29,7 +29,12 @@
 | Cookies | Refresh cookie is `et_rt`, `HttpOnly`, `SameSite=Strict`, `Path=/api/auth`, 7-day expiry, `Secure` only over HTTPS. |
 | Rate limiting | 5 req/min on `/api/auth/*` (auth-specific, shared bucket). 200 req/min per authenticated user (JWT `sub`) on all other authenticated endpoints (`Transactions`, `Categories`, `Dashboard`, `Exports`). Both policies use `429 TooManyRequests`. |
 | Body size limit | Maximum request body size is 64 KB. Oversized bodies are rejected with `413 Payload Too Large`. |
+<<<<<<< HEAD
 | CORS | Configured for `http://localhost:5173` (Vite dev origin) with credentials. |
+=======
+| CORS | Configured for `http://localhost:5173` (Vite dev origin) and `http://localhost:4173` (Vite preview / Lighthouse CI) with credentials. Preflight responses include `Access-Control-Max-Age: 600` so browsers cache the preflight result for 10 minutes (B5 / R16). |
+| Request ID | Every response carries an `X-Request-Id` header. Clients may send their own `X-Request-Id` on the request; if missing or invalid, the server generates a 32-char hex id. The same id appears in every Serilog log line for that request as `RequestId=…` (C1 / R17). |
+>>>>>>> 150cbd4 (sec(c1): propagate X-Request-Id through the request pipeline and into Serilog)
 
 ---
 
