@@ -29,7 +29,7 @@
 | Cookies | Refresh cookie is `et_rt`, `HttpOnly`, `SameSite=Strict`, `Path=/api/auth`, 7-day expiry, `Secure` only over HTTPS. |
 | Rate limiting | 5 req/min on `/api/auth/*` (auth-specific, shared bucket). 200 req/min per authenticated user (JWT `sub`) on all other authenticated endpoints (`Transactions`, `Categories`, `Dashboard`, `Exports`). Both policies use `429 TooManyRequests`. |
 | Body size limit | Maximum request body size is 64 KB. Oversized bodies are rejected with `413 Payload Too Large`. |
-| CORS | Configured for `http://localhost:5173` (Vite dev origin) with credentials. |
+| CORS | Configured for `http://localhost:5173` (Vite dev origin) and `http://localhost:4173` (Vite preview / Lighthouse CI) with credentials. Preflight responses include `Access-Control-Max-Age: 600` so browsers cache the preflight result for 10 minutes (B5 / R16). |
 
 ---
 
@@ -586,6 +586,7 @@ When a route or shape changes here, update the corresponding test in the same ch
 - `GET /health` — health check endpoint with DB ping ✅
 - Rate limiting on `/api/auth/*` (5 req/min/IP) ✅
 - CORS for the Vite dev origin (`http://localhost:5173`) ✅
+- CORS `Access-Control-Max-Age: 600` (10-minute preflight cache) (B5 / R16) ✅
 
 ## Implemented in Phase B
 

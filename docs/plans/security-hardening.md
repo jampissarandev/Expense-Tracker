@@ -447,17 +447,21 @@
 
 **Files**:
 - `backend/src/ExpenseTracker.Api/Program.cs` (one line)
+- `backend/tests/ExpenseTracker.IntegrationTests/Api/CorsEndpointsTests.cs` (added 4-line assertion pinning the new header)
+- `docs/api-contract.md` (CORS row + Phase B implemented list)
 
 **Why**: Browsers re-issue preflights on every state-changing request without `PreflightMaxAge`. With our CORS policy, every `POST /api/transactions` carries an extra OPTIONS round trip. Minor perf, but worth fixing.
 
 **Sub-steps**:
-1. **No test** — pure config; manual `curl -X OPTIONS -H "Origin: http://localhost:5173" -H "Access-Control-Request-Method: POST" http://localhost:5117/api/transactions -I` should show `Access-Control-Max-Age: 600`.
+1. ~~**No test** — pure config~~ **Test added** — 4-line assertion in the existing `Preflight_request_with_valid_origin_returns_cors_headers` test pins `Access-Control-Max-Age: 600` on the preflight response. Rationale for deviating from the plan: `CorsEndpointsTests` already exercises the same preflight path; adding the assertion in-place is free regression insurance and matches the project's "tests before code" guideline. `WebApplicationFactory` (TestServer) does emit the header — verified by `dotnet test`.
 2. Add `.SetPreflightMaxAge(TimeSpan.FromMinutes(10))` to the CORS policy.
 
 **Acceptance**:
 - `Access-Control-Max-Age: 600` header on preflight responses.
+- Integration test `CorsEndpointsTests.Preflight_request_with_valid_origin_returns_cors_headers` asserts the header.
+- Manual smoke (recommended before merge): `curl -i -X OPTIONS -H "Origin: http://localhost:5173" -H "Access-Control-Request-Method: POST" http://localhost:5117/api/transactions` should show `Access-Control-Max-Age: 600` in the response headers.
 
-**Branch**: `sec/b5-cors-preflight`
+**Branch**: `sec/b5-cors-preflight` ✅ implemented 2026-06-28
 
 ---
 

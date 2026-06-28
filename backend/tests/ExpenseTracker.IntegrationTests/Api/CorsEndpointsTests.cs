@@ -70,6 +70,12 @@ public class CorsEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
         credentials!.Should().Contain("true");
 
         response.Headers.TryGetValues("Access-Control-Allow-Methods", out var methods).Should().BeTrue();
+
+        // B5 / R16 — preflight result is cached by the browser for 10 minutes
+        // (SetPreflightMaxAge in Program.cs). Pin the value so a future
+        // refactor that drops the cache configuration fails this test.
+        response.Headers.TryGetValues("Access-Control-Max-Age", out var maxAge).Should().BeTrue();
+        maxAge!.Should().ContainSingle().Which.Should().Be("600");
     }
 
     [Fact]

@@ -126,7 +126,16 @@ builder.Services.AddCors(options =>
             )
               .AllowCredentials()
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              // B5 / R16 — cache the CORS preflight result for 10 minutes so
+              // browsers stop issuing an extra OPTIONS round trip before
+              // every POST/PUT/DELETE. The browser will reuse the cached
+              // allow-list (origins, methods, headers, credentials) for
+              // 600 seconds, after which it re-issues a preflight. 10 min
+              // is a pragmatic balance: long enough to remove the per-mutation
+              // preflight during a typical user session, short enough that
+              // a future CORS policy change propagates within one session.
+              .SetPreflightMaxAge(TimeSpan.FromMinutes(10));
     });
 });
 
