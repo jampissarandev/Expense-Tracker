@@ -201,7 +201,10 @@ graphify-out/cache/
 # local dev only.  Production must override via env var Jwt__SecretKey
 # (see ADR-0006).
 
-# ── Copilot agent local memory ────────────────────────────────
-# Per-session notes written by the GitHub Copilot agent into
-# .github/copilot-memory/. Not part of the project — never commit.
+# ── Agent local memory ───────────────────────────────────────
+# Per-session notes written by AI agents into the repo working
+# tree. Not part of the project — never commit. Persistent state
+# lives in the memory tool (under /memories/), not in git.
+memories/
+.github/agents/memories/
 .github/copilot-memory/
