@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using System.Threading.RateLimiting;
@@ -129,13 +130,36 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Rate limiting — strict limit on auth endpoints
-// Disabled in E2E test environments (set E2E_TESTS=true) so Playwright
-// suites that register many users in quick succession are not blocked.
+// Rate limiting — disabled in E2E test environments (set E2E_TESTS=true) so
+// Playwright suites that register many users in quick succession are not blocked.
 if (!string.Equals(builder.Configuration["E2E_TESTS"], "true", StringComparison.OrdinalIgnoreCase))
 {
     builder.Services.AddRateLimiter(options =>
     {
+        // B1 / R7 — partition per authenticated user (JWT 'sub' claim), with
+        // IP fallback for any future anonymous traffic on GlobalRateLimit.
+        // Per-user (not per-IP) so an attacker cannot bypass by rotating IPs,
+        // matching the R11 threat model. See docs/plans/security-hardening.md
+        // §B1 "C-option deviation" for the full rationale.
+        options.AddPolicy("GlobalRateLimit", context =>
+        {
+            var userId = context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var partitionKey = !string.IsNullOrEmpty(userId)
+                ? $"user:{userId}"
+                : $"ip:{context.Connection.RemoteIpAddress?.ToString() ?? "unknown"}";
+
+            return RateLimitPartition.GetSlidingWindowLimiter(
+                partitionKey,
+                _ => new SlidingWindowRateLimiterOptions
+                {
+                    PermitLimit = 200,
+                    Window = TimeSpan.FromMinutes(1),
+                    SegmentsPerWindow = 4,
+                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                    QueueLimit = 0
+                });
+        });
+
         options.AddFixedWindowLimiter("AuthRateLimit", config =>
         {
             config.PermitLimit = 5;
@@ -143,6 +167,7 @@ if (!string.Equals(builder.Configuration["E2E_TESTS"], "true", StringComparison.
             config.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
             config.QueueLimit = 0;
         });
+
         options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
     });
 }
@@ -196,14 +221,20 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Rate limiting — before auth to block excessive requests early
+// Rate limiting — after UseAuthentication so the per-user partition
+// can read the JWT 'sub' claim, but before UseAuthorization so unauth
+// requests still hit AuthRateLimit. See B1 / R7 C-option deviation.
 // Skipped when E2E_TESTS=true (no rate limiter registered in that case).
 if (!string.Equals(builder.Configuration["E2E_TESTS"], "true", StringComparison.OrdinalIgnoreCase))
 {
+    app.UseAuthentication();
     app.UseRateLimiter();
 }
+else
+{
+    app.UseAuthentication();
+}
 
-app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -3,12 +3,14 @@ using ExpenseTracker.Application.Dashboard;
 using ExpenseTracker.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace ExpenseTracker.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
+[EnableRateLimiting("GlobalRateLimit")]
 public class DashboardController : ControllerBase
 {
     private readonly IDashboardService _dashboardService;

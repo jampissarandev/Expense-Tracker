@@ -5,12 +5,14 @@ using ExpenseTracker.Application.Transactions.Filters;
 using ExpenseTracker.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace ExpenseTracker.Api.Controllers;
 
 [ApiController]
 [Route("api/exports")]
 [Authorize]
+[EnableRateLimiting("GlobalRateLimit")]
 public class ExportsController : ControllerBase
 {
     private readonly IExportService _exportService;

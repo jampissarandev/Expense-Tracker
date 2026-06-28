@@ -3,12 +3,14 @@ using ExpenseTracker.Application.Categories;
 using ExpenseTracker.Application.Categories.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace ExpenseTracker.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
+[EnableRateLimiting("GlobalRateLimit")]
 public class CategoriesController : ControllerBase
 {
     private readonly ICategoryService _categoryService;

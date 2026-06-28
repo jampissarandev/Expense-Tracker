@@ -316,6 +316,36 @@
 - E2E suite (`npm run test:e2e`) still green.
 - 5 reqs/min auth limit unchanged.
 
+> **Implementation note (C-option deviation)**: The plan originally specified
+> per-IP partitioning. The shipped implementation uses per-**user** (JWT `sub`
+> claim), with IP as fallback for any future anonymous `[Authorize]`-free
+> routes that opt into the same policy. Rationale:
+>
+> 1. Per-IP would require `UseForwardedHeaders` to be configured behind a
+>    reverse proxy — it is not, and adding it expands trust of `X-Forwarded-For`
+>    headers (RFC 7239 caveat). Per-user reads the verified JWT `sub` instead.
+> 2. Per-user aligns with the R11 threat model (§B3): "IP-based rate limit
+>    doesn't stop an attacker rotating IPs." B1 was always a defense-in-depth
+>    complement to B3; making it per-user keeps the two layers consistent.
+> 3. `HttpContextAccessor` and `ICurrentUserService` are already wired — no
+>    new infrastructure.
+>
+> **Middleware ordering note**: `app.UseRateLimiter()` is registered **after**
+> `app.UseAuthentication()` (and before `app.UseAuthorization()`) so the
+> partition callback can read the authenticated `User` claims. Placing it
+> before auth would force the per-user partition to fall back to IP for
+> every request (since `User` is still anonymous), collapsing the per-user
+> behavior back into a single IP bucket — the bug discovered during
+> integration test development and locked down by
+> `Rate_limit_is_per_user_not_shared_across_users`.
+>
+> The 200 req/min budget is preserved **per partition**. `AuthRateLimit`
+> (5/min) keeps its single shared bucket because it guards anonymous auth
+> traffic where there is no user id yet. Test
+> `GlobalRateLimitTests.Rate_limit_is_per_user_not_shared_across_users`
+> locks in the per-user behavior. `SPEC.md` and `api-contract.md` reflect
+> this choice.
+
 **Branch**: `sec/b1-global-rate-limit`
 
 ---

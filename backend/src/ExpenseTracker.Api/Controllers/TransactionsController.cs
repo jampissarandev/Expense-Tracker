@@ -6,12 +6,14 @@ using ExpenseTracker.Application.Transactions.Filters;
 using ExpenseTracker.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace ExpenseTracker.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
+[EnableRateLimiting("GlobalRateLimit")]
 public class TransactionsController : ControllerBase
 {
     private readonly ITransactionService _transactionService;
