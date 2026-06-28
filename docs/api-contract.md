@@ -23,7 +23,7 @@
 | Dates | `occurredOn` is a `DateOnly` — wire format `"YYYY-MM-DD"` (`2026-06-24`). Query parameters `from` / `to` accept the same shape. |
 | Timestamps | `createdAt` / `updatedAt` / `refreshTokenExpiresAt` / `accessToken.expiresAt` are ISO-8601 with offset (e.g. `"2026-06-24T18:00:00+00:00"`). |
 | IDs | UUID v4 (cryptographically random `Guid.NewGuid()`) — except for seeded system categories, which use deterministic Guids. |
-| Errors | Always `application/problem+json` (RFC 7807) with `type`, `title`, `status`, `detail`, `instance`, `traceId`. See `GlobalExceptionMiddleware`. |
+| Errors | Always `application/problem+json` (RFC 7807) with `type`, `title`, `status`, `detail`, `instance`. The `traceId` extension is **only included when the API is running in the `Development` environment**; in any other environment it is omitted from the response body (still logged server-side). See `GlobalExceptionMiddleware` and C2 in `docs/plans/security-hardening.md`. |
 | Pagination | `?page=1&pageSize=20` — `pageSize` is capped at 100 (`TransactionFilter.MaxPageSize`). |
 | Sorting | Transactions list defaults to `occurredOn DESC, createdAt DESC`. No client-side sort. |
 | Cookies | Refresh cookie is `et_rt`, `HttpOnly`, `SameSite=Strict`, `Path=/api/auth`, 7-day expiry, `Secure` only over HTTPS. |
@@ -526,6 +526,8 @@ Every non-2xx response (except 204) is `application/problem+json`:
   "traceId": "0HNMHS495PA7J:00000003"
 }
 ```
+
+> The `traceId` field is **Development-only** (C2 / R9). In any other environment, the field is omitted from the response body to prevent correlation-handle leakage to external attackers. Clients that need to correlate a 5xx with server logs in non-Development should supply an `X-Request-Id` request header — the API echoes it on the response and the server logs it.
 
 The exception-to-status mapping (see `GlobalExceptionMiddleware`):
 

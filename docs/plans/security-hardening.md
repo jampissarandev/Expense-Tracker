@@ -490,7 +490,13 @@
 
 ---
 
-## C2. Trace-ID disclosure gated by environment (R9)
+## C2. Trace-ID disclosure gated by environment (R9) ✅ implemented 2026-06-28
+
+**Files**:
+- `backend/src/ExpenseTracker.Api/Middleware/GlobalExceptionMiddleware.cs` (inject `IWebHostEnvironment`; gate `traceId` extension by `IsDevelopment()`)
+- `backend/tests/ExpenseTracker.UnitTests/Middleware/GlobalExceptionMiddlewareTests.cs` (new — 8 tests covering Development includes, Production/Staging/Test omit, other ProblemDetails fields preserved, success responses untouched)
+- `backend/tests/ExpenseTracker.UnitTests/ExpenseTracker.UnitTests.csproj` (added `<ProjectReference>` to `ExpenseTracker.Api` so the middleware type is reachable from unit tests)
+- `docs/api-contract.md` (errors row + the example JSON block)
 
 **Files**:
 - `backend/src/ExpenseTracker.Api/Middleware/GlobalExceptionMiddleware.cs` (one condition)
