@@ -158,6 +158,14 @@ Sets a new `et_rt` cookie (rotation). The old refresh token is **revoked** serve
 |---|---|
 | 401 | Cookie missing, expired, revoked, or reused |
 
+**Client note (C3 / R12)**: The frontend's `apiClient` refresh interceptor
+calls this endpoint via the configured `apiClient` instance (not a raw
+`axios.post` with a hand-built URL), so the refresh cookie is sent on the
+same path as every other request regardless of a trailing-slash in
+`VITE_API_URL`. The refresh request carries the sentinel header
+`X-Refresh-Request: 1` to prevent the response interceptor from treating
+its own 401 as a refreshable request.
+
 ### 4. POST /api/auth/logout
 
 Requires `Authorization: Bearer <accessToken>`. Revokes the refresh token in `et_rt` (if any), then clears the cookie.

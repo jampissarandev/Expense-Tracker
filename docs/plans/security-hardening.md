@@ -517,21 +517,32 @@
 
 ---
 
-## C3. Frontend refresh interceptor `withCredentials` consistency (R12)
+## C3. Frontend refresh interceptor `withCredentials` consistency (R12) ✅ implemented 2026-06-28
 
 **Files**:
-- `frontend/src/lib/apiClient.ts` (line 79-83 — use the same instance instead of raw `axios.post`)
+- `frontend/src/lib/apiClient.ts` (replaced the raw `axios.post(...)` with `apiClient.post('/api/auth/refresh', null, { headers: { 'X-Refresh-Request': '1' } })`; added a matching short-circuit in the response interceptor so a 401 on the refresh request itself is not retried)
+- `frontend/tests/unit/apiClient.test.ts` (replaced the previous "passes withCredentials: true for cookie-based refresh" test — which was actually asserting the buggy hand-built-URL behavior — with two new tests: one asserts the refresh goes through `apiClient.post('/api/auth/refresh', ...)` with the `X-Refresh-Request` sentinel, the other pins the `withCredentials: include` propagation through the refresh call)
+- `docs/api-contract.md` (added a "Client note (C3 / R12)" callout under the `/api/auth/refresh` table)
 
-**Why**: The refresh interceptor uses a raw `axios.post` with `withCredentials: true`. If `VITE_API_URL` is misconfigured (e.g., trailing slash), the cookie path differs from the main client's path, and the cookie isn't sent. We should use the configured `apiClient` instance.
+**Why**: The refresh interceptor previously used a raw `axios.post` with
+`withCredentials: true` and a hand-built URL of
+`` `${import.meta.env.VITE_API_URL}/api/auth/refresh` ``. If `VITE_API_URL`
+ends with a trailing slash, the produced URL is `http://…//api/auth/refresh`
+(double slash) — the refresh cookie isn't sent on the same path the main
+client uses, the refresh fails, and the user is silently logged out. We
+should use the configured `apiClient` instance, which delegates URL-joining
+to axios and reuses the same `baseURL` and `withCredentials: true` for
+every request.
 
 **Sub-steps**:
-1. **Test first** — manual smoke: log in, wait for token to expire, observe a single 401 → refresh → retry. No infinite loop. No double-refresh.
-2. Replace the raw `axios.post` with `apiClient.post('/api/auth/refresh')` (uses the same `baseURL` and `withCredentials`).
-3. Remove the now-redundant `withCredentials: true` from the call.
+1. **Test first** — `apiClient.test.ts`: spy on `apiClient.post` and assert the refresh call goes through it (not raw `axios.post`) with the `X-Refresh-Request: '1'` sentinel. The test was RED before the fix because the raw `axios.post` call didn't trigger the spy.
+2. Replace the raw `axios.post` with `apiClient.post('/api/auth/refresh', null, { headers: { 'X-Refresh-Request': '1' } })` so it uses the same `baseURL` and `withCredentials`.
+3. Add a short-circuit in the response interceptor so a 401 on the refresh request (identified by the `X-Refresh-Request` header) is not retried — otherwise routing the refresh through `apiClient` (instead of raw `axios`) introduces an infinite "refresh-the-refresh" loop.
 
 **Acceptance**:
-- Refresh flow works against `/api/auth/refresh` regardless of `VITE_API_URL` value.
-- E2E tests green.
+- Refresh flow works against `/api/auth/refresh` regardless of `VITE_API_URL` value (no double-slash in the URL).
+- No infinite refresh loop (the `X-Refresh-Request` sentinel short-circuits the interceptor).
+- All 149 frontend tests pass; typecheck and lint clean; prettier clean on touched files.
 
 **Branch**: `sec/c3-refresh-interceptor`
 
