@@ -282,6 +282,21 @@ Two parallel jobs:
 - **Transport security**: HTTPS enforcement + HSTS in Production (A2). See §Deployment.
 - **Security-event audit log** (A6 / R10): every register, login, refresh, and logout attempt is emitted as a structured Serilog event with a stable correlation handle (see §Security Events).
 
+### Data at rest (E2 / R22)
+
+The PII and credential material in the database is stored as follows:
+
+| Field | Table | Encoding | Why |
+|---|---|---|---|
+| `Email` | `users` | Plaintext | Displayed in the UI; used as the login identifier; indexed for `WHERE email = $1` lookups. |
+| `DisplayName` | `users` | Plaintext | Free-text profile field. |
+| `PasswordHash` | `users` | BCrypt (work factor 12) | One-way hash; cleartext is never recoverable. |
+| `TokenHash` | `refresh_tokens` | SHA-256 of the cookie plaintext | One-way hash; the cleartext token is in the `et_rt` HttpOnly cookie. |
+
+**No application-level encryption of PII.** `Email` and `DisplayName` are stored as plaintext. The compensating control is **disk-level encryption of the Postgres data volume** at the infrastructure layer — this is a deployment-time requirement, not a code-time one. The single Postgres instance is treated as a trust boundary: anyone with read access to the DB can read the plaintext PII. See [ADR-0008](../adr/0008-pii-encryption-at-rest.md) for the full decision (alternatives considered, threat model, follow-up). The audit's log-redaction rule (no raw email in logs — only the truncated SHA-256 `EmailHash`) is independent of this decision and continues to apply; see §Security Events.
+
+**Operator runbook requirement**: when bringing up a production Postgres (AWS RDS, Azure Database for PostgreSQL, GCP Cloud SQL, or self-hosted on an encrypted volume), the storage encryption option must be enabled. The application does not verify this at runtime; the operator is responsible.
+
 ### Security Events (A6 / R10)
 
 Every authentication-lifecycle event is logged via `ISecurityEventLogger` (Serilog-backed) with the following schema. All events include `MachineName`, `ThreadId`, and `RequestId` (C1 / R17) via Serilog enrichers. Email addresses are **never** logged in raw form — only their SHA-256 hash (first 16 hex chars, lowercased + trimmed before hashing) appears, which is enough to correlate events for the same email without exposing the address.
