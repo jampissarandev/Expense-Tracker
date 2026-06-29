@@ -252,6 +252,40 @@ See [docs/PLAN.md](docs/PLAN.md) for the full phased breakdown (Phase 0 → Phas
 
 ---
 
+## 🔒 Security
+
+### Reporting vulnerabilities
+
+Please email security issues to the maintainers (do **not** open a public GitHub issue) so we can patch and disclose responsibly.
+
+### Dependency audit (R15 / Phase E1)
+
+NuGet and npm packages are scanned for known CVEs both in CI and locally. Any finding at severity **High** or **Critical** fails the build.
+
+**CI** — `.github/workflows/security-audit.yml` runs:
+
+- On every push to `main`
+- On every PR that touches a dependency manifest (`*.csproj`, `*.props`, `frontend/package.json`, `frontend/package-lock.json`)
+- Weekly on Monday 06:00 UTC (background sweep)
+
+**Local** — equivalent commands in the Makefile:
+
+```bash
+make audit             # audit both backend (NuGet) and frontend (npm)
+make audit-backend     # backend only — `dotnet list package --vulnerable --include-transitive`
+make audit-frontend    # frontend only — `npm audit --omit=dev --audit-level=high`
+```
+
+Run `make audit` before opening a PR that touches a dependency manifest. The CI workflow will catch the same issues, but catching them locally saves a round trip.
+
+### Other hardening
+
+- Production-mode builds apply security headers (CSP, HSTS, `X-Frame-Options`, etc.) — see [docs/plans/security-hardening.md §A1](docs/plans/security-hardening.md).
+- Dev JWT secret is loaded from per-user `dotnet user-secrets`, never from tracked `appsettings.Development.json` — see [R5](docs/plans/security-hardening.md).
+- Full audit + remediation plan: [docs/plans/security-hardening.md](docs/plans/security-hardening.md).
+
+---
+
 ## 📜 License
 
 See [LICENSE](LICENSE).
