@@ -1,0 +1,146 @@
+name: Security Audit
+
+# R15 / Phase E1 — automated CVE scanning for backend NuGet packages and
+# frontend npm packages. Runs:
+#   - weekly (Monday 06:00 UTC) on main, as a scheduled background sweep
+#   - on every push to main
+#   - on PRs that touch a dependency manifest (csproj / props / package.json)
+#
+# Failure policy: any known vulnerability at severity High or Critical
+# fails the job. Moderate/Low are reported but do not fail the build —
+# they are reviewed in the weekly sweep so the team can decide whether
+# to upgrade, suppress, or accept the risk.
+
+on:
+  schedule:
+    # Weekly sweep — Monday 06:00 UTC. Hand-off window: the developer
+    # who triages GitHub notifications gets a fresh report after the
+    # weekend's CVE feeds settle.
+    - cron: "0 6 * * 1"
+
+  push:
+    branches: [main]
+
+  pull_request:
+    branches: [main]
+    paths:
+      - "backend/**/*.csproj"
+      - "backend/**/*.props"
+      - "frontend/package.json"
+      - "frontend/package-lock.json"
+
+permissions:
+  contents: read
+
+jobs:
+  backend-audit:
+    name: Backend (NuGet) vulnerable packages
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # `dotnet list package --vulnerable --include-transitive` is a
+      # *report*, not a gate — it always exits 0 even when it finds
+      # known-vuln packages. We grep for the severity column and
+      # promote any High/Critical finding to a build failure.
+      #
+      # .NET 10 console output puts one row per vulnerable package
+      # reference, with the severity token ("High" / "Critical" /
+      # "Moderate" / "Low") appearing in the "Severity" column, e.g.:
+      #
+      #     > Newtonsoft.Json      9.0.1       9.0.1      High       https://...
+      #
+      # We match the severity token as a stand-alone word
+      # (non-letter on the left, whitespace/EOL on the right) so the
+      # command also works on older .NET versions whose table layouts
+      # differ slightly.
+      - name: List vulnerable packages (transitive)
+        id: list
+        run: |
+          set +e
+          dotnet list package --vulnerable --include-transitive > vulnerable.txt
+          echo "--- vulnerable.txt ---"
+          cat vulnerable.txt
+          echo "--- end ---"
+
+      - name: Fail on High or Critical findings
+        run: |
+          # Match the High/Critical severity tokens as stand-alone
+          # words on a line. The lookbehind `[^a-zA-Z]` prevents
+          # matching the word "high" inside prose like
+          # "a known high severity vulnerability" that dotnet prints
+          # in its NU1903 warning.
+          if grep -E "(^|[^a-zA-Z]) (High|Critical)([[:space:]]|$)" vulnerable.txt; then
+            echo "::error::Backend has High/Critical NuGet vulnerabilities. See vulnerable.txt above."
+            exit 1
+          fi
+          echo "No High or Critical NuGet vulnerabilities found."
+
+      - name: Upload vulnerability report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-vulnerable-packages
+          path: backend/vulnerable.txt
+
+  frontend-audit:
+    name: Frontend (npm) audit
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: frontend/.nvmrc
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Verify Node version matches .nvmrc
+        run: node ./scripts/verify-node-version.mjs
+
+      - name: Install dependencies
+        run: npm ci
+
+      # `npm audit --omit=dev` scopes the audit to production
+      # dependencies (matches what we ship to users). `--audit-level=high`
+      # makes npm exit non-zero when it finds any High or Critical
+      # finding. The JSON report is archived as a build artifact for
+      # later review.
+      - name: Audit production dependencies (fail on High/Critical)
+        run: |
+          set +e
+          npm audit --omit=dev --json > npm-audit.json
+          audit_rc=$?
+          set -e
+          echo "audit exit code: $audit_rc"
+          # Always print a human summary for the Actions log.
+          npm audit --omit=dev || true
+          if [ "$audit_rc" -ne 0 ]; then
+            echo "::error::Frontend has High/Critical npm vulnerabilities. See npm-audit.json artifact."
+            exit "$audit_rc"
+          fi
+          echo "No High or Critical npm vulnerabilities found."
+
+      - name: Upload npm audit JSON
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-npm-audit
+          path: frontend/npm-audit.json

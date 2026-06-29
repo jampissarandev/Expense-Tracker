@@ -1,4 +1,4 @@
-.PHONY: db-up db-down db-reset db-wsl-ip db-portproxy db-portproxy-remove dev-secrets e2e e2e-build
+.PHONY: db-up db-down db-reset db-wsl-ip db-portproxy db-portproxy-remove dev-secrets e2e e2e-build audit audit-backend audit-frontend
 
 # --- Docker Postgres lifecycle -------------------------------------------------
 
@@ -67,3 +67,40 @@ e2e:
 
 e2e-build:
 	cd frontend && npx playwright install --with-deps chromium
+
+# --- Dependency audit (R15 / E1) ---------------------------------------------
+# Local equivalent of .github/workflows/security-audit.yml. Run before
+# opening a PR that touches *.csproj or frontend/package.json.
+#
+#   make audit             — audit both backend (NuGet) and frontend (npm)
+#   make audit-backend     — backend only
+#   make audit-frontend    — frontend only
+#
+# Exit codes:
+#   0 — no High/Critical vulnerabilities
+#   1 — at least one High or Critical finding (printed above)
+#
+# Notes:
+#   - `dotnet list package --vulnerable` is a *report* (always exits 0).
+#     We grep the severity column and turn High/Critical into a failure
+#     to match what the CI workflow does.
+#   - `npm audit --audit-level=high` already exits non-zero on High/Critical,
+#     so the `|| exit 1` is a belt-and-suspenders guard for older npm
+#     versions that may not honor the flag.
+
+audit: audit-backend audit-frontend
+
+audit-backend:
+	@echo "==> Auditing backend NuGet packages (transitive, fail on High/Critical)..."
+	cd backend && dotnet list package --vulnerable --include-transitive > vulnerable.txt
+	@if grep -E "(^|[^a-zA-Z]) (High|Critical)([[:space:]]|$)" backend/vulnerable.txt; then \
+		echo ""; \
+		echo "ERROR: backend has High/Critical NuGet vulnerabilities. See backend/vulnerable.txt."; \
+		exit 1; \
+	fi
+	@echo "Backend: no High or Critical NuGet vulnerabilities."
+
+audit-frontend:
+	@echo "==> Auditing frontend npm packages (production only, fail on High/Critical)..."
+	cd frontend && npm audit --omit=dev --audit-level=high || (echo ""; echo "ERROR: frontend has High/Critical npm vulnerabilities. Re-run with 'npm audit' in frontend/ for details."; exit 1)
+	@echo "Frontend: no High or Critical npm vulnerabilities."
