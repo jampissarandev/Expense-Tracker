@@ -358,6 +358,104 @@ The API is designed to run behind a **reverse proxy** (Nginx, Caddy, cloud LB) t
 
 ---
 
+## Security
+
+This is the authoritative description of the security controls the v1 API enforces. The `## Boundaries` section above is a quick-reference bullet list — this section is the detailed chapter that backs it. Every subsection cross-links to the relevant ADR (where one exists) and to the corresponding fix in `docs/plans/security-hardening.md` (where the control was introduced or is planned).
+
+> **Adding a new endpoint or feature?** Read [ADR-0009](../adr/0009-threat-model.md) (Threat-Model Baseline) first and update its endpoint-inventory table before opening a PR. The PR template's "Threat model reviewed" checkbox enforces this.
+
+### Authentication
+
+Users authenticate with **email + password**. Passwords are hashed with **BCrypt** (work factor 12); the cleartext is never recoverable. Authenticated requests carry a **JWT access token** in the `Authorization: Bearer` header (15-minute lifetime, in-memory only on the client), and a **refresh token** in an `HttpOnly + Secure + SameSite=Strict` cookie named `et_rt` (7-day lifetime, SHA-256 hash stored in the `refresh_tokens` table). Every successful `/api/auth/refresh` call **rotates** the refresh token: the old token is revoked atomically with the new token's creation, and reuse of a revoked token revokes the entire rotation chain (defense against token theft).
+
+**Local dev**: a dev-only `Jwt:SecretKey` is stored in `dotnet user-secrets`, never in tracked `appsettings.Development.json`. In non-Development environments the app fails fast at startup if `Jwt:SecretKey` is empty or shorter than 32 characters (ADR-0006).
+
+See [ADR-0002](../adr/0002-jwt-refresh-token-with-rotation.md) (JWT + refresh-token design), [ADR-0006](../adr/0006-jwt-secret-validation.md) (secret-length startup assertion), and `docs/plans/security-hardening.md` §A2, §A4, §A6.
+
+### Authorization
+
+Every authenticated request is scoped to the **current user** via two layers:
+
+1. **ASP.NET Core `[Authorize]`** on the 4 protected controllers (`Transactions`, `Categories`, `Dashboard`, `Exports`) — the request must carry a valid `sub` claim.
+2. **EF Core global query filter** on the `UserId` column of `Category` and `Transaction` — every read, write, and delete is automatically restricted to rows where `UserId == currentUserId`. The filter is set up in `OnModelCreating` and cannot be bypassed from a controller without explicitly calling `IgnoreQueryFilters()`. No controller does.
+
+This is the **OWASP A01: Broken Access Control** defense in depth. The first layer stops unauthenticated requests; the second layer stops authenticated requests from reading or mutating another user's data even if the controller has a logic bug. The threat-model ADR's "if you can't fill the Authorization column" test applies here — every new endpoint must fill that column, or the PR is incomplete.
+
+See [ADR-0001](../adr/0001-clean-architecture.md) (the architectural seam between controllers and the DB), [ADR-0003](../adr/0003-ef-core-over-dapper.md) (why EF Core's global query filter is the right primitive), and the integration test `backend/tests/ExpenseTracker.IntegrationTests/Persistence/GlobalQueryFilterTests.cs`.
+
+### Transport
+
+The API enforces HTTPS in non-Development and emits a full set of security headers on every response (the 9 headers from `docs/plans/security-hardening.md` §A1; HSTS is sent only outside Development):
+
+| Header | Value | Notes |
+|---|---|---|
+| `X-Content-Type-Options` | `nosniff` | Prevents MIME-sniff attacks on user-controlled fields. |
+| `X-Frame-Options` | `DENY` | App has no iframe use case; clickjacking defense. |
+| `Referrer-Policy` | `no-referrer` | No `?token=…` style query strings; future-proofing. |
+| `Permissions-Policy` | `camera=(), microphone=(), geolocation=(), payment=()` | Disable unused powerful browser APIs. |
+| `Content-Security-Policy` | `default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'` | Covers R1 + R18. Applies to the API's own responses (e.g. `/swagger` in Dev); the frontend has its own CSP via `<meta>` (`docs/plans/security-hardening.md` §D1). |
+| `Cross-Origin-Opener-Policy` | `same-origin` | Process isolation. |
+| `Cross-Origin-Resource-Policy` | `same-origin` | Resource isolation. |
+| `Cross-Origin-Embedder-Policy` | `require-corp` | Resource isolation. |
+| `Strict-Transport-Security` | `max-age=31536000; includeSubDomains` | Sent only in non-Development via `app.UseHsts()`. Production deployment sends `; preload` additionally (see `### Deployment` above). |
+
+**CSRF**: state-changing cookie-bearing endpoints (`POST /api/auth/logout`) require a double-submit antiforgery token: the `XSRF-TOKEN` cookie (JS-readable) and the `X-XSRF-TOKEN` header (set by the frontend axios interceptor) must match. The frontend reads the cookie and sets the header on every state-changing request (`docs/plans/security-hardening.md` §B2 + §D2).
+
+**CORS**: configured for `http://localhost:5173` (Vite dev) and `http://localhost:4173` (Vite preview / Lighthouse CI) with `Access-Control-Max-Age: 600` so browsers cache the preflight for 10 minutes (§B5).
+
+**Deployment**: see `### Deployment` above. The app expects to run behind a reverse proxy that terminates TLS and forwards `X-Forwarded-Proto`. The `appsettings.Production.json` stub is the deterministic config source for non-Dev environments.
+
+See `docs/plans/security-hardening.md` §A1 (security headers), §A2 (HTTPS + HSTS), §A3 (`/health` minimal body in Prod), §B2 (CSRF), §B4 (Swagger guarded by env), §B5 (CORS preflight), §D1 (frontend CSP), §R9 (traceId disclosure gated by env — see `### Security Events` below for the related event-log behavior).
+
+### Rate limiting
+
+Two rate-limit policies run independently:
+
+| Policy | Scope | Limit | Applies to | Plan ref |
+|---|---|---|---|---|
+| **Auth** | Per IP, single shared bucket | 5 requests / minute | `POST /api/auth/*` (register, login, refresh, logout) | Pre-audit baseline; unchanged by Phase A/B. |
+| **Global** | Per authenticated user (JWT `sub`), with IP fallback for any future anonymous routes | 200 requests / minute | All `[Authorize]` controllers (`Transactions`, `Categories`, `Dashboard`, `Exports`) | §B1 (R7) |
+
+**Why per-user and not per-IP** (deviation from the audit's original B1 plan): per-user reads the verified JWT `sub` and is consistent with the per-account lockout policy below — an attacker rotating IPs is stopped by the lockout, not the IP-based limit. Per-IP would also require `UseForwardedHeaders` to be configured behind a reverse proxy, which expands trust of `X-Forwarded-For` (RFC 7239 caveat). See `docs/plans/security-hardening.md` §B1 for the full deviation note and the test that locks the per-user behavior in place.
+
+**E2E test override**: the `E2E_TESTS=true` env var (and a matching knob for the global limit) raises both limits so the Playwright suite can run to completion. The override is a deployment-time setting, not a code-time one.
+
+### Security event audit
+
+Every authentication-lifecycle event is emitted as a structured Serilog event by `ISecurityEventLogger`. The full event schema and the toggle (`SecurityEvents:Enabled`) live in `### Security Events` above. The two most important properties are:
+
+- **`EmailHash`** is **always** a SHA-256 hash of the lowercased+trimmed email, truncated to 16 hex chars — never the raw email. The log file is therefore a *correlatable* but not *recoverable* store of user activity. A grep for `email.*@` against the log directory returns 0 matches (acceptance criterion).
+- **`RequestId`** is stamped on every event via the Serilog `LogContext`, so a user-reported incident can be traced end-to-end through the log lines that handled the request (`### Request-ID propagation` above).
+
+**Why audit logs are first-class**: OWASP **A09: Security Logging & Monitoring Failures**. Without the audit log, a brute-force attacker hammering `/api/auth/login` produces only one INFO line per request — no way to distinguish "user doesn't exist" from "wrong password", no alert on 50 failures in 60 s, no trail for "who logged in as X at 3 AM".
+
+**Trade-off (ADR-0007)**: the `POST /api/auth/register` endpoint reveals whether a given email is already registered (a user-enumeration vector). The 5 req/min auth rate limit is the primary bulk-enumeration mitigation. Adding a send-email-on-register pattern (the proper fix) is deferred to a future ADR if the product scope changes.
+
+See `docs/plans/security-hardening.md` §A6, [ADR-0007](../adr/0007-register-endpoint-enumeration.md).
+
+### Account lockout
+
+> **Status: planned, not yet shipped.** This policy is in `docs/plans/security-hardening.md` §B3 (R11) and is gated on a database-schema change (two new columns on `users`: `failed_login_count`, `lockout_end`). See `.github/copilot-instructions.md` §"Ask first" — schema changes require approval before implementation.
+
+When shipped, the policy is:
+
+- **5 consecutive failed logins** for a given account → the account is locked for **15 minutes**.
+- The `lockout_end` check runs **before** password verification (cheap short-circuit, prevents a timing oracle).
+- A successful login resets the counter to 0 and clears `lockout_end`.
+- The counter increment uses a single `UPDATE users SET failed_login_count = failed_login_count + 1 WHERE id = $1` to avoid a read-modify-write race across concurrent requests.
+
+The lockout complements the rate-limit policy above: the rate limit stops a single IP from brute-forcing, the lockout stops an attacker rotating IPs (or attacking a single user from a botnet).
+
+### Data at rest
+
+`Email` and `DisplayName` are stored as **plaintext** in the `users` table. `PasswordHash` is BCrypt(work factor 12) and `TokenHash` is SHA-256 of the refresh-token cookie plaintext. The compensating control is **disk-level encryption of the Postgres data volume** at the infrastructure layer — this is a deployment-time requirement, not a code-time one. The single Postgres instance is treated as a trust boundary: anyone with read access to the DB can read the plaintext PII.
+
+The operator runbook must verify the storage volume is encrypted when bringing up a production Postgres (AWS RDS encryption, Azure Database for PostgreSQL storage encryption, GCP Cloud SQL encryption, or self-hosted on an encrypted volume). The application does not verify this at runtime.
+
+> **Cross-link**: see [ADR-0008](../adr/0008-pii-encryption-at-rest.md) for the full decision (threat model, alternatives considered, follow-ups). ADR-0008 is the citable answer to "why isn't `User.Email` encrypted?"
+
+---
+
 ## Success Criteria
 
 ### Functional
