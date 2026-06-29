@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="แอปบันทึกรายรับ-รายจ่ายส่วนบุคคล พร้อมแดชบอร์ด 6 เดือน หมวดหมู่ระบบและหมวดหมู่ส่วนตัว ส่งออก CSV รองรับหลายผู้ใช้" />
     <meta name="theme-color" content="#0f172a" />
+    <!--
+      Content-Security-Policy is injected at build time by the Vite plugin
+      in `vite.config.ts` (see `injectCspPlugin`). The plugin reads
+      `buildCspPolicy` from `src/lib/csp.ts` and appends the meta tag below
+      these static <meta> tags. Don't add a static CSP <meta> here — the
+      injected one will reflect `VITE_API_URL` / dev extras correctly.
+    -->
     <title>Expense Tracker — บันทึกรายรับรายจ่าย</title>
   </head>
   <body>

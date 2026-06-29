@@ -571,7 +571,7 @@ every request.
 
 # Phase D — Frontend Hardening (week 2–3)
 
-## D1. Frontend CSP `<meta>` tag (R13)
+## D1. Frontend CSP `<meta>` tag (R13) ✅ Done (PR `sec/d1-frontend-csp`)
 
 **Files**:
 - `frontend/index.html` (add `<meta http-equiv="Content-Security-Policy" content="…">`)
