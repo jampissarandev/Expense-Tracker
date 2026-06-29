@@ -43,11 +43,84 @@ await fetch("/api/some-endpoint", {
 });
 ```
 
-## External script policy
+## External script policy (R14 / D3)
 
-If you ever add a `<script src="…">` or `<link href="…">` pointing at a
-CDN / non-`self` origin, it **must** include `integrity="sha384-…"` and
-`crossorigin="anonymous"`. See D3 in `docs/plans/security-hardening.md`.
+This project has **no external scripts today** — the only `<script>` in
+[`index.html`](index.html) is `/src/main.tsx`, which Vite serves from the
+same origin. Same-origin resources are trusted by the browser and **do
+not need** subresource integrity (SRI).
+
+### The rule
+
+If anyone ever adds a `<script src="…">` or `<link rel="stylesheet"
+href="…">` that points at a non-`self` origin (a CDN, a third-party
+analytics snippet, a font host, etc.), the element **must** include
+both:
+
+- `integrity="sha384-…"` — the base64-encoded SHA-384 hash of the file.
+- `crossorigin="anonymous"` — so the browser performs a CORS fetch and
+  can compare the hash against the response.
+
+Without both, a compromised CDN (think the historical `event-stream`,
+`node-ipc`, `ua-parser-js` incidents) can ship arbitrary code into the
+page and the browser will execute it without complaint. SRI is the
+defense-in-depth that catches that class of bug.
+
+### How to compute the hash
+
+For a pinned version of an external asset, generate the integrity value
+once and commit it. Re-generate only when you intentionally upgrade the
+asset version.
+
+```bash
+# From the asset URL (after pinning the version, e.g. /lib@1.2.3/…):
+curl -sS https://cdn.example.com/lib@1.2.3/lib.min.js | \
+  openssl dgst -sha384 -binary | \
+  openssl base64 -A
+# → paste the output as integrity="sha384-<…>"
+```
+
+Or with `shasum`:
+
+```bash
+curl -sSL https://cdn.example.com/lib@1.2.3/lib.min.js | \
+  openssl dgst -sha384 -binary | openssl base64 -A
+```
+
+### Good vs. bad
+
+```html
+<!-- ✅ Bad: CDN, no SRI, no crossorigin. -->
+<script src="https://cdn.example.com/lib@latest/lib.min.js"></script>
+
+<!-- ✅ Good: pinned version, SRI hash, crossorigin. -->
+<script
+  src="https://cdn.example.com/lib@1.2.3/lib.min.js"
+  integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC"
+  crossorigin="anonymous"
+></script>
+```
+
+### What counts as "external"
+
+| Origin | SRI required? | Reason |
+|---|---|---|
+| `/src/main.tsx`, `/favicon.svg`, etc. (served by Vite) | No | Same origin — trusted by browser, CSP `default-src 'self'` allows it |
+| Other assets bundled by the build (`/_assets/…`) | No | Same origin — they're emitted by Vite and hash-stable via Rollup |
+| Any `https://cdn.*`, `https://unpkg.com`, `https://cdnjs.cloudflare.com`, `https://fonts.googleapis.com`, etc. | **Yes** | Browser has no reason to trust a third party; the server could be compromised |
+| `data:` and `blob:` URLs (e.g. inline images) | N/A | SRI does not apply; CSP `img-src` is the right control there |
+
+### Fallback plan
+
+If the upstream CDN cannot provide a stable hash (rare, but happens
+with dynamically built bundles), prefer self-hosting the asset instead
+of dropping SRI. "We trust the vendor" is not a defense.
+
+### Reference
+
+- MDN — [Subresource Integrity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity)
+- W3C SRI spec — <https://www.w3.org/TR/SRI/>
+- Origin of this rule: `docs/plans/security-hardening.md` §D3 (R14)
 
 ---
 

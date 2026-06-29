@@ -1,6 +1,15 @@
 <!doctype html>
 <html lang="th">
   <head>
+    <!--
+      External script policy (R14 / D3): if you add a <script> or <link>
+      pointing at a non-`self` origin (CDN, third-party host, …), it
+      MUST also carry `integrity="sha384-…"` and `crossorigin="anonymous"`.
+      See frontend/README.md#external-script-policy-r14--d3 for the
+      rule, the hash recipe, and the good-vs-bad examples. Same-origin
+      assets (everything Vite emits and the favicon above) are
+      explicitly exempt — the browser already trusts them.
+    -->
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
