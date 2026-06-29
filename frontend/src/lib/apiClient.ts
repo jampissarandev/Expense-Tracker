@@ -28,7 +28,50 @@ const apiClient = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
-// ── Request interceptor: attach Bearer token ───────────────────────────────
+// ── CSRF (D2 / R8) — double-submit-cookie wiring ────────────────────────────
+//
+// The backend (B2) registers `AddAntiforgery` with:
+//   HeaderName = "X-XSRF-TOKEN", Cookie.Name = "XSRF-TOKEN", Cookie.HttpOnly = false
+// The cookie is intentionally JS-readable so the SPA can echo its value
+// into the header. We use a small request interceptor (rather than
+// axios's built-in `xsrfCookieName` / `xsrfHeaderName` defaults) because:
+//
+//   - axios's built-in handling is tied to the XHR adapter's automatic
+//     cookie jar and is unreliable across adapters (e.g. the `node`
+//     adapter used by MSW tests in this repo does not see browser
+//     cookie state).
+//   - An explicit interceptor gives us a single, testable surface for
+//     the read pattern and lets us skip the header on safe methods
+//     (GET / HEAD / OPTIONS), which is the convention the ASP.NET Core
+//     antiforgery middleware expects.
+
+const CSRF_COOKIE_NAME = "XSRF-TOKEN";
+const CSRF_HEADER_NAME = "X-XSRF-TOKEN";
+const SAFE_METHODS = new Set(["get", "head", "options"]);
+
+/**
+ * Parse a single named cookie from `document.cookie`.
+ *
+ * Why a hand-rolled parser: `document.cookie` returns the raw cookie
+ * string with the value URL-encoded by the browser. `CookieStore` API
+ * is not yet broadly available, and a tiny dedicated parser keeps the
+ * dependency surface at zero. Returns `null` if the cookie is absent.
+ */
+function readCookie(name: string): string | null {
+  if (typeof document === "undefined" || !document.cookie) return null;
+  const prefix = `${name}=`;
+  for (const part of document.cookie.split(";")) {
+    const trimmed = part.trim();
+    if (trimmed.startsWith(prefix)) {
+      // document.cookie exposes values URL-encoded; decode so the
+      // header matches the value the backend stored.
+      return decodeURIComponent(trimmed.slice(prefix.length));
+    }
+  }
+  return null;
+}
+
+// ── Request interceptor: attach Bearer token + CSRF header ─────────────────
 
 apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   // Don't overwrite an already-set header (e.g. after a refresh retry)
@@ -38,6 +81,19 @@ apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
       config.headers.Authorization = `Bearer ${token}`;
     }
   }
+
+  // CSRF — only on state-changing methods, and only if the backend
+  // emitted a cookie. If the cookie is absent (e.g. backend B2 not yet
+  // deployed) we silently skip the header; the request still goes
+  // through. This keeps the wiring safe to land before B2.
+  const method = (config.method ?? "get").toLowerCase();
+  if (!SAFE_METHODS.has(method)) {
+    const csrfToken = readCookie(CSRF_COOKIE_NAME);
+    if (csrfToken) {
+      config.headers.set(CSRF_HEADER_NAME, csrfToken);
+    }
+  }
+
   return config;
 });
 
