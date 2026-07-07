@@ -12,6 +12,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
+  AlertDialogMedia,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -254,13 +255,18 @@ export default function CategoriesPage() {
           if (!open) setDeletingCategory(null)
         }}
       >
-        <AlertDialogContent>
+        <AlertDialogContent size="default">
           <AlertDialogHeader>
-            <AlertDialogTitle>ยืนยันการลบ</AlertDialogTitle>
-            <AlertDialogDescription>
-              คุณต้องการลบหมวดหมู่ &ldquo;{deletingCategory?.name}&rdquo; ใช่หรือไม่?
-              การกระทำนี้ไม่สามารถย้อนกลับได้
-            </AlertDialogDescription>
+            <AlertDialogMedia>
+              <Trash2Icon aria-hidden="true" />
+            </AlertDialogMedia>
+            <div>
+              <AlertDialogTitle>ยืนยันการลบ</AlertDialogTitle>
+              <AlertDialogDescription>
+                คุณต้องการลบหมวดหมู่ &ldquo;{deletingCategory?.name}&rdquo; ใช่หรือไม่?
+                การกระทำนี้ไม่สามารถย้อนกลับได้
+              </AlertDialogDescription>
+            </div>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={deleteMutation.isPending}>

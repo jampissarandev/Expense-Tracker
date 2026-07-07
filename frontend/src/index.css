@@ -22,6 +22,9 @@
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.145 0 0);
+  --shadow-popover:
+    0 10px 30px -10px oklch(0.145 0 0 / 0.25),
+    0 4px 12px -4px oklch(0.145 0 0 / 0.15);
   --radius: 0.5rem;
 }
 
@@ -45,6 +48,9 @@
   --border: oklch(0.269 0 0);
   --input: oklch(0.269 0 0);
   --ring: oklch(0.708 0 0);
+  --shadow-popover:
+    0 10px 30px -10px oklch(0 0 0 / 0.5),
+    0 4px 12px -4px oklch(0 0 0 / 0.3);
 }
 
 * {

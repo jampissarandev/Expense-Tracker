@@ -205,6 +205,7 @@ ExpenseTracker/
 - **Forms**: react-hook-form + Zod schemas for validation
 - **State**: @tanstack/react-query for server state; React state for UI state
 - **CSS**: Tailwind CSS utility classes; shadcn/ui component library
+- **Popup elevation**: `--shadow-popover` CSS token (light + dark) + `bg-black/60` overlay + `ring-foreground/20` on Dialog, AlertDialog, Sheet
 
 ### General Rules
 
