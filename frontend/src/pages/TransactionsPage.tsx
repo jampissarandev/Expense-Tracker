@@ -39,6 +39,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
+  AlertDialogMedia,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import {
@@ -524,13 +525,19 @@ export default function TransactionsPage() {
           if (!open) setDeletingTransaction(null)
         }}
       >
-        <AlertDialogContent>
+        <AlertDialogContent size="default">
           <AlertDialogHeader>
-            <AlertDialogTitle>ยืนยันการลบ</AlertDialogTitle>
-            <AlertDialogDescription>
-              คุณต้องการลบรายการวันที่ {deletingTransaction?.occurredOn}{" "}
-              ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้
-            </AlertDialogDescription>
+            <AlertDialogMedia>
+              <Trash2Icon aria-hidden="true" />
+            </AlertDialogMedia>
+            <div>
+              <AlertDialogTitle>ยืนยันการลบ</AlertDialogTitle>
+              <AlertDialogDescription>
+                คุณต้องการลบรายการวันที่{" "}
+                {deletingTransaction?.occurredOn}{" "}
+                ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้
+              </AlertDialogDescription>
+            </div>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={deleteMutation.isPending}>

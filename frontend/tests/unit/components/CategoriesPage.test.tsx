@@ -216,11 +216,25 @@ vi.mock("@/components/ui/alert-dialog", () => {
       </button>
     )
   }
+  function AlertDialogMedia({
+    children,
+    ...props
+  }: {
+    children: React.ReactNode
+    [key: string]: unknown
+  }) {
+    return (
+      <div data-slot="alert-dialog-media" {...props}>
+        {children}
+      </div>
+    )
+  }
   return {
     AlertDialog: AlertDialogProvider,
     AlertDialogContent,
     AlertDialogHeader,
     AlertDialogFooter,
+    AlertDialogMedia,
     AlertDialogTitle,
     AlertDialogDescription,
     AlertDialogCancel,
