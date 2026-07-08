@@ -296,7 +296,12 @@ export default function TransactionsPage() {
             }
           >
             <SelectTrigger id="filter-type">
-              <SelectValue />
+              <SelectValue>
+                {(value: string) => {
+                  if (value === "all" || value == null) return "ทั้งหมด"
+                  return typeLabel(Number(value) as TransactionType)
+                }}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">ทั้งหมด</SelectItem>
@@ -326,7 +331,14 @@ export default function TransactionsPage() {
             }}
           >
             <SelectTrigger id="filter-category">
-              <SelectValue />
+              <SelectValue>
+                {(value: string) => {
+                  if (value === "all" || value == null) return "ทั้งหมด"
+                  return (
+                    categories?.find((c) => c.id === value)?.name ?? value
+                  )
+                }}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">ทั้งหมด</SelectItem>

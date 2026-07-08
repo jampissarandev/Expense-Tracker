@@ -184,9 +184,15 @@ vi.mock("@/components/ui/select", () => {
   function SelectValue({
     children,
   }: {
-    children?: React.ReactNode
+    children?: React.ReactNode | ((value: string | null) => React.ReactNode)
     [key: string]: unknown
   }) {
+    // With our fix, SelectValue receives a render function from the real code.
+    // In this test mock, SelectTrigger already renders the correct label
+    // via the registry, so we render nothing here to avoid duplication.
+    if (typeof children === "function") {
+      return null
+    }
     return <>{children}</>
   }
   SelectValue.displayName = "SelectValue"
