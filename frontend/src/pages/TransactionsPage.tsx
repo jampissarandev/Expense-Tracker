@@ -31,17 +31,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogMedia,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+import { DeleteConfirmDialog } from "@/components/common/DeleteConfirmDialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -531,40 +521,22 @@ export default function TransactionsPage() {
       />
 
       {/* Delete confirmation dialog */}
-      <AlertDialog
+      <DeleteConfirmDialog
         open={deletingTransaction !== null}
         onOpenChange={(open) => {
           if (!open) setDeletingTransaction(null)
         }}
-      >
-        <AlertDialogContent size="default">
-          <AlertDialogHeader>
-            <AlertDialogMedia>
-              <Trash2Icon aria-hidden="true" />
-            </AlertDialogMedia>
-            <div>
-              <AlertDialogTitle>ยืนยันการลบ</AlertDialogTitle>
-              <AlertDialogDescription>
-                คุณต้องการลบรายการวันที่{" "}
-                {deletingTransaction?.occurredOn}{" "}
-                ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้
-              </AlertDialogDescription>
-            </div>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleteMutation.isPending}>
-              ยกเลิก
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDeleteConfirm}
-              disabled={deleteMutation.isPending}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              {deleteMutation.isPending ? "กำลังลบ..." : "ลบ"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        title="ยืนยันการลบ"
+        description={
+          <>
+            คุณต้องการลบรายการวันที่{" "}
+            {deletingTransaction?.occurredOn}{" "}
+            ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้
+          </>
+        }
+        isPending={deleteMutation.isPending}
+        onConfirm={handleDeleteConfirm}
+      />
     </div>
   )
 }
