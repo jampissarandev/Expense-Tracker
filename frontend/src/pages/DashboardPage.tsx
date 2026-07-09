@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ErrorState } from "@/components/common/ErrorState"
 import { EmptyState } from "@/components/common/EmptyState"
+import { PageHeader } from "@/components/common/PageHeader"
 import { useDashboardSummary } from "@/features/dashboard/api"
 import {
   downloadTransactionsCsv,
@@ -146,47 +147,47 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      {/* Page title */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">แดชบอร์ด</h1>
-        {/* Export dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <Button variant="outline">
-                <DownloadIcon className="mr-2 size-4" />
-                ส่งออก
-              </Button>
-            }
-          />
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() => {
-                toast.promise(downloadSummaryCsv(), {
-                  loading: "กำลังส่งออกรายงานสรุป...",
-                  success: "ส่งออกรายงานสรุปสำเร็จ",
-                  error: "ส่งออกรายงานสรุปไม่สำเร็จ",
-                })
-              }}
-            >
-              <BarChart3Icon className="mr-2 size-4" />
-              ส่งออกรายงานสรุป (CSV)
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                toast.promise(downloadTransactionsCsv({}), {
-                  loading: "กำลังส่งออกรายการ...",
-                  success: "ส่งออกรายการสำเร็จ",
-                  error: "ส่งออกรายการไม่สำเร็จ",
-                })
-              }}
-            >
-              <FileDownIcon className="mr-2 size-4" />
-              ส่งออกรายการ (CSV)
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+      <PageHeader
+        title="แดชบอร์ด"
+        actions={
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button variant="outline">
+                  <DownloadIcon className="mr-2 size-4" />
+                  ส่งออก
+                </Button>
+              }
+            />
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={() => {
+                  toast.promise(downloadSummaryCsv(), {
+                    loading: "กำลังส่งออกรายงานสรุป...",
+                    success: "ส่งออกรายงานสรุปสำเร็จ",
+                    error: "ส่งออกรายงานสรุปไม่สำเร็จ",
+                  })
+                }}
+              >
+                <BarChart3Icon className="mr-2 size-4" />
+                ส่งออกรายงานสรุป (CSV)
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  toast.promise(downloadTransactionsCsv({}), {
+                    loading: "กำลังส่งออกรายการ...",
+                    success: "ส่งออกรายการสำเร็จ",
+                    error: "ส่งออกรายการไม่สำเร็จ",
+                  })
+                }}
+              >
+                <FileDownIcon className="mr-2 size-4" />
+                ส่งออกรายการ (CSV)
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        }
+      />
 
       {/* ── KPI Cards ─────────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
