@@ -2,6 +2,39 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * Tell Tailwind v4 about the project's design tokens so it generates
+ * matching utility classes (bg-*, text-*, border-*, ring-*, etc.).
+ * Without this block, custom --popover/--background/--card/... are only
+ * available as raw CSS variables and Tailwind cannot compile
+ * `bg-popover` etc., leaving popups, dialogs, sheets, and dropdowns
+ * with transparent backgrounds (text overlaps labels behind them).
+ */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-strong-foreground: var(--accent-strong-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius: var(--radius);
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -17,6 +50,8 @@
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.965 0 0);
   --accent-foreground: oklch(0.145 0 0);
+  --accent-strong: oklch(0.82 0 0);
+  --accent-strong-foreground: oklch(0.145 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(0.922 0 0);
@@ -43,6 +78,8 @@
   --muted-foreground: oklch(0.708 0 0);
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
+  --accent-strong: oklch(0.35 0 0);
+  --accent-strong-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(0.269 0 0);
@@ -61,4 +98,10 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Select item highlight state — Base UI adds data-highlighted on focus/hover */
+[data-slot="select-item"][data-highlighted] {
+  background-color: var(--accent-strong);
+  color: var(--accent-strong-foreground);
 }
