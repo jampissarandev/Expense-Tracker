@@ -66,6 +66,43 @@ export function formatThaiDate(date: string): string {
 }
 
 /**
+ * Format an ISO date string ("yyyy-mm-dd") to "dd/mm/yyyy" for display.
+ * Empty / null / undefined input returns "".
+ */
+export function formatDateInput(
+  date: string | null | undefined,
+): string {
+  if (!date) return ""
+  const m = date.match(/^(\d{4})-(\d{2})-(\d{2})/)
+  if (!m) return ""
+  return `${m[3]}/${m[2]}/${m[1]}`
+}
+
+/**
+ * Parse a "dd/mm/yyyy" display string back to ISO "yyyy-mm-dd".
+ * Returns null for invalid input (caller should keep the prior value).
+ */
+export function parseDateInput(input: string): string | null {
+  const m = input.match(/^(\d{2})\/(\d{2})\/(\d{4})$/)
+  if (!m) return null
+  const day = Number.parseInt(m[1], 10)
+  const month = Number.parseInt(m[2], 10)
+  const year = Number.parseInt(m[3], 10)
+  if (month < 1 || month > 12) return null
+  if (day < 1 || day > 31) return null
+  // Validate the actual date (handles Feb 30, Apr 31, etc.)
+  const d = new Date(year, month - 1, day)
+  if (
+    d.getFullYear() !== year ||
+    d.getMonth() !== month - 1 ||
+    d.getDate() !== day
+  ) {
+    return null
+  }
+  return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`
+}
+
+/**
  * Parse a user-entered amount string, stripping currency symbols, commas, and
  * spaces. Returns null if the result is not a valid number.
  *

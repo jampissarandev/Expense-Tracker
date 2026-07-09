@@ -473,6 +473,35 @@ vi.mock("@/components/ui/alert-dialog", () => {
   }
 })
 
+// ── Mock DateInput — Base UI Popover doesn't render in happy-dom ────────────
+// Renders a plain native <input> that accepts ISO values directly, so tests
+// can set date filters via fireEvent.change without needing the real
+// Popover/Calendar plumbing.
+
+vi.mock("@/components/ui/date-input", () => {
+  function DateInput({
+    id,
+    value,
+    onChange,
+  }: {
+    id?: string
+    value: string
+    onChange: (iso: string) => void
+  }) {
+    return (
+      <input
+        id={id}
+        type="text"
+        data-testid={id ? `date-input-${id}` : undefined}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    )
+  }
+  DateInput.displayName = "DateInput"
+  return { DateInput }
+})
+
 // ── Test data ───────────────────────────────────────────────────────────────
 
 const categories = [
