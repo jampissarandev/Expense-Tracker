@@ -22,6 +22,12 @@ export interface SegmentedControlProps<T extends string | number> {
  * Renders as a `role="radiogroup"` with a single-select segmented UI.
  * Each option is a real `role="radio"` button with `aria-checked`, so it's
  * announced correctly by screen readers and is fully keyboard-navigable.
+ *
+ * @internal — no consumer yet. Pending candidate: replace the
+ * income/expense <Select> filter on TransactionsPage. Revisit when the
+ * transactions-filter-ui-polish plan lands (type filter would collapse to
+ * a 2-option segmented toggle).
+ * TODO: Close or wire this once a concrete consumer is identified.
  */
 export function SegmentedControl<T extends string | number>({
   options,
