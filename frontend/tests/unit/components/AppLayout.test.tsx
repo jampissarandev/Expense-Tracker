@@ -102,6 +102,30 @@ describe("AppLayout", () => {
     const dashboardLink = within(nav).getByText("แดชบอร์ด").closest("a");
     expect(dashboardLink?.className).not.toMatch(/bg-primary\/10/);
   });
+
+  it("renders the TopBar with a page title derived from the current route", () => {
+    renderAt("/transactions");
+    const banner = screen.getByRole("banner");
+    expect(banner).toBeInTheDocument();
+    expect(within(banner).getByRole("heading", { name: /รายการทั้งหมด/i })).toBeInTheDocument();
+  });
+
+  it("renders the MobileTabBar with a primary Add button", () => {
+    renderAt("/");
+    const bottomnav = screen.getByRole("navigation", { name: /เมนูนำทางด้านล่าง/i });
+    expect(bottomnav).toBeInTheDocument();
+    expect(within(bottomnav).getByRole("button", { name: /เพิ่มรายการใหม่/i })).toBeInTheDocument();
+  });
+
+  it("clicking the MobileTabBar Add button navigates to /transactions", async () => {
+    const user = userEvent.setup();
+    renderAt("/");
+    await user.click(screen.getByRole("button", { name: /เพิ่มรายการใหม่/i }));
+    // Outlet renders <div data-testid="page">Transactions page</div> on /transactions
+    await waitFor(() => {
+      expect(screen.getByTestId("page")).toHaveTextContent("Transactions page");
+    });
+  });
 });
 
 describe("UserMenu", () => {

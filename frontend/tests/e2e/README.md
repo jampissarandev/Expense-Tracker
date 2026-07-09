@@ -24,8 +24,20 @@ Spec files live in `tests/e2e/`:
 - `transactions.spec.ts` — create, filter, paginate, delete
 - `dashboard.spec.ts` — KPI cards, charts render
 - `export.spec.ts` — CSV download, BOM + Thai characters
+- `mobile-tabbar.spec.ts` — Phase E: bottom tab bar visibility on mobile vs
+  desktop, `+` button navigation to `/transactions`, tab link routing.
 
 CI runs these with `--reporter=html,github` and uploads artifacts.
+
+> **Note on rate limiting:** when running the full e2e suite locally against a
+> dev backend, set `E2E_TESTS=true` on the backend so the `AuthRateLimit`
+> limiter (5 req/min on `/api/auth/*`) is disabled — otherwise the per-spec
+> `registerViaApi` calls return `429`. See
+> `backend/src/ExpenseTracker.Api/Program.cs`.
+>
+> ```bash
+> E2E_TESTS=true dotnet run --project backend/src/ExpenseTracker.Api
+> ```
 
 ### Playwright MCP (interactive browser control)
 

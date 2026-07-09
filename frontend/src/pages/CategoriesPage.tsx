@@ -4,20 +4,11 @@ import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogMedia,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+import { DeleteConfirmDialog } from "@/components/common/DeleteConfirmDialog"
 import { Skeleton } from "@/components/ui/skeleton"
 import { EmptyState } from "@/components/common/EmptyState"
 import { ErrorState } from "@/components/common/ErrorState"
+import { PageHeader } from "@/components/common/PageHeader"
 import {
   useCategories,
   useDeleteCategory,
@@ -116,18 +107,27 @@ export default function CategoriesPage() {
   const systemCategories = categories?.filter((c) => c.isSystem) ?? []
   const userCategories = categories?.filter((c) => !c.isSystem) ?? []
 
+  // ── Page header (shared across empty + data states) ────────────────────
+
+  const pageHeader = (
+    <PageHeader
+      title="หมวดหมู่"
+      description="จัดการหมวดหมู่รายรับรายจ่ายของคุณ"
+      actions={
+        <Button onClick={handleAdd}>
+          <PlusIcon className="mr-2 size-4" />
+          เพิ่มหมวดหมู่
+        </Button>
+      }
+    />
+  )
+
   // ── Empty state (no categories at all) ──────────────────────────────────
 
   if (categories && categories.length === 0) {
     return (
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">หมวดหมู่</h1>
-          <Button onClick={handleAdd}>
-            <PlusIcon className="mr-2 size-4" />
-            เพิ่มหมวดหมู่
-          </Button>
-        </div>
+        {pageHeader}
         <EmptyState
           title="ยังไม่มีหมวดหมู่"
           description="เริ่มต้นด้วยการเพิ่มหมวดหมู่แรกของคุณ"
@@ -152,14 +152,7 @@ export default function CategoriesPage() {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">หมวดหมู่</h1>
-        <Button onClick={handleAdd}>
-          <PlusIcon className="mr-2 size-4" />
-          เพิ่มหมวดหมู่
-        </Button>
-      </div>
+      {pageHeader}
 
       {/* System categories */}
       {systemCategories.length > 0 && (
@@ -249,39 +242,21 @@ export default function CategoriesPage() {
       />
 
       {/* Delete confirmation dialog */}
-      <AlertDialog
+      <DeleteConfirmDialog
         open={deletingCategory !== null}
         onOpenChange={(open) => {
           if (!open) setDeletingCategory(null)
         }}
-      >
-        <AlertDialogContent size="default">
-          <AlertDialogHeader>
-            <AlertDialogMedia>
-              <Trash2Icon aria-hidden="true" />
-            </AlertDialogMedia>
-            <div>
-              <AlertDialogTitle>ยืนยันการลบ</AlertDialogTitle>
-              <AlertDialogDescription>
-                คุณต้องการลบหมวดหมู่ &ldquo;{deletingCategory?.name}&rdquo; ใช่หรือไม่?
-                การกระทำนี้ไม่สามารถย้อนกลับได้
-              </AlertDialogDescription>
-            </div>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleteMutation.isPending}>
-              ยกเลิก
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDeleteConfirm}
-              disabled={deleteMutation.isPending}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              {deleteMutation.isPending ? "กำลังลบ..." : "ลบ"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        title="ยืนยันการลบ"
+        description={
+          <>
+            คุณต้องการลบหมวดหมู่ &ldquo;{deletingCategory?.name}&rdquo; ใช่หรือไม่?
+            การกระทำนี้ไม่สามารถย้อนกลับได้
+          </>
+        }
+        isPending={deleteMutation.isPending}
+        onConfirm={handleDeleteConfirm}
+      />
     </div>
   )
 }

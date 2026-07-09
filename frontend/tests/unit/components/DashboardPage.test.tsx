@@ -310,7 +310,7 @@ describe("DashboardPage", () => {
 
     const balanceNode = screen.getByText("-฿1,500.25")
     expect(balanceNode).toBeInTheDocument()
-    expect(balanceNode.className).toMatch(/text-red-600/)
+    expect(balanceNode.className).toMatch(/var\(--danger\)/)
   })
 
   it("renders the balance in green when the balance is positive", async () => {
@@ -322,7 +322,7 @@ describe("DashboardPage", () => {
 
     const balanceNode = screen.getByText("฿37,499.50")
     expect(balanceNode).toBeInTheDocument()
-    expect(balanceNode.className).toMatch(/text-green-600/)
+    expect(balanceNode.className).toMatch(/var\(--success\)/)
   })
 
   it("shows error state on 401 unauthorized", async () => {

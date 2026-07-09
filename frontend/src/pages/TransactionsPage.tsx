@@ -31,17 +31,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogMedia,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+import { DeleteConfirmDialog } from "@/components/common/DeleteConfirmDialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -62,6 +52,9 @@ import {
   downloadSummaryCsv,
 } from "@/features/exports/api"
 import { formatTHB, formatThaiDate } from "@/lib/format"
+import { textAmountClass } from "@/lib/colors"
+import { cn } from "@/lib/utils"
+import { PageHeader } from "@/components/common/PageHeader"
 import { TransactionType } from "@/types/api"
 import type { TransactionDto, TransactionFilter } from "@/types/api"
 
@@ -231,53 +224,53 @@ export default function TransactionsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">รายการ</h1>
-        <div className="flex items-center gap-2">
-          {/* Export dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button variant="outline">
-                  <DownloadIcon className="mr-2 size-4" />
-                  ส่งออก
-                </Button>
-              }
-            />
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                onClick={() => {
-                  toast.promise(downloadTransactionsCsv(filter), {
-                    loading: "กำลังส่งออกรายการ...",
-                    success: "ส่งออกรายการสำเร็จ",
-                    error: "ส่งออกรายการไม่สำเร็จ",
-                  })
-                }}
-              >
-                <FileDownIcon className="mr-2 size-4" />
-                ส่งออกรายการ (CSV)
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  toast.promise(downloadSummaryCsv(), {
-                    loading: "กำลังส่งออกรายงานสรุป...",
-                    success: "ส่งออกรายงานสรุปสำเร็จ",
-                    error: "ส่งออกรายงานสรุปไม่สำเร็จ",
-                  })
-                }}
-              >
-                <BarChart3Icon className="mr-2 size-4" />
-                ส่งออกรายงานสรุป (CSV)
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Button onClick={handleAdd}>
-            <PlusIcon className="mr-2 size-4" />
-            เพิ่มรายการ
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        title="รายการ"
+        actions={
+          <div className="flex items-center gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button variant="outline">
+                    <DownloadIcon className="mr-2 size-4" />
+                    ส่งออก
+                  </Button>
+                }
+              />
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onClick={() => {
+                    toast.promise(downloadTransactionsCsv(filter), {
+                      loading: "กำลังส่งออกรายการ...",
+                      success: "ส่งออกรายการสำเร็จ",
+                      error: "ส่งออกรายการไม่สำเร็จ",
+                    })
+                  }}
+                >
+                  <FileDownIcon className="mr-2 size-4" />
+                  ส่งออกรายการ (CSV)
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    toast.promise(downloadSummaryCsv(), {
+                      loading: "กำลังส่งออกรายงานสรุป...",
+                      success: "ส่งออกรายงานสรุปสำเร็จ",
+                      error: "ส่งออกรายงานสรุปไม่สำเร็จ",
+                    })
+                  }}
+                >
+                  <BarChart3Icon className="mr-2 size-4" />
+                  ส่งออกรายงานสรุป (CSV)
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Button onClick={handleAdd}>
+              <PlusIcon className="mr-2 size-4" />
+              เพิ่มรายการ
+            </Button>
+          </div>
+        }
+      />
 
       {/* Filter bar */}
       <div className="bg-muted/50 flex flex-wrap items-end gap-3 rounded-lg p-4">
@@ -453,11 +446,10 @@ export default function TransactionsPage() {
                     </TableCell>
                     <TableCell>{getCategoryName(tx.categoryId)}</TableCell>
                     <TableCell
-                      className={
-                        tx.type === TransactionType.Income
-                          ? "text-right text-green-600 dark:text-green-400"
-                          : "text-right text-red-600 dark:text-red-400"
-                      }
+                      className={cn(
+                        "text-right",
+                        textAmountClass(tx.type === TransactionType.Income ? "income" : "expense"),
+                      )}
                     >
                       {tx.type === TransactionType.Income ? "+" : "-"}
                       {formatTHB(tx.amount)}
@@ -529,40 +521,22 @@ export default function TransactionsPage() {
       />
 
       {/* Delete confirmation dialog */}
-      <AlertDialog
+      <DeleteConfirmDialog
         open={deletingTransaction !== null}
         onOpenChange={(open) => {
           if (!open) setDeletingTransaction(null)
         }}
-      >
-        <AlertDialogContent size="default">
-          <AlertDialogHeader>
-            <AlertDialogMedia>
-              <Trash2Icon aria-hidden="true" />
-            </AlertDialogMedia>
-            <div>
-              <AlertDialogTitle>ยืนยันการลบ</AlertDialogTitle>
-              <AlertDialogDescription>
-                คุณต้องการลบรายการวันที่{" "}
-                {deletingTransaction?.occurredOn}{" "}
-                ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้
-              </AlertDialogDescription>
-            </div>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleteMutation.isPending}>
-              ยกเลิก
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDeleteConfirm}
-              disabled={deleteMutation.isPending}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              {deleteMutation.isPending ? "กำลังลบ..." : "ลบ"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        title="ยืนยันการลบ"
+        description={
+          <>
+            คุณต้องการลบรายการวันที่{" "}
+            {deletingTransaction?.occurredOn}{" "}
+            ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้
+          </>
+        }
+        isPending={deleteMutation.isPending}
+        onConfirm={handleDeleteConfirm}
+      />
     </div>
   )
 }
