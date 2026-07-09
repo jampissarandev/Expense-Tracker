@@ -1,5 +1,11 @@
 import { describe, it, expect } from "vitest"
-import { formatTHB, formatThaiDate, parseAmount } from "@/lib/format"
+import {
+  formatTHB,
+  formatThaiDate,
+  parseAmount,
+  formatDateInput,
+  parseDateInput,
+} from "@/lib/format"
 
 describe("formatTHB", () => {
   it("formats a simple amount with THB symbol and thousands separator", () => {
@@ -79,5 +85,77 @@ describe("parseAmount", () => {
 
   it("handles integer input", () => {
     expect(parseAmount("100")).toBe("100.00")
+  })
+})
+
+describe("formatDateInput", () => {
+  it("formats ISO date to dd/mm/yyyy", () => {
+    expect(formatDateInput("2026-07-08")).toBe("08/07/2026")
+  })
+
+  it("returns empty string for empty input", () => {
+    expect(formatDateInput("")).toBe("")
+  })
+
+  it("returns empty string for null", () => {
+    expect(formatDateInput(null)).toBe("")
+  })
+
+  it("returns empty string for undefined", () => {
+    expect(formatDateInput(undefined)).toBe("")
+  })
+
+  it("formats single-digit day and month with zero padding", () => {
+    expect(formatDateInput("2026-01-05")).toBe("05/01/2026")
+  })
+})
+
+describe("parseDateInput", () => {
+  it("parses dd/mm/yyyy to ISO", () => {
+    expect(parseDateInput("08/07/2026")).toBe("2026-07-08")
+  })
+
+  it("returns null for invalid date like 31/02/2026", () => {
+    expect(parseDateInput("31/02/2026")).toBeNull()
+  })
+
+  it("returns null for non-numeric garbage", () => {
+    expect(parseDateInput("garbage")).toBeNull()
+  })
+
+  it("returns null for partial input", () => {
+    expect(parseDateInput("08/07")).toBeNull()
+  })
+
+  it("returns null for month 00", () => {
+    expect(parseDateInput("08/00/2026")).toBeNull()
+  })
+
+  it("returns null for month 13", () => {
+    expect(parseDateInput("08/13/2026")).toBeNull()
+  })
+
+  it("returns null for day 00", () => {
+    expect(parseDateInput("00/07/2026")).toBeNull()
+  })
+
+  it("returns null for day 32", () => {
+    expect(parseDateInput("32/07/2026")).toBeNull()
+  })
+
+  it("accepts 29/02 in a leap year", () => {
+    expect(parseDateInput("29/02/2024")).toBe("2024-02-29")
+  })
+
+  it("returns null for 29/02 in a non-leap year", () => {
+    expect(parseDateInput("29/02/2025")).toBeNull()
+  })
+
+  it("accepts 31/12/2026", () => {
+    expect(parseDateInput("31/12/2026")).toBe("2026-12-31")
+  })
+
+  it("accepts 01/01/2000", () => {
+    expect(parseDateInput("01/01/2000")).toBe("2000-01-01")
   })
 })

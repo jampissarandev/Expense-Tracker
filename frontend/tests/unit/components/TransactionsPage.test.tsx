@@ -184,9 +184,15 @@ vi.mock("@/components/ui/select", () => {
   function SelectValue({
     children,
   }: {
-    children?: React.ReactNode
+    children?: React.ReactNode | ((value: string | null) => React.ReactNode)
     [key: string]: unknown
   }) {
+    // With our fix, SelectValue receives a render function from the real code.
+    // In this test mock, SelectTrigger already renders the correct label
+    // via the registry, so we render nothing here to avoid duplication.
+    if (typeof children === "function") {
+      return null
+    }
     return <>{children}</>
   }
   SelectValue.displayName = "SelectValue"
@@ -465,6 +471,35 @@ vi.mock("@/components/ui/alert-dialog", () => {
     AlertDialogCancel,
     AlertDialogAction,
   }
+})
+
+// ── Mock DateInput — Base UI Popover doesn't render in happy-dom ────────────
+// Renders a plain native <input> that accepts ISO values directly, so tests
+// can set date filters via fireEvent.change without needing the real
+// Popover/Calendar plumbing.
+
+vi.mock("@/components/ui/date-input", () => {
+  function DateInput({
+    id,
+    value,
+    onChange,
+  }: {
+    id?: string
+    value: string
+    onChange: (iso: string) => void
+  }) {
+    return (
+      <input
+        id={id}
+        type="text"
+        data-testid={id ? `date-input-${id}` : undefined}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    )
+  }
+  DateInput.displayName = "DateInput"
+  return { DateInput }
 })
 
 // ── Test data ───────────────────────────────────────────────────────────────

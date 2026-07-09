@@ -15,7 +15,7 @@ import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
+import { DateInput } from "@/components/ui/date-input"
 import {
   Select,
   SelectContent,
@@ -296,7 +296,12 @@ export default function TransactionsPage() {
             }
           >
             <SelectTrigger id="filter-type">
-              <SelectValue />
+              <SelectValue>
+                {(value: string) => {
+                  if (value === "all" || value == null) return "ทั้งหมด"
+                  return typeLabel(Number(value) as TransactionType)
+                }}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">ทั้งหมด</SelectItem>
@@ -326,7 +331,14 @@ export default function TransactionsPage() {
             }}
           >
             <SelectTrigger id="filter-category">
-              <SelectValue />
+              <SelectValue>
+                {(value: string) => {
+                  if (value === "all" || value == null) return "ทั้งหมด"
+                  return (
+                    categories?.find((c) => c.id === value)?.name ?? value
+                  )
+                }}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">ทั้งหมด</SelectItem>
@@ -347,12 +359,11 @@ export default function TransactionsPage() {
           >
             จากวันที่
           </label>
-          <Input
+          <DateInput
             id="filter-from"
-            type="date"
             value={filterFrom}
-            onChange={(e) => {
-              setFilterFrom(e.target.value)
+            onChange={(v) => {
+              setFilterFrom(v)
               setPage(1)
             }}
           />
@@ -366,12 +377,11 @@ export default function TransactionsPage() {
           >
             ถึงวันที่
           </label>
-          <Input
+          <DateInput
             id="filter-to"
-            type="date"
             value={filterTo}
-            onChange={(e) => {
-              setFilterTo(e.target.value)
+            onChange={(v) => {
+              setFilterTo(v)
               setPage(1)
             }}
           />
