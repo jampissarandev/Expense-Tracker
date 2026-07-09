@@ -39,6 +39,7 @@ import {
 import { formatTHB } from "@/lib/format"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
+import { textSuccess, textDanger, CHART_COLORS } from "@/lib/colors"
 
 // ── Thai month labels (Buddhist year) ──────────────────────────────────────
 
@@ -51,15 +52,6 @@ function formatMonthLabel(year: number, month: number): string {
   const buddhistYear = year + 543
   return `${thaiShortMonths[month - 1]} ${buddhistYear}`
 }
-
-// ── Chart colours ──────────────────────────────────────────────────────────
-
-const INCOME_COLOR = "#22c55e"    // green-500
-const EXPENSE_COLOR = "#ef4444"  // red-500
-const CHART_COLORS = [
-  "#3b82f6", "#22c55e", "#f59e0b", "#ef4444", "#8b5cf6",
-  "#ec4899", "#14b8a6", "#f97316", "#6366f1", "#84cc16",
-]
 
 // ── Component ───────────────────────────────────────────────────────────────
 
@@ -201,7 +193,7 @@ export default function DashboardPage() {
         {/* Income card */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-sm font-medium text-green-600">
+            <CardTitle className={cn("flex items-center gap-2 text-sm font-medium", textSuccess)}>
               <TrendingUpIcon className="size-4" />
               รายรับ
             </CardTitle>
@@ -219,7 +211,7 @@ export default function DashboardPage() {
         {/* Expense card */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-sm font-medium text-red-600">
+            <CardTitle className={cn("flex items-center gap-2 text-sm font-medium", textDanger)}>
               <TrendingDownIcon className="size-4" />
               รายจ่าย
             </CardTitle>
@@ -247,8 +239,8 @@ export default function DashboardPage() {
               className={cn(
                 "text-2xl font-bold",
                 Number.parseFloat(currentMonth.balance) >= 0
-                  ? "text-green-600"
-                  : "text-red-600",
+                  ? textSuccess
+                  : textDanger,
               )}
             >
               {formatTHB(currentMonth.balance)}
@@ -307,17 +299,17 @@ export default function DashboardPage() {
                     <Line
                       type="monotone"
                       dataKey="income"
-                      stroke={INCOME_COLOR}
+                      stroke={CHART_COLORS[0]}
                       strokeWidth={2}
-                      dot={{ r: 3, fill: INCOME_COLOR }}
+                      dot={{ r: 3, fill: CHART_COLORS[0] }}
                       name="income"
                     />
                     <Line
                       type="monotone"
                       dataKey="expense"
-                      stroke={EXPENSE_COLOR}
+                      stroke={CHART_COLORS[1]}
                       strokeWidth={2}
-                      dot={{ r: 3, fill: EXPENSE_COLOR }}
+                      dot={{ r: 3, fill: CHART_COLORS[1] }}
                       name="expense"
                     />
                   </LineChart>

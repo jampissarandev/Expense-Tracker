@@ -62,6 +62,8 @@ import {
   downloadSummaryCsv,
 } from "@/features/exports/api"
 import { formatTHB, formatThaiDate } from "@/lib/format"
+import { textAmountClass } from "@/lib/colors"
+import { cn } from "@/lib/utils"
 import { TransactionType } from "@/types/api"
 import type { TransactionDto, TransactionFilter } from "@/types/api"
 
@@ -453,11 +455,10 @@ export default function TransactionsPage() {
                     </TableCell>
                     <TableCell>{getCategoryName(tx.categoryId)}</TableCell>
                     <TableCell
-                      className={
-                        tx.type === TransactionType.Income
-                          ? "text-right text-green-600 dark:text-green-400"
-                          : "text-right text-red-600 dark:text-red-400"
-                      }
+                      className={cn(
+                        "text-right",
+                        textAmountClass(tx.type === TransactionType.Income ? "income" : "expense"),
+                      )}
                     >
                       {tx.type === TransactionType.Income ? "+" : "-"}
                       {formatTHB(tx.amount)}
