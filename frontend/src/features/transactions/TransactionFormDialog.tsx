@@ -21,6 +21,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { DateInput } from "@/components/ui/date-input"
 import {
   Select,
   SelectContent,
@@ -88,6 +89,13 @@ interface TransactionFormDialogProps {
   editingTransaction: TransactionDto | null
 }
 
+// ── Labels ──────────────────────────────────────────────────────────────────
+
+const typeLabels: Record<string, string> = {
+  [String(TransactionType.Expense)]: "รายจ่าย",
+  [String(TransactionType.Income)]: "รายรับ",
+}
+
 // ── Component ───────────────────────────────────────────────────────────────
 
 export function TransactionFormDialog({
@@ -118,6 +126,12 @@ export function TransactionFormDialog({
     if (!categories) return []
     return categories.filter((c) => c.type === selectedType)
   }, [categories, selectedType])
+
+  // Category label lookup for SelectValue display
+  const categoryLabelMap = useMemo(() => {
+    if (!categories) return new Map<string, string>()
+    return new Map(categories.map((c) => [c.id, c.name]))
+  }, [categories])
 
   // Reset form when dialog opens or editing transaction changes
   useEffect(() => {
@@ -212,7 +226,9 @@ export function TransactionFormDialog({
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="เลือกประเภท" />
+                        <SelectValue placeholder="เลือกประเภท">
+                          {(value: string) => typeLabels[value] ?? "เลือกประเภท"}
+                        </SelectValue>
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -242,7 +258,9 @@ export function TransactionFormDialog({
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="เลือกหมวดหมู่" />
+                        <SelectValue placeholder="เลือกหมวดหมู่">
+                          {(value: string) => categoryLabelMap.get(value) ?? "เลือกหมวดหมู่"}
+                        </SelectValue>
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -286,7 +304,10 @@ export function TransactionFormDialog({
                 <FormItem>
                   <FormLabel>วันที่</FormLabel>
                   <FormControl>
-                    <Input type="date" {...field} />
+                    <DateInput
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
