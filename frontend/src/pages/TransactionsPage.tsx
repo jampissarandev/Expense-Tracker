@@ -55,8 +55,15 @@ import { formatTHB, formatThaiDate } from "@/lib/format"
 import { textAmountClass } from "@/lib/colors"
 import { cn } from "@/lib/utils"
 import { PageHeader } from "@/components/common/PageHeader"
+import { SortableTableHead } from "@/components/ui/sortable-table-head"
+import { nextSortState } from "@/features/transactions/nextSortState"
 import { TransactionType } from "@/types/api"
-import type { TransactionDto, TransactionFilter } from "@/types/api"
+import type {
+  TransactionDto,
+  TransactionFilter,
+  TransactionSortBy,
+  SortOrder,
+} from "@/types/api"
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -81,16 +88,22 @@ export default function TransactionsPage() {
   const [page, setPage] = useState(1)
   const pageSize = 20
 
+  // ── Sort state (wired in Phase C UI) ────────────────────────────────────
+  const [sortBy, setSortBy] = useState<TransactionSortBy | null>(null)
+  const [sortOrder, setSortOrder] = useState<SortOrder | null>(null)
+
   const filter: TransactionFilter = useMemo(
     () => ({
       type: filterType,
       categoryId: filterCategoryId,
       from: filterFrom || null,
       to: filterTo || null,
+      sortBy,
+      sortOrder,
       page,
       pageSize,
     }),
-    [filterType, filterCategoryId, filterFrom, filterTo, page],
+    [filterType, filterCategoryId, filterFrom, filterTo, sortBy, sortOrder, page],
   )
 
   // ── Data ────────────────────────────────────────────────────────────────
@@ -151,6 +164,8 @@ export default function TransactionsPage() {
     setFilterCategoryId(null)
     setFilterFrom("")
     setFilterTo("")
+    setSortBy(null)
+    setSortOrder(null)
     setPage(1)
   }
 
@@ -177,11 +192,19 @@ export default function TransactionsPage() {
     }
   }
 
+  function handleSortChange(column: TransactionSortBy) {
+    const next = nextSortState(column, { sortBy, sortOrder })
+    setSortBy(next.sortBy)
+    setSortOrder(next.sortOrder)
+    setPage(1)
+  }
+
   const hasActiveFilters =
     filterType !== null ||
     filterCategoryId !== null ||
     filterFrom !== "" ||
-    filterTo !== ""
+    filterTo !== "" ||
+    sortBy !== null
 
   // ── Loading state ───────────────────────────────────────────────────────
 
@@ -421,13 +444,45 @@ export default function TransactionsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[120px]">วันที่</TableHead>
-                  <TableHead className="w-[80px]">ประเภท</TableHead>
-                  <TableHead>หมวดหมู่</TableHead>
-                  <TableHead className="w-[140px] text-right">
-                    จำนวนเงิน
-                  </TableHead>
-                  <TableHead>หมายเหตุ</TableHead>
+                  <SortableTableHead
+                    label="วันที่"
+                    column="occurredOn"
+                    currentSortBy={sortBy}
+                    currentOrder={sortOrder}
+                    onSort={handleSortChange}
+                    className="w-[120px]"
+                  />
+                  <SortableTableHead
+                    label="ประเภท"
+                    column="type"
+                    currentSortBy={sortBy}
+                    currentOrder={sortOrder}
+                    onSort={handleSortChange}
+                    className="w-[80px]"
+                  />
+                  <SortableTableHead
+                    label="หมวดหมู่"
+                    column="categoryName"
+                    currentSortBy={sortBy}
+                    currentOrder={sortOrder}
+                    onSort={handleSortChange}
+                  />
+                  <SortableTableHead
+                    label="จำนวนเงิน"
+                    column="amount"
+                    currentSortBy={sortBy}
+                    currentOrder={sortOrder}
+                    onSort={handleSortChange}
+                    align="right"
+                    className="w-[140px]"
+                  />
+                  <SortableTableHead
+                    label="หมายเหตุ"
+                    column="note"
+                    currentSortBy={sortBy}
+                    currentOrder={sortOrder}
+                    onSort={handleSortChange}
+                  />
                   <TableHead className="w-[80px] text-right">
                     การกระทำ
                   </TableHead>

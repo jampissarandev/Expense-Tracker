@@ -9,6 +9,17 @@ export const TransactionType = {
 
 export type TransactionType = (typeof TransactionType)[keyof typeof TransactionType]
 
+// ── Sort ────────────────────────────────────────────────
+
+export type TransactionSortBy =
+  | "occurredOn"
+  | "type"
+  | "categoryName"
+  | "amount"
+  | "note"
+
+export type SortOrder = "asc" | "desc"
+
 // ── Auth ───────────────────────────────────────────────
 
 export interface UserDto {
@@ -109,6 +120,8 @@ export interface TransactionFilter {
   categoryId?: string | null
   from?: string | null
   to?: string | null
+  sortBy?: TransactionSortBy | null
+  sortOrder?: SortOrder | null
   page?: number
   pageSize?: number
 }

@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import apiClient from "@/lib/apiClient"
+import { dashboardKeys } from "@/features/dashboard/api"
 import type {
   TransactionDto,
   CreateTransactionRequest,
@@ -21,7 +22,7 @@ export const transactionKeys = {
 
 // ── API functions ───────────────────────────────────────────────────────────
 
-function buildQueryString(filter: TransactionFilter): string {
+export function buildQueryString(filter: TransactionFilter): string {
   const params = new URLSearchParams()
   if (filter.type != null) {
     params.set("type", filter.type === 0 ? "income" : "expense")
@@ -29,6 +30,8 @@ function buildQueryString(filter: TransactionFilter): string {
   if (filter.categoryId) params.set("categoryId", filter.categoryId)
   if (filter.from) params.set("from", filter.from)
   if (filter.to) params.set("to", filter.to)
+  if (filter.sortBy) params.set("sortBy", filter.sortBy)
+  if (filter.sortOrder) params.set("sortOrder", filter.sortOrder)
   if (filter.page) params.set("page", String(filter.page))
   if (filter.pageSize) params.set("pageSize", String(filter.pageSize))
   return params.toString()
@@ -98,6 +101,7 @@ export function useCreateTransaction() {
     mutationFn: createTransaction,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: transactionKeys.all })
+      queryClient.invalidateQueries({ queryKey: dashboardKeys.all })
     },
   })
 }
@@ -112,6 +116,7 @@ export function useUpdateTransaction() {
       updateTransaction(id, request),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: transactionKeys.all })
+      queryClient.invalidateQueries({ queryKey: dashboardKeys.all })
     },
   })
 }
@@ -122,6 +127,7 @@ export function useDeleteTransaction() {
     mutationFn: deleteTransaction,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: transactionKeys.all })
+      queryClient.invalidateQueries({ queryKey: dashboardKeys.all })
     },
   })
 }

@@ -1,3 +1,4 @@
+using ExpenseTracker.Application.Common;
 using ExpenseTracker.Domain.Enums;
 
 namespace ExpenseTracker.Application.Transactions.Filters;
@@ -15,6 +16,8 @@ public sealed record TransactionFilter
     public DateOnly? To { get; init; }
     public int Page { get; init; } = 1;
     public int PageSize { get; init; } = 20;
+    public TransactionSortBy? SortBy { get; init; }
+    public SortOrder? SortOrder { get; init; }
 
     public const int MaxPageSize = 100;
     public const int DefaultPageSize = 20;
