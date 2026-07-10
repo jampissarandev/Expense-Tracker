@@ -681,7 +681,7 @@ import TransactionsPage from "@/pages/TransactionsPage"
 function renderWithProviders(ui: React.ReactElement) {
   const queryClient = new QueryClient({
     defaultOptions: {
-      queries: { retry: false },
+      queries: { retry: false, staleTime: 0, gcTime: 0, refetchOnWindowFocus: false },
       mutations: { retry: false },
     },
   })
@@ -1124,6 +1124,233 @@ describe("TransactionsPage", () => {
 
     await waitFor(() => {
       expect(mockDownloadSummaryCsv).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  // ── Sort tests ────────────────────────────────────────────────────────────
+  // Toggle lifecycle (desc → asc → null) is exhaustively covered in
+  // `nextSortState.test.ts`. Here we verify integration: clicking a header
+  // triggers correct API params, and page resets when sort changes.
+
+  describe("sorting", () => {
+    function setupSortTest(
+      items: typeof sampleTransactions = txStore,
+    ) {
+      const capturedUrls: string[] = []
+      server.use(
+        http.get("http://localhost:5117/api/transactions", ({ request }) => {
+          capturedUrls.push(request.url)
+          const url = new URL(request.url)
+          const page = Number(url.searchParams.get("page") ?? "1")
+          const pageSize = Number(url.searchParams.get("pageSize") ?? "20")
+          return HttpResponse.json(
+            buildPagedResponse(items, page, pageSize),
+          )
+        }),
+      )
+      return { capturedUrls }
+    }
+
+    /** Find the columnheader <th> whose text matches `label`. */
+    function findTh(label: string): HTMLElement {
+      return screen
+        .getAllByRole("columnheader")
+        .find((th) => th.textContent?.includes(label))!
+    }
+
+    it("sends sort params when clicking a sortable column header", async () => {
+      const { capturedUrls } = setupSortTest()
+      const user = userEvent.setup()
+      renderWithProviders(<TransactionsPage />)
+
+      await waitFor(() => {
+        expect(screen.getByText("25 มิ.ย. 2569")).toBeInTheDocument()
+      })
+      expect(capturedUrls.length).toBe(1)
+
+      // Click the "จำนวนเงิน" header button
+      await user.click(screen.getByRole("button", { name: /จำนวนเงิน/ }))
+
+      await waitFor(() => {
+        expect(capturedUrls.length).toBe(2)
+      })
+      const url = new URL(capturedUrls[1])
+      expect(url.searchParams.get("sortBy")).toBe("amount")
+      expect(url.searchParams.get("sortOrder")).toBe("desc")
+    })
+
+    it("clicking the same column twice toggles desc → asc in API calls", async () => {
+      // The toggle lifecycle (desc→asc→null) is exhaustively covered in
+      // `nextSortState.test.ts`. Here we verify the component correctly
+      // sends the updated sort params on each click.
+      const { capturedUrls } = setupSortTest()
+      const user = userEvent.setup()
+      renderWithProviders(<TransactionsPage />)
+
+      await waitFor(() => {
+        expect(screen.getByText("25 มิ.ย. 2569")).toBeInTheDocument()
+      })
+
+      // First click → desc (re-query each time — the button re-renders
+      // with a different icon after each click, which can throw off
+      // a stale reference captured before the first click).
+      await user.click(screen.getByRole("button", { name: /จำนวนเงิน/ }))
+      await waitFor(() => {
+        expect(capturedUrls.length).toBe(2)
+      })
+      expect(new URL(capturedUrls[1]).searchParams.get("sortBy")).toBe("amount")
+      expect(new URL(capturedUrls[1]).searchParams.get("sortOrder")).toBe("desc")
+
+      // Second click → asc
+      await user.click(screen.getByRole("button", { name: /จำนวนเงิน/ }))
+      await waitFor(() => {
+        expect(capturedUrls.length).toBe(3)
+      })
+      expect(new URL(capturedUrls[2]).searchParams.get("sortBy")).toBe("amount")
+      expect(new URL(capturedUrls[2]).searchParams.get("sortOrder")).toBe("asc")
+    })
+
+    it("third click on the same column resets sort to null (no sort params)", async () => {
+      // Toggle lifecycle: desc → asc → reset (back to unsorted).
+      const { capturedUrls } = setupSortTest()
+      const user = userEvent.setup()
+      renderWithProviders(<TransactionsPage />)
+
+      await waitFor(() => {
+        expect(screen.getByText("25 มิ.ย. 2569")).toBeInTheDocument()
+      })
+
+      // Click 1 → desc
+      await user.click(screen.getByRole("button", { name: /จำนวนเงิน/ }))
+      await waitFor(() => {
+        expect(capturedUrls.length).toBe(2)
+      })
+
+      // Click 2 → asc
+      await user.click(screen.getByRole("button", { name: /จำนวนเงิน/ }))
+      await waitFor(() => {
+        expect(capturedUrls.length).toBe(3)
+      })
+
+      // Click 3 → reset (no sortBy/sortOrder)
+      await user.click(screen.getByRole("button", { name: /จำนวนเงิน/ }))
+      await waitFor(() => {
+        expect(capturedUrls.length).toBe(4)
+      })
+      const lastUrl = new URL(capturedUrls[3])
+      expect(lastUrl.searchParams.get("sortBy")).toBeNull()
+      expect(lastUrl.searchParams.get("sortOrder")).toBeNull()
+      // aria-sort should be back to "none"
+      await waitFor(() => {
+        expect(findTh("จำนวนเงิน")).toHaveAttribute("aria-sort", "none")
+      })
+    })
+
+    it("clicking a different column switches sortBy to that column", async () => {
+      const { capturedUrls } = setupSortTest()
+      const user = userEvent.setup()
+      renderWithProviders(<TransactionsPage />)
+
+      await waitFor(() => {
+        expect(screen.getByText("25 มิ.ย. 2569")).toBeInTheDocument()
+      })
+
+      // First sort by จำนวนเงิน → desc
+      await user.click(screen.getByRole("button", { name: /จำนวนเงิน/ }))
+      await waitFor(() => {
+        expect(capturedUrls.length).toBe(2)
+      })
+      expect(new URL(capturedUrls[1]).searchParams.get("sortBy")).toBe("amount")
+
+      // Then click วันที่ → should switch sortBy to occurredOn (desc)
+      await user.click(screen.getByRole("button", { name: /^วันที่$/ }))
+      await waitFor(() => {
+        expect(capturedUrls.length).toBe(3)
+      })
+      const url = new URL(capturedUrls[2])
+      expect(url.searchParams.get("sortBy")).toBe("occurredOn")
+      expect(url.searchParams.get("sortOrder")).toBe("desc")
+    })
+
+    it("clicking the การกระทำ column header does not trigger sort", async () => {
+      // The "การกระทำ" header is a plain <th> (no SortableTableHead),
+      // so there should be no button inside it and no sort API call.
+      const { capturedUrls } = setupSortTest()
+      const user = userEvent.setup()
+      renderWithProviders(<TransactionsPage />)
+
+      await waitFor(() => {
+        expect(screen.getByText("25 มิ.ย. 2569")).toBeInTheDocument()
+      })
+      const initialCallCount = capturedUrls.length
+
+      const actionTh = findTh("การกระทำ")
+      // No button inside the การกระทำ header
+      expect(within(actionTh).queryByRole("button")).toBeNull()
+
+      // Clicking the th text directly should not fire any sort
+      await user.click(actionTh)
+      // No new API call should have been triggered by this click
+      expect(capturedUrls.length).toBe(initialCallCount)
+    })
+
+    it("sets aria-sort on the active column header after a click", async () => {
+      // Verify the DOM attribute is correctly set after a sort click.
+      // Multi-click toggle lifecycle (desc→asc→null) is exhaustively
+      // covered in `nextSortState.test.ts` (pure function, no DOM).
+      const user = userEvent.setup()
+      renderWithProviders(<TransactionsPage />)
+
+      await waitFor(() => {
+        expect(screen.getByText("25 มิ.ย. 2569")).toBeInTheDocument()
+      })
+
+      await user.click(screen.getByRole("button", { name: /จำนวนเงิน/ }))
+
+      await waitFor(() => {
+        expect(findTh("จำนวนเงิน")).toHaveAttribute("aria-sort", "descending")
+      })
+    })
+
+    it("resets page to 1 when sort changes while on a higher page", async () => {
+      const manyItems = Array.from({ length: 25 }, (_, i) => ({
+        id: `tx-sort-${i}`,
+        categoryId: "cat-food",
+        categoryName: "Food",
+        type: 1,
+        amount: `${i + 1}.00`,
+        occurredOn: `2026-06-${String(25 - (i % 25)).padStart(2, "0")}`,
+        note: `Item ${i}`,
+        createdAt: `2026-06-25T${String(i).padStart(2, "0")}:00:00+00:00`,
+        updatedAt: `2026-06-25T${String(i).padStart(2, "0")}:00:00+00:00`,
+      }))
+
+      const { capturedUrls } = setupSortTest(manyItems)
+      const user = userEvent.setup()
+      const { container } = renderWithProviders(<TransactionsPage />)
+
+      await waitFor(() => {
+        expect(screen.getByText(/หน้า 1 \/ 2/)).toBeInTheDocument()
+      })
+
+      // Go to page 2
+      const nextBtn = container
+        .querySelector(".lucide-chevron-right")
+        ?.closest("button")
+      expect(nextBtn).not.toBeNull()
+      await user.click(nextBtn!)
+
+      await waitFor(() => {
+        expect(screen.getByText(/หน้า 2 \/ 2/)).toBeInTheDocument()
+      })
+
+      // Click sort header — page should reset to 1
+      await user.click(screen.getByRole("button", { name: /จำนวนเงิน/ }))
+
+      await waitFor(() => {
+        const last = new URL(capturedUrls[capturedUrls.length - 1])
+        expect(last.searchParams.get("page")).toBe("1")
+      })
     })
   })
 })

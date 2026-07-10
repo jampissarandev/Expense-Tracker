@@ -55,6 +55,8 @@ import { formatTHB, formatThaiDate } from "@/lib/format"
 import { textAmountClass } from "@/lib/colors"
 import { cn } from "@/lib/utils"
 import { PageHeader } from "@/components/common/PageHeader"
+import { SortableTableHead } from "@/components/ui/sortable-table-head"
+import { nextSortState } from "@/features/transactions/nextSortState"
 import { TransactionType } from "@/types/api"
 import type {
   TransactionDto,
@@ -188,6 +190,13 @@ export default function TransactionsPage() {
         err instanceof Error ? err.message : "ไม่สามารถลบรายการได้"
       toast.error(message)
     }
+  }
+
+  function handleSortChange(column: TransactionSortBy) {
+    const next = nextSortState(column, { sortBy, sortOrder })
+    setSortBy(next.sortBy)
+    setSortOrder(next.sortOrder)
+    setPage(1)
   }
 
   const hasActiveFilters =
@@ -435,13 +444,45 @@ export default function TransactionsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[120px]">วันที่</TableHead>
-                  <TableHead className="w-[80px]">ประเภท</TableHead>
-                  <TableHead>หมวดหมู่</TableHead>
-                  <TableHead className="w-[140px] text-right">
-                    จำนวนเงิน
-                  </TableHead>
-                  <TableHead>หมายเหตุ</TableHead>
+                  <SortableTableHead
+                    label="วันที่"
+                    column="occurredOn"
+                    currentSortBy={sortBy}
+                    currentOrder={sortOrder}
+                    onSort={handleSortChange}
+                    className="w-[120px]"
+                  />
+                  <SortableTableHead
+                    label="ประเภท"
+                    column="type"
+                    currentSortBy={sortBy}
+                    currentOrder={sortOrder}
+                    onSort={handleSortChange}
+                    className="w-[80px]"
+                  />
+                  <SortableTableHead
+                    label="หมวดหมู่"
+                    column="categoryName"
+                    currentSortBy={sortBy}
+                    currentOrder={sortOrder}
+                    onSort={handleSortChange}
+                  />
+                  <SortableTableHead
+                    label="จำนวนเงิน"
+                    column="amount"
+                    currentSortBy={sortBy}
+                    currentOrder={sortOrder}
+                    onSort={handleSortChange}
+                    align="right"
+                    className="w-[140px]"
+                  />
+                  <SortableTableHead
+                    label="หมายเหตุ"
+                    column="note"
+                    currentSortBy={sortBy}
+                    currentOrder={sortOrder}
+                    onSort={handleSortChange}
+                  />
                   <TableHead className="w-[80px] text-right">
                     การกระทำ
                   </TableHead>
