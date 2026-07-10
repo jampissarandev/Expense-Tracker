@@ -3,7 +3,7 @@
 > Origin: User request on 2026-07-10 — เพิ่มความสามารถเรียงแถวในตารางรายการธุรกรรมตามคอลัมน์ที่คลิกได้ (click-to-sort on table headers).
 > Scope: Full vertical slice — backend (Domain filter, Repository, Controller) + frontend (types, API client, UI, tests). แตะ CSV export path ด้วย (ส่ง sort param ผ่าน `filter` เดียวกัน).
 > Format: 3 phases, 9 tasks. TDD ตามมาตรฐาน repo — failing test ก่อน, implement, ก่อน commit ต้องผ่าน `npm test` / `dotnet test`.
-> Status: **Phase A done** (A1–A4 + Exit Criteria build/test pass; manual curl + commit pending). Phase B/C not started.
+> Status: **Phase A done** (A1–A4 + Exit Criteria build/test pass; manual curl + commit pending). **Phase B logic done** (B1 + B2 core; build/lint/typecheck/test ✅; UI binding + manual Network check pending ใน Phase C). Phase C not started.
 
 ## TL;DR
 
@@ -234,14 +234,14 @@
 **Description**: เพิ่ม sort fields ใน TS interface และ serialize ลง query string.
 
 **Acceptance criteria**:
-- [ ] `frontend/src/types/api.ts`: เพิ่ม `export type TransactionSortBy = "occurredOn" | "type" | "categoryName" | "amount" | "note"` และ `export type SortOrder = "asc" | "desc"` — ใช้ camelCase ตรง query string (ดูว่า backend `[FromQuery]` รับ camelCase ได้จาก A4)
-- [ ] `TransactionFilter` interface เพิ่ม `sortBy?: TransactionSortBy | null` และ `sortOrder?: SortOrder | null`
-- [ ] `buildQueryString` (`features/transactions/api.ts`): ถ้า `filter.sortBy` set → `params.set("sortBy", filter.sortBy)`; เช่นเดียวกับ `sortOrder`. ถ้า null/undefined ไม่ส่ง (backend default)
-- [ ] TDD: อัปเดต/เพิ่ม test ใน `features/transactions/api.test.ts` (ถ้าไม่มี สร้างใหม่) ยืนยัน URL output มี `sortBy=amount&sortOrder=asc` เมื่อ pass; ไม่มี sort param เมื่อ omit
+- [x] `frontend/src/types/api.ts`: เพิ่ม `export type TransactionSortBy = "occurredOn" | "type" | "categoryName" | "amount" | "note"` และ `export type SortOrder = "asc" | "desc"` — ใช้ camelCase ตรง query string (ดูว่า backend `[FromQuery]` รับ camelCase ได้จาก A4) — ✅ `types/api.ts:14-21`
+- [x] `TransactionFilter` interface เพิ่ม `sortBy?: TransactionSortBy | null` และ `sortOrder?: SortOrder | null` — ✅ `types/api.ts:123-124`
+- [x] `buildQueryString` (`features/transactions/api.ts`): ถ้า `filter.sortBy` set → `params.set("sortBy", filter.sortBy)`; เช่นเดียวกับ `sortOrder`. ถ้า null/undefined ไม่ส่ง (backend default) — ✅ `features/transactions/api.ts:40-41`
+- [x] TDD: อัปเดต/เพิ่ม test ใน `features/transactions/api.test.ts` (ถ้าไม่มี สร้างใหม่) ยืนยัน URL output มี `sortBy=amount&sortOrder=asc` เมื่อ pass; ไม่มี sort param เมื่อ omit — ✅ `tests/unit/features/transactions/api.test.ts` (8 tests: buildQueryString 6 + listTransactions URL capture 2)
 
 **Verification**:
-- [ ] `npm run typecheck` สะอาด
-- [ ] `npm test -- api` (หรือไฟล์ test ที่เกี่ยว) ผ่าน
+- [x] `npm run typecheck` สะอาด — ✅ 0 errors
+- [x] `npm test -- api` (หรือไฟล์ test ที่เกี่ยว) ผ่าน — ✅ 8/8 pass in `api.test.ts`
 
 **Dependencies**: Phase A merge (หรืออย่างน้อย A4 deploy locally เพื่อทดสอบ e2e manual)
 
@@ -259,32 +259,34 @@
 **Description**: เพิ่ม `sortBy`/`sortOrder` state, feed เข้า `filter` useMemo, reset `page=1` เมื่อ sort เปลี่ยน.
 
 **Acceptance criteria**:
-- [ ] `TransactionsPage.tsx` เพิ่ม `const [sortBy, setSortBy] = useState<TransactionSortBy | null>(null)` และ `const [sortOrder, setSortOrder] = useState<SortOrder | null>(null)`
-- [ ] `filter` useMemo รวม `sortBy`, `sortOrder`
-- [ ] handler `handleSortChange(column: TransactionSortBy)` — ถ้า column === current sortBy และ order === 'desc' → toggle to 'asc'; ถ้า 'asc' → ออก (set null); ถ้า column !== current → set sortBy=column, sortOrder='desc'. Reset `page = 1` ทุกกรณี.
-- [ ] `handleResetFilters` ล้าง sort ด้วย
-- [ ] `hasActiveFilters` รวม sort (optional — อาจไม่ถือว่าเป็น filter ที่แสดง reset; disclosed in PR)
-- [ ] TDD: Tests คลิก `handleSortChange` เปลี่ยน `sortBy`/`sortOrder`/`page` ถูก (test ผ่านการยิง query ผ่าน `useTransactions` — เช็ค query key / URL output)
+- [x] `TransactionsPage.tsx` เพิ่ม `const [sortBy, setSortBy] = useState<TransactionSortBy | null>(null)` และ `const [sortOrder, setSortOrder] = useState<SortOrder | null>(null)` — ✅ `TransactionsPage.tsx:90-91`
+- [x] `filter` useMemo รวม `sortBy`, `sortOrder` — ✅ `TransactionsPage.tsx:96-105` (deps array รวม `sortBy, sortOrder`)
+- [x] handler `handleSortChange(column: TransactionSortBy)` — ถ้า column === current sortBy และ order === 'desc' → toggle to 'asc'; ถ้า 'asc' → ออก (set null); ถ้า column !== current → set sortBy=column, sortOrder='desc'. Reset `page = 1` ทุกกรณี. — ⚠️ **deviate (เพื่อไม่ให้ unused-local break build/lint)**: logic ถูกแยกเป็น pure function `nextSortState(column, current)` ที่ `features/transactions/nextSortState.ts` + unit tests (`nextSortState.test.ts`, 7 tests) ครอบครอบทุกกรณี toggle (desc→asc→null, switch-column→desc). ตัว component handler ที่จะ `setPage(1)` + apply `nextSortState` + set state จะถูกเพิ่มใน `Task C2` เมื่อมี UI (`SortableTableHead`) เรียกจริง — ไม่ปล่อยให้เป็น unused local ระหว่าง Phase B → C. ดูหมายเหตุด้านล่าง.
+- [x] `handleResetFilters` ล้าง sort ด้วย — ✅ `TransactionsPage.tsx:165-166` (`setSortBy(null)`, `setSortOrder(null)`)
+- [x] `hasActiveFilters` รวม sort (optional — อาจไม่ถือว่าเป็น filter ที่แสดง reset; disclosed in PR) — ✅ `TransactionsPage.tsx:198` (`sortBy !== null`)
+- [x] TDD: Tests คลิก `handleSortChange` เปลี่ยน `sortBy`/`sortOrder`/`page` ถูก (test ผ่านการยิง query ผ่าน `useTransactions` — เช็ค query key / URL output) — ⚠️ **deviate**: เนื่องจาก UI ยังไม่มีใน Phase B (plan กำหนดไว้เอง) และ `noUnusedLocals: true` + lint บังคับห้ามปล่อย unused handler, tests ครอบ logic ที่ pure function `nextSortState` แทน (7 tests cover ทุก toggle branch). การ test แบบ "คลิก → query URL เปลี่ยน" จะเกิดใน `Task C3` เมื่อมี UI.
 
 **Verification**:
-- [ ] `npm test` ผ่าน
-- [ ] `npm run typecheck` + `npm run lint` สะอาด
+- [x] `npm test` ผ่าน — ✅ 229/229 pass (28 files; รวม 7 tests ใหม่ in `nextSortState.test.ts` + 8 tests ใน `api.test.ts`)
+- [x] `npm run typecheck` + `npm run lint` สะอาด — ✅ typecheck 0 errors; lint 0 errors (5 pre-existing warnings จาก `button.tsx`/`form.tsx`/`AuthContext.tsx`/`TransactionFormDialog.tsx` ไม่เกี่ยวกับ Phase B)
 
 **Dependencies**: B1
 
 **Files likely touched**:
 - `frontend/src/pages/TransactionsPage.tsx`
 - `frontend/tests/unit/components/TransactionsPage.test.tsx` (extend)
+- `frontend/src/features/transactions/nextSortState.ts` (new — pure toggle logic, split out เพื่อทดสอบได้ไม่ติด `noUnusedLocals`)
+- `frontend/tests/unit/features/transactions/nextSortState.test.ts` (new — 7 tests)
 
-**Estimated scope**: Small (2 files, ~60 LOC)
+**Estimated scope**: Small (4 files, ~120 LOC — เพิ่ม pure function + tests เล็กน้อยเกิน plan)
 
 ---
 
 ## Phase B — Exit Criteria (Checkpoint)
 
-- [ ] Frontend type + build + lint + test สะอาด
-- [ ] Manual: DevTools Network ตรวจว่าคำขอ `useTransactions` ส่ง `sortBy`/`sortOrder` query param ถูกต้องเมื่อ state เปลี่ยน (จะต้อง trigger ผ่าน code ชั่วคราวเพราะ UI ยังไม่มี — หรือข้ามไป Phase C ที่มี UI)
-- [ ] พิจารณา squash Phase B + C เป็น PR เดียวเพื่อกัน intermediate state ที่ state มี UI ยังไม่ครบ
+- [x] Frontend type + build + lint + test สะอาด — ✅ typecheck 0 errors; lint 0 errors (5 pre-existing warnings ไม่เกี่ยว); `npm test` 229/229 pass; `npm run build` สะอาด
+- [ ] Manual: DevTools Network ตรวจว่าคำขอ `useTransactions` ส่ง `sortBy`/`sortOrder` query param ถูกต้องเมื่อ state เปลี่ยน (จะต้อง trigger ผ่าน code ชั่วคราวเพราะ UI ยังไม่มี — หรือข้ามไป Phase C ที่มี UI) — ⏸ ยังไม่ทำ manual check ได้ (UI เชื่อม logic อยู่ใน Phase C2). อนึ่ง `api.test.ts` ครอบที่ `listTransactions` ส่ง URL query param ถูกต้องแล้ว (MSW URL-capture tests 2 tests) — ส่วน state → query จะทดสอบใน C3.
+- [ ] พิจารณา squash Phase B + C เป็น PR เดียวเพื่อกัน intermediate state ที่ state มี UI ยังไม่ครบ — ⏸ รอ user
 
 ---
 
@@ -447,7 +449,7 @@ Behavior:
 
 ```
 Phase A (backend):  [x] A1  [x] A2  [x] A3  [x] A4   → Checkpoint [2/4] (build+unit+integration-isolated ✅; manual curl และ commit pending) → PR?
-Phase B (FE core):  [ ] B1  [ ] B2                    → Checkpoint
+Phase B (FE core):  [x] B1  [x] B2  [⚠️]              → Checkpoint [1/3] (build/lint/typecheck/test ✅; manual Network + squash-PR pending) — note: B2 handler logic split เป็น pure fn `nextSortState` (UI binding อยู่ใน C2)
 Phase C (FE UI):    [ ] C1  [ ] C2  [ ] C3  [ ] C4 (optional) → Final Checkpoint → PR?
 ```
 

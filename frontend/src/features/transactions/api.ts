@@ -22,7 +22,7 @@ export const transactionKeys = {
 
 // ── API functions ───────────────────────────────────────────────────────────
 
-function buildQueryString(filter: TransactionFilter): string {
+export function buildQueryString(filter: TransactionFilter): string {
   const params = new URLSearchParams()
   if (filter.type != null) {
     params.set("type", filter.type === 0 ? "income" : "expense")
@@ -30,6 +30,8 @@ function buildQueryString(filter: TransactionFilter): string {
   if (filter.categoryId) params.set("categoryId", filter.categoryId)
   if (filter.from) params.set("from", filter.from)
   if (filter.to) params.set("to", filter.to)
+  if (filter.sortBy) params.set("sortBy", filter.sortBy)
+  if (filter.sortOrder) params.set("sortOrder", filter.sortOrder)
   if (filter.page) params.set("page", String(filter.page))
   if (filter.pageSize) params.set("pageSize", String(filter.pageSize))
   return params.toString()

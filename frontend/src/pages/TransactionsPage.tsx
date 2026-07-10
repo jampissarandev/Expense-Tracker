@@ -56,7 +56,12 @@ import { textAmountClass } from "@/lib/colors"
 import { cn } from "@/lib/utils"
 import { PageHeader } from "@/components/common/PageHeader"
 import { TransactionType } from "@/types/api"
-import type { TransactionDto, TransactionFilter } from "@/types/api"
+import type {
+  TransactionDto,
+  TransactionFilter,
+  TransactionSortBy,
+  SortOrder,
+} from "@/types/api"
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -81,16 +86,22 @@ export default function TransactionsPage() {
   const [page, setPage] = useState(1)
   const pageSize = 20
 
+  // ── Sort state (wired in Phase C UI) ────────────────────────────────────
+  const [sortBy, setSortBy] = useState<TransactionSortBy | null>(null)
+  const [sortOrder, setSortOrder] = useState<SortOrder | null>(null)
+
   const filter: TransactionFilter = useMemo(
     () => ({
       type: filterType,
       categoryId: filterCategoryId,
       from: filterFrom || null,
       to: filterTo || null,
+      sortBy,
+      sortOrder,
       page,
       pageSize,
     }),
-    [filterType, filterCategoryId, filterFrom, filterTo, page],
+    [filterType, filterCategoryId, filterFrom, filterTo, sortBy, sortOrder, page],
   )
 
   // ── Data ────────────────────────────────────────────────────────────────
@@ -151,6 +162,8 @@ export default function TransactionsPage() {
     setFilterCategoryId(null)
     setFilterFrom("")
     setFilterTo("")
+    setSortBy(null)
+    setSortOrder(null)
     setPage(1)
   }
 
@@ -181,7 +194,8 @@ export default function TransactionsPage() {
     filterType !== null ||
     filterCategoryId !== null ||
     filterFrom !== "" ||
-    filterTo !== ""
+    filterTo !== "" ||
+    sortBy !== null
 
   // ── Loading state ───────────────────────────────────────────────────────
 
