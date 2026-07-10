@@ -11,6 +11,7 @@ import userEvent from "@testing-library/user-event"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { http, HttpResponse } from "msw"
 import { setupServer } from "msw/node"
+import { formatDateInput } from "@/lib/format"
 
 vi.stubEnv("VITE_API_URL", "http://localhost:5117")
 
@@ -486,16 +487,18 @@ describe("TransactionFormDialog", () => {
 
     const dialog = await screen.findByRole("dialog")
 
-    // The date input is pre-filled with today's date (YYYY-MM-DD).
+    // The date input is pre-filled with today's date (dd/mm/yyyy).
+    const todayISO = new Date().toISOString().split("T")[0]
     const dateInput = within(dialog).getByDisplayValue(
-      new Date().toISOString().split("T")[0],
+      formatDateInput(todayISO),
     ) as HTMLInputElement
     expect(dateInput).toBeDefined()
 
     // Set a date 7 days in the future.
     const future = new Date()
     future.setDate(future.getDate() + 7)
-    const futureStr = future.toISOString().split("T")[0]
+    const futureISO = future.toISOString().split("T")[0]
+    const futureStr = formatDateInput(futureISO)
 
     fireEvent.change(dateInput, { target: { value: futureStr } })
 
