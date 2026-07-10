@@ -1,4 +1,5 @@
 using ExpenseTracker.Application.Abstractions;
+using ExpenseTracker.Application.Common;
 using ExpenseTracker.Application.Transactions.Filters;
 using ExpenseTracker.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -47,9 +48,40 @@ public class TransactionRepository : ITransactionRepository
             ? TransactionFilter.DefaultPageSize
             : Math.Min(filter.PageSize, TransactionFilter.MaxPageSize);
 
-        var items = await query
-            .OrderByDescending(t => t.OccurredOn)
-            .ThenByDescending(t => t.CreatedAt)
+        // Apply dynamic sort if SortBy is specified; fall back to default.
+        IOrderedQueryable<Transaction> ordered;
+        if (filter.SortBy.HasValue)
+        {
+            var isAsc = filter.SortOrder == SortOrder.Asc;
+            ordered = filter.SortBy.Value switch
+            {
+                TransactionSortBy.OccurredOn => isAsc
+                    ? query.OrderBy(t => t.OccurredOn)
+                    : query.OrderByDescending(t => t.OccurredOn),
+                TransactionSortBy.Type => isAsc
+                    ? query.OrderBy(t => t.Type)
+                    : query.OrderByDescending(t => t.Type),
+                TransactionSortBy.CategoryName => isAsc
+                    ? query.OrderBy(t => t.Category.Name)
+                    : query.OrderByDescending(t => t.Category.Name),
+                TransactionSortBy.Amount => isAsc
+                    ? query.OrderBy(t => t.Amount)
+                    : query.OrderByDescending(t => t.Amount),
+                TransactionSortBy.Note => isAsc
+                    ? query.OrderBy(t => t.Note ?? string.Empty)
+                    : query.OrderByDescending(t => t.Note ?? string.Empty),
+                _ => query.OrderByDescending(t => t.OccurredOn),
+            };
+        }
+        else
+        {
+            ordered = query.OrderByDescending(t => t.OccurredOn);
+        }
+
+        // Always add CreatedAt as tiebreaker for stable ordering.
+        ordered = ordered.ThenByDescending(t => t.CreatedAt);
+
+        var items = await ordered
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();

@@ -34,7 +34,9 @@ public class TransactionsController : ControllerBase
         [FromQuery] string? from = null,
         [FromQuery] string? to = null,
         [FromQuery] int page = 1,
-        [FromQuery] int pageSize = TransactionFilter.DefaultPageSize)
+        [FromQuery] int pageSize = TransactionFilter.DefaultPageSize,
+        [FromQuery] TransactionSortBy? sortBy = null,
+        [FromQuery] SortOrder? sortOrder = null)
     {
         var userId = GetRequiredUserId();
         var filter = new TransactionFilter
@@ -44,7 +46,9 @@ public class TransactionsController : ControllerBase
             From = DateOnlyParser.Parse(from),
             To = DateOnlyParser.Parse(to),
             Page = page,
-            PageSize = pageSize
+            PageSize = pageSize,
+            SortBy = sortBy,
+            SortOrder = sortOrder
         };
         var result = await _transactionService.ListAsync(userId, filter);
         return Ok(result);

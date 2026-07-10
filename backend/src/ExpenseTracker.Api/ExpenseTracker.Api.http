@@ -1,6 +1,47 @@
 @ExpenseTracker.Api_HostAddress = http://localhost:5117
 
-GET {{ExpenseTracker.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+### Register a user (returns access + refresh token)
+# @name register
+POST {{ExpenseTracker.Api_HostAddress}}/api/auth/register
+Content-Type: application/json
 
-###
+{
+  "email": "sort-demo@test.com",
+  "password": "Password123!",
+  "displayName": "Sort Demo"
+}
+
+### Capture the access token from the register response above
+@token = {{register.response.body.accessToken.token}}
+
+### List transactions — default order (OccurredOn desc, no sort params)
+GET {{ExpenseTracker.Api_HostAddress}}/api/transactions
+Authorization: Bearer {{token}}
+
+### List transactions — sort by amount, descending (largest first)
+GET {{ExpenseTracker.Api_HostAddress}}/api/transactions?sortBy=amount&sortOrder=desc
+Authorization: Bearer {{token}}
+
+### List transactions — sort by amount, ascending (smallest first)
+GET {{ExpenseTracker.Api_HostAddress}}/api/transactions?sortBy=amount&sortOrder=asc
+Authorization: Bearer {{token}}
+
+### List transactions — sort by occurredOn ascending (oldest first)
+GET {{ExpenseTracker.Api_HostAddress}}/api/transactions?sortBy=occurredOn&sortOrder=asc
+Authorization: Bearer {{token}}
+
+### List transactions — sort by category name A→Z
+GET {{ExpenseTracker.Api_HostAddress}}/api/transactions?sortBy=categoryName&sortOrder=asc
+Authorization: Bearer {{token}}
+
+### List transactions — sort by note ascending (nulls first in PostgreSQL)
+GET {{ExpenseTracker.Api_HostAddress}}/api/transactions?sortBy=note&sortOrder=asc
+Authorization: Bearer {{token}}
+
+### List transactions — invalid sortBy should return 400 Bad Request
+GET {{ExpenseTracker.Api_HostAddress}}/api/transactions?sortBy=garbage
+Authorization: Bearer {{token}}
+
+### List transactions — combine filter + sort (expense only, amount desc)
+GET {{ExpenseTracker.Api_HostAddress}}/api/transactions?type=1&sortBy=amount&sortOrder=desc
+Authorization: Bearer {{token}}

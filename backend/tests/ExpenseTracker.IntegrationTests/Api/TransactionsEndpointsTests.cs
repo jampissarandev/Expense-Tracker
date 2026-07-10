@@ -424,6 +424,158 @@ public class TransactionsEndpointsTests : IClassFixture<WebApplicationFactory<Pr
         result2!.Items.Should().HaveCount(5); // 25 - 20 = 5 remaining
     }
 
+    // ==================== List — sort scenarios ====================
+
+    [Fact]
+    public async Task List_sorts_by_amount_desc()
+    {
+        // Arrange
+        await RegisterAndGetTokenAsync();
+        var category = await CreateCategoryAsync();
+        var yesterday = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-1));
+        await CreateTransactionAsync(category.Id, TransactionType.Expense, "50.00", yesterday);
+        await CreateTransactionAsync(category.Id, TransactionType.Expense, "200.00", yesterday);
+        await CreateTransactionAsync(category.Id, TransactionType.Expense, "100.00", yesterday);
+
+        // Act
+        var response = await _client.GetAsync("/api/transactions?sortBy=amount&sortOrder=desc");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var result = await response.Content.ReadFromJsonAsync<PagedResult<TransactionDto>>(JsonOptions);
+        result.Should().NotBeNull();
+        result!.Items.Should().HaveCount(3);
+        result.Items[0].Amount.Should().Be("200.00");
+        result.Items[1].Amount.Should().Be("100.00");
+        result.Items[2].Amount.Should().Be("50.00");
+    }
+
+    [Fact]
+    public async Task List_sorts_by_amount_asc()
+    {
+        // Arrange
+        await RegisterAndGetTokenAsync();
+        var category = await CreateCategoryAsync();
+        var yesterday = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-1));
+        await CreateTransactionAsync(category.Id, TransactionType.Expense, "50.00", yesterday);
+        await CreateTransactionAsync(category.Id, TransactionType.Expense, "200.00", yesterday);
+        await CreateTransactionAsync(category.Id, TransactionType.Expense, "100.00", yesterday);
+
+        // Act
+        var response = await _client.GetAsync("/api/transactions?sortBy=amount&sortOrder=asc");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var result = await response.Content.ReadFromJsonAsync<PagedResult<TransactionDto>>(JsonOptions);
+        result.Should().NotBeNull();
+        result!.Items.Should().HaveCount(3);
+        result.Items[0].Amount.Should().Be("50.00");
+        result.Items[1].Amount.Should().Be("100.00");
+        result.Items[2].Amount.Should().Be("200.00");
+    }
+
+    [Fact]
+    public async Task List_sorts_by_occurred_on_asc()
+    {
+        // Arrange
+        await RegisterAndGetTokenAsync();
+        var category = await CreateCategoryAsync();
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        await CreateTransactionAsync(category.Id, TransactionType.Expense, "100.00", today.AddDays(-1));
+        await CreateTransactionAsync(category.Id, TransactionType.Expense, "200.00", today.AddDays(-5));
+
+        // Act
+        var response = await _client.GetAsync("/api/transactions?sortBy=occurredOn&sortOrder=asc");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var result = await response.Content.ReadFromJsonAsync<PagedResult<TransactionDto>>(JsonOptions);
+        result.Should().NotBeNull();
+        result!.Items.Should().HaveCount(2);
+        result.Items[0].Amount.Should().Be("200.00"); // older (5 days ago)
+        result.Items[1].Amount.Should().Be("100.00"); // newer (1 day ago)
+    }
+
+    [Fact]
+    public async Task List_sorts_by_occurred_on_desc()
+    {
+        // Arrange
+        await RegisterAndGetTokenAsync();
+        var category = await CreateCategoryAsync();
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        await CreateTransactionAsync(category.Id, TransactionType.Expense, "100.00", today.AddDays(-1));
+        await CreateTransactionAsync(category.Id, TransactionType.Expense, "200.00", today.AddDays(-5));
+
+        // Act — explicit desc (same as default)
+        var response = await _client.GetAsync("/api/transactions?sortBy=occurredOn&sortOrder=desc");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var result = await response.Content.ReadFromJsonAsync<PagedResult<TransactionDto>>(JsonOptions);
+        result.Should().NotBeNull();
+        result!.Items.Should().HaveCount(2);
+        result.Items[0].Amount.Should().Be("100.00"); // newer (1 day ago)
+        result.Items[1].Amount.Should().Be("200.00"); // older (5 days ago)
+    }
+
+    [Fact]
+    public async Task List_sorts_by_category_name_asc()
+    {
+        // Arrange
+        await RegisterAndGetTokenAsync();
+        var foodCategory = await CreateCategoryAsync("BBQ", TransactionType.Expense);
+        var transportCategory = await CreateCategoryAsync("Airlines", TransactionType.Expense);
+        var yesterday = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-1));
+        await CreateTransactionAsync(foodCategory.Id, TransactionType.Expense, "100.00", yesterday);
+        await CreateTransactionAsync(transportCategory.Id, TransactionType.Expense, "200.00", yesterday);
+
+        // Act
+        var response = await _client.GetAsync("/api/transactions?sortBy=categoryName&sortOrder=asc");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var result = await response.Content.ReadFromJsonAsync<PagedResult<TransactionDto>>(JsonOptions);
+        result.Should().NotBeNull();
+        result!.Items.Should().HaveCount(2);
+        result.Items[0].CategoryName.Should().Be("Airlines");
+        result.Items[1].CategoryName.Should().Be("BBQ");
+    }
+
+    [Fact]
+    public async Task List_with_invalid_sortBy_returns_400()
+    {
+        // Arrange
+        await RegisterAndGetTokenAsync();
+
+        // Act
+        var response = await _client.GetAsync("/api/transactions?sortBy=garbage");
+
+        // Assert — default model binding returns 400 for unknown enum value
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task List_without_sort_params_returns_default_order()
+    {
+        // Arrange
+        await RegisterAndGetTokenAsync();
+        var category = await CreateCategoryAsync();
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        await CreateTransactionAsync(category.Id, TransactionType.Expense, "100.00", today.AddDays(-1));
+        await CreateTransactionAsync(category.Id, TransactionType.Expense, "200.00", today.AddDays(-5));
+
+        // Act — no sort params
+        var response = await _client.GetAsync("/api/transactions");
+
+        // Assert — default order: newest first
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var result = await response.Content.ReadFromJsonAsync<PagedResult<TransactionDto>>(JsonOptions);
+        result.Should().NotBeNull();
+        result!.Items.Should().HaveCount(2);
+        result.Items[0].Amount.Should().Be("100.00"); // 1 day ago
+        result.Items[1].Amount.Should().Be("200.00"); // 5 days ago
+    }
+
     // ==================== GetById ====================
 
     [Fact]
