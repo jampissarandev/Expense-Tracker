@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import apiClient from "@/lib/apiClient"
+import { dashboardKeys } from "@/features/dashboard/api"
 import type {
   CategoryDto,
   CreateCategoryRequest,
@@ -60,6 +61,7 @@ export function useCreateCategory() {
     mutationFn: createCategory,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: categoryKeys.all })
+      queryClient.invalidateQueries({ queryKey: dashboardKeys.all })
     },
   })
 }
@@ -67,13 +69,11 @@ export function useCreateCategory() {
 export function useUpdateCategory() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({
-      id,
-      ...request
-    }: UpdateCategoryRequest & { id: string }) =>
-      updateCategory(id, request),
+    mutationFn: (arg: { id: string } & UpdateCategoryRequest) =>
+      updateCategory(arg.id, arg),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: categoryKeys.all })
+      queryClient.invalidateQueries({ queryKey: dashboardKeys.all })
     },
   })
 }
@@ -84,6 +84,7 @@ export function useDeleteCategory() {
     mutationFn: deleteCategory,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: categoryKeys.all })
+      queryClient.invalidateQueries({ queryKey: dashboardKeys.all })
     },
   })
 }

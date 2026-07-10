@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import apiClient from "@/lib/apiClient"
+import { dashboardKeys } from "@/features/dashboard/api"
 import type {
   TransactionDto,
   CreateTransactionRequest,
@@ -98,6 +99,7 @@ export function useCreateTransaction() {
     mutationFn: createTransaction,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: transactionKeys.all })
+      queryClient.invalidateQueries({ queryKey: dashboardKeys.all })
     },
   })
 }
@@ -112,6 +114,7 @@ export function useUpdateTransaction() {
       updateTransaction(id, request),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: transactionKeys.all })
+      queryClient.invalidateQueries({ queryKey: dashboardKeys.all })
     },
   })
 }
@@ -122,6 +125,7 @@ export function useDeleteTransaction() {
     mutationFn: deleteTransaction,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: transactionKeys.all })
+      queryClient.invalidateQueries({ queryKey: dashboardKeys.all })
     },
   })
 }
