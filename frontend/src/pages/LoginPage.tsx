@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
 import { Loader2Icon } from "lucide-react"
 
-import { useAuth } from "@/features/auth/AuthContext"
+import { useAuth } from "@/features/auth/use-auth"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"

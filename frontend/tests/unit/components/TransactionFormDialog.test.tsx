@@ -302,7 +302,7 @@ vi.mock("@/features/transactions/api", () => {
 
 // ── Mock AuthContext (avoid the real provider) ──────────────────────────────
 
-vi.mock("@/features/auth/AuthContext", () => ({
+vi.mock("@/features/auth/use-auth", () => ({
   useAuth: () => ({
     user: { id: "u1", email: "alice@test.com", displayName: "Alice" },
     accessToken: "test-token",

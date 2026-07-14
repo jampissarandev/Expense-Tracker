@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { useAuth } from "@/features/auth/AuthContext";
+import { useAuth } from "@/features/auth/use-auth";
 
 export interface UseLogoutResult {
   /** Trigger a logout (calls `/api/auth/logout`, clears local state, redirects). */

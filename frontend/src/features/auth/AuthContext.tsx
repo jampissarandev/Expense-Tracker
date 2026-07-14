@@ -1,6 +1,4 @@
 import {
-  createContext,
-  useContext,
   useState,
   useEffect,
   useCallback,
@@ -8,23 +6,7 @@ import {
 } from "react"
 import apiClient, { setTokenGetter, setLogoutHandler } from "@/lib/apiClient"
 import type { UserDto, AuthResponse } from "@/types/api"
-
-// ── Context shape ───────────────────────────────────────────────────────────
-
-interface AuthContextValue {
-  user: UserDto | null
-  accessToken: string | null
-  isLoading: boolean
-  login: (email: string, password: string) => Promise<void>
-  register: (
-    email: string,
-    password: string,
-    displayName: string,
-  ) => Promise<void>
-  logout: () => Promise<void>
-}
-
-const AuthContext = createContext<AuthContextValue | null>(null)
+import { AuthContext } from "./auth-context"
 
 // ── Provider ────────────────────────────────────────────────────────────────
 
@@ -118,12 +100,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   )
 }
 
-// ── Hook ────────────────────────────────────────────────────────────────────
 
-export function useAuth(): AuthContextValue {
-  const ctx = useContext(AuthContext)
-  if (!ctx) {
-    throw new Error("useAuth must be used within an AuthProvider")
-  }
-  return ctx
-}
