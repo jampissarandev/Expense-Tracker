@@ -1,0 +1,6 @@
+{
+  "name": "agent-skills",
+  "description": "Collection of agent skills and custom agents for code review, testing, security, and more",
+  "skills": "./.github/skills/",
+  "agents": "./.github/agents/"
+}
