@@ -15,12 +15,17 @@ const _require = createRequire(import.meta.url)
 const undici = _require("undici") as typeof import("undici")
 
 function restoreRealFetch() {
+  const before = globalThis.fetch?.toString().slice(0, 60) ?? "undefined"
   if (undici.fetch) {
     Object.defineProperty(globalThis, "fetch", {
       value: undici.fetch,
       writable: true,
       configurable: true,
     })
+  }
+  const after = globalThis.fetch?.toString().slice(0, 60) ?? "undefined"
+  if (process.env.CI) {
+    console.log(`[setup.ts] fetch restore: ${before} -> ${after}`)
   }
 }
 
