@@ -122,7 +122,7 @@ test.describe("Transactions sort", () => {
     await expect(amountTh).toHaveAttribute("aria-sort", "descending")
 
     // Now click "วันที่" column — the amount column should reset
-    const dateBtn = page.getByRole("button", { name: "วันที่" })
+    const dateBtn = page.getByRole("button", { name: "วันที่", exact: true })
     await expect(dateBtn).toBeVisible()
     const dateTh = dateBtn.locator("..")
 
@@ -135,7 +135,7 @@ test.describe("Transactions sort", () => {
     // Verify all 5 sortable columns have buttons
     const sortableLabels = ["วันที่", "ประเภท", "หมวดหมู่", "จำนวนเงิน", "หมายเหตุ"]
     for (const label of sortableLabels) {
-      const btn = page.getByRole("button", { name: label })
+      const btn = page.getByRole("button", { name: label, exact: true })
       await expect(btn).toBeVisible({ timeout: 5_000 })
     }
 

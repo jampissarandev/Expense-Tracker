@@ -1,0 +1,14 @@
+{
+  "name": "addy-agent-skills",
+  "owner": {
+    "name": "jampissarandev"
+  },
+  "description": "Agent skills and plugins for Expense Tracker development",
+  "plugins": [
+    {
+      "name": "agent-skills",
+      "source": "./",
+      "description": "Collection of agent skills and custom agents for code review, testing, security, and more"
+    }
+  ]
+}

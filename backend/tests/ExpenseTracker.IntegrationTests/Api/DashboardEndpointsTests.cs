@@ -198,12 +198,13 @@ public class DashboardEndpointsTests : IClassFixture<WebApplicationFactory<Progr
         var expenseCategory = await CreateCategoryAsync("Food", TransactionType.Expense);
         var incomeCategory = await CreateCategoryAsync("Salary", TransactionType.Income);
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var safeDay = Math.Min(15, today.Day); // avoid future dates when today < 15th
 
         // Seed transactions across 6 months
         for (var i = 0; i < 6; i++)
         {
             var date = new DateTime(today.Year, today.Month, 1).AddMonths(-i);
-            var dateOnly = new DateOnly(date.Year, date.Month, 15);
+            var dateOnly = new DateOnly(date.Year, date.Month, safeDay);
             await CreateTransactionAsync(expenseCategory.Id, TransactionType.Expense, "100.00", dateOnly);
             await CreateTransactionAsync(incomeCategory.Id, TransactionType.Income, "500.00", dateOnly);
         }

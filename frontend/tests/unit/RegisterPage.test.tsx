@@ -8,7 +8,7 @@ vi.stubEnv("VITE_API_URL", "http://localhost:5117")
 // ── Mock auth module ─────────────────────────────────────────────────────────
 
 const mockRegister = vi.fn()
-vi.mock("@/features/auth/AuthContext", () => ({
+vi.mock("@/features/auth/use-auth", () => ({
   useAuth: () => ({
     user: null,
     accessToken: null,
