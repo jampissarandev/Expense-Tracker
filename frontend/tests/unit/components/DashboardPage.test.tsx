@@ -121,6 +121,17 @@ afterEach(() => {
 
 // ── Tests ────────────────────────────────────────────────────────────────────
 
+import apiClientDebug from "@/lib/apiClient"
+
+describe("DashboardPage debug", () => {
+  it("logs apiClient adapter and Request type", () => {
+    console.log(`[debug] apiClient.defaults.adapter=${JSON.stringify(apiClientDebug.defaults.adapter)}`)
+    console.log(`[debug] VITEST=${import.meta.env.VITEST}`)
+    console.log(`[debug] Request.name=${globalThis.Request?.name}`)
+    console.log(`[debug] fetch.name=${globalThis.fetch?.name}`)
+  })
+})
+
 describe("DashboardPage", () => {
   it("renders KPI cards with formatted values", async () => {
     renderWithProviders(<DashboardPage />)
