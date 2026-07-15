@@ -119,7 +119,22 @@ beforeEach(() => {
   if (process.env.CI) {
     const f = globalThis.fetch?.toString().slice(0, 50) ?? "undefined"
     console.log(`[Dashboard beforeEach-after-listen] fetch=${f}`)
+    console.log(`[Dashboard beforeEach] XMLHttpRequest=${typeof XMLHttpRequest}`)
   }
+})
+
+// ── First test: log adapter info ─────────────────────────────────────────────
+
+it("debug: adapter info", () => {
+  if (process.env.CI) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const axios = require("axios")
+    const client = axios.create({})
+    console.log(`[Dashboard debug] adapter=${JSON.stringify(client.defaults.adapter)}`)
+    console.log(`[Dashboard debug] XMLHttpRequest=${typeof XMLHttpRequest}`)
+    console.log(`[Dashboard debug] fetch=${typeof fetch} ${fetch.toString().slice(0, 50)}`)
+  }
+  expect(true).toBe(true)
 })
 
 afterEach(() => {
