@@ -65,7 +65,12 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version-file: frontend/.nvmrc
+          # Pin the exact Node version (kept in sync with frontend/.nvmrc).
+          # Using a major-only .nvmrc (e.g. "22") let actions/setup-node
+          # resolve to whatever 22.x.x was latest on the runner, which
+          # drifted between local and CI and caused the Test step to
+          # sporadically fail with exit code 1. See frontend/.nvmrc.
+          node-version: "22.22.0"
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
@@ -137,7 +142,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version-file: frontend/.nvmrc
+          # Pin the exact Node version (kept in sync with frontend/.nvmrc).
+          # See frontend-ci step above for the rationale on pinning.
+          node-version: "22.22.0"
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 

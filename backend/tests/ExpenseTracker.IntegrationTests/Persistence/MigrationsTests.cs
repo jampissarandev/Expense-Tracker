@@ -1,7 +1,6 @@
 using ExpenseTracker.Domain.Entities;
 using ExpenseTracker.Domain.Enums;
 using ExpenseTracker.Infrastructure.Persistence;
-using ExpenseTracker.Infrastructure.Persistence.SeedData;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,35 +21,23 @@ public class MigrationsApplyToFreshDatabase : IAsyncLifetime
     public Task DisposeAsync() => _factory.DisposeAsync();
 
     [Fact]
-    public async Task Migrations_Apply_To_Fresh_Database()
+    public async Task Migrations_Apply_To_Fresh_Database_And_Seed_System_Categories()
     {
         if (!_factory.IsDockerAvailable) return;
         // Arrange & Act - migrations were applied during InitializeAsync
         using var context = _factory.CreateDbContext();
 
-        // Assert - all tables exist and are empty
+        // Assert - all tables exist
         (await context.Users.CountAsync()).Should().Be(0);
-        (await context.Categories.CountAsync()).Should().Be(0);
         (await context.Transactions.CountAsync()).Should().Be(0);
         (await context.RefreshTokens.CountAsync()).Should().Be(0);
-    }
 
-    [Fact]
-    public async Task System_Categories_Are_Seeded_On_Startup()
-    {
-        if (!_factory.IsDockerAvailable) return;
-        // Arrange - seed the database
-        using (var context = _factory.CreateDbContext())
-        {
-            context.Categories.AddRange(SystemCategories.Categories);
-            await context.SaveChangesAsync();
-        }
-
-        // Act
-        using var dbContext = _factory.CreateDbContext();
-        var categories = await dbContext.Categories.ToListAsync();
-
-        // Assert
+        // InitialCreate migration seeds 12 system categories via InsertData:
+        // 7 expense (Food, Transport, Shopping, Bills, Health, Entertainment, Other)
+        // 5 income  (Salary, Bonus, Gift, Investment, Other)
+        // Use IgnoreQueryFilters to bypass the per-user global filter and see the
+        // seed rows regardless of ICurrentUserService.
+        var categories = await context.Categories.IgnoreQueryFilters().ToListAsync();
         categories.Should().HaveCount(12);
         categories.Count(c => c.Type == TransactionType.Expense).Should().Be(7);
         categories.Count(c => c.Type == TransactionType.Income).Should().Be(5);
