@@ -109,35 +109,9 @@ const emptyDashboardData = {
 // ── Lifecycle ────────────────────────────────────────────────────────────────
 
 beforeEach(() => {
-  if (process.env.CI) {
-    const f = globalThis.fetch?.toString().slice(0, 50) ?? "undefined"
-    console.log(`[Dashboard beforeEach-before-listen] fetch=${f}`)
-  }
   vi.stubEnv("VITE_API_URL", "http://localhost:5117")
   server.resetHandlers()
   server.listen({ onUnhandledRequest: "bypass" })
-  if (process.env.CI) {
-    const f = globalThis.fetch?.toString().slice(0, 50) ?? "undefined"
-    console.log(`[Dashboard beforeEach-after-listen] fetch=${f}`)
-    console.log(`[Dashboard beforeEach] XMLHttpRequest=${typeof XMLHttpRequest}`)
-  }
-})
-
-// ── First test: log adapter info ─────────────────────────────────────────────
-
-it("debug: adapter info", () => {
-  if (process.env.CI) {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const axios = require("axios")
-    const client = axios.create({})
-    console.log(`[Dashboard debug] adapter=${JSON.stringify(client.defaults.adapter)}`)
-    console.log(`[Dashboard debug] XMLHttpRequest=${typeof XMLHttpRequest}`)
-    console.log(`[Dashboard debug] XMLHttpRequest name=${XMLHttpRequest.name}`)
-    console.log(`[Dashboard debug] XMLHttpRequest desc=${JSON.stringify(Object.getOwnPropertyDescriptor(globalThis, "XMLHttpRequest"))}`)
-    console.log(`[Dashboard debug] fetch=${typeof fetch} ${fetch.toString().slice(0, 50)}`)
-    console.log(`[Dashboard debug] fetch desc=${JSON.stringify(Object.getOwnPropertyDescriptor(globalThis, "fetch"))}`)
-  }
-  expect(true).toBe(true)
 })
 
 afterEach(() => {

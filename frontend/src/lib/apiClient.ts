@@ -26,6 +26,16 @@ const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL as string,
   withCredentials: true,
   headers: { "Content-Type": "application/json" },
+  // In Node-based test environments (vitest + happy-dom), the default
+  // adapter order ['xhr', 'http', 'fetch'] selects the xhr adapter,
+  // which is happy-dom's XMLHttpRequest. Happy-dom's XHR uses its own
+  // internal Fetch — bypassing the real Node.js fetch that MSW patches
+  // via setupServer() — and fails with "Failed to execute fetch() on
+  // Window". Force the fetch adapter in Node tests so requests go
+  // through the real Node.js fetch that MSW intercepts.
+  ...(import.meta.env.VITEST
+    ? { adapter: "fetch" }
+    : {}),
 });
 
 // ── CSRF (D2 / R8) — double-submit-cookie wiring ────────────────────────────
