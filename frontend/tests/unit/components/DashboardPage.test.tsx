@@ -132,7 +132,10 @@ it("debug: adapter info", () => {
     const client = axios.create({})
     console.log(`[Dashboard debug] adapter=${JSON.stringify(client.defaults.adapter)}`)
     console.log(`[Dashboard debug] XMLHttpRequest=${typeof XMLHttpRequest}`)
+    console.log(`[Dashboard debug] XMLHttpRequest name=${XMLHttpRequest.name}`)
+    console.log(`[Dashboard debug] XMLHttpRequest desc=${JSON.stringify(Object.getOwnPropertyDescriptor(globalThis, "XMLHttpRequest"))}`)
     console.log(`[Dashboard debug] fetch=${typeof fetch} ${fetch.toString().slice(0, 50)}`)
+    console.log(`[Dashboard debug] fetch desc=${JSON.stringify(Object.getOwnPropertyDescriptor(globalThis, "fetch"))}`)
   }
   expect(true).toBe(true)
 })
