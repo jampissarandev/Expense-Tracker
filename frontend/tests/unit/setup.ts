@@ -1,13 +1,14 @@
 import "@testing-library/jest-dom"
+import { createRequire } from "node:module"
 
-// happy-dom replaces globalThis.fetch with a non-functional stub that
-// throws "Failed to execute fetch() on Window". MSW's setupServer only
-// patches Node.js http modules — not globalThis.fetch. Direct fetch()
-// calls (e.g. in test mock dialog components) hit the broken stub.
-// Restore Node.js native fetch (available since Node 18, backed by
-// undici in Node 22+) so both MSW-handled and direct fetch() calls work.
+// happy-dom replaces globalThis.fetch with a stub that throws
+// "Failed to execute fetch() on Window". Restore the real Node.js fetch
+// (undici-backed) so MSW's FetchInterceptor can patch it properly in
+// server.listen(), and direct fetch() calls in test mocks work too.
+const _require = createRequire(import.meta.url)
+const undici = _require("undici") as typeof import("undici")
 Object.defineProperty(globalThis, "fetch", {
-  value: globalThis.fetch,
+  value: undici.fetch,
   writable: true,
   configurable: true,
 })
