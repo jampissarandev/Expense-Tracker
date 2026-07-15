@@ -26,13 +26,24 @@ const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL as string,
   withCredentials: true,
   headers: { "Content-Type": "application/json" },
-  // In Node-based test environments (vitest + happy-dom), the default
-  // adapter order ['xhr', 'http', 'fetch'] selects the xhr adapter,
-  // which is happy-dom's XMLHttpRequest. Happy-dom's XHR uses its own
-  // internal Fetch — bypassing the real Node.js fetch that MSW patches
-  // via setupServer() — and fails with "Failed to execute fetch() on
-  // Window". Force the fetch adapter in Node tests so requests go
-  // through the real Node.js fetch that MSW intercepts.
+  // ── Fix for vitest + happy-dom test environment ──────────────────────
+  //
+  // Two issues arise when running unit tests in vitest + happy-dom:
+  //
+  // Issue 1 — baseURL timing: import.meta.env.VITE_API_URL is evaluated
+  //   here at module-load time, before any test-file top-level code runs.
+  //   Therefore VITE_API_URL must be set in vitest.config.ts (test.env),
+  //   NOT via vi.stubEnv() in test files — those run too late.
+  //
+  // Issue 2 — adapter selection: The default adapter order ['xhr', 'http',
+  //   'fetch'] selects 'xhr' because happy-dom defines XMLHttpRequest.
+  //   Happy-dom's XHR uses its own internal Fetch class, which bypasses
+  //   the real Node.js fetch that MSW patches via setupServer(). The
+  //   result is "Failed to execute fetch() on Window". Forcing the
+  //   "fetch" adapter in VITEST env sends requests through real Node.js
+  //   fetch, which MSW can intercept. setup.ts additionally restores
+  //   Request/Response/Headers from undici so the fetch adapter has the
+  //   correct constructors.
   ...(import.meta.env.VITEST
     ? { adapter: "fetch" }
     : {}),
