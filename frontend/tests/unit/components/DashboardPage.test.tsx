@@ -109,9 +109,17 @@ const emptyDashboardData = {
 // ── Lifecycle ────────────────────────────────────────────────────────────────
 
 beforeEach(() => {
+  if (process.env.CI) {
+    const f = globalThis.fetch?.toString().slice(0, 50) ?? "undefined"
+    console.log(`[Dashboard beforeEach-before-listen] fetch=${f}`)
+  }
   vi.stubEnv("VITE_API_URL", "http://localhost:5117")
   server.resetHandlers()
   server.listen({ onUnhandledRequest: "bypass" })
+  if (process.env.CI) {
+    const f = globalThis.fetch?.toString().slice(0, 50) ?? "undefined"
+    console.log(`[Dashboard beforeEach-after-listen] fetch=${f}`)
+  }
 })
 
 afterEach(() => {
