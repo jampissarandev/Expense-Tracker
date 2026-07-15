@@ -66,11 +66,12 @@ jobs:
         uses: actions/setup-node@v5
         with:
           # Pin the exact Node version (kept in sync with frontend/.nvmrc).
-          # Using a major-only .nvmrc (e.g. "22") let actions/setup-node
-          # resolve to whatever 22.x.x was latest on the runner, which
-          # drifted between local and CI and caused the Test step to
-          # sporadically fail with exit code 1. See frontend/.nvmrc.
-          node-version: "22.22.0"
+          # Node 22.23.x bundles undici 6.27.0 which is required for
+          # happy-dom + MSW compatibility — Node 22.22.x ships an older
+          # undici whose globalThis.fetch is shadowed by happy-dom's
+          # Window stub, breaking 45 frontend unit tests. See
+          # frontend/.nvmrc.
+          node-version: "22.23.1"
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
@@ -144,7 +145,7 @@ jobs:
         with:
           # Pin the exact Node version (kept in sync with frontend/.nvmrc).
           # See frontend-ci step above for the rationale on pinning.
-          node-version: "22.22.0"
+          node-version: "22.23.1"
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
