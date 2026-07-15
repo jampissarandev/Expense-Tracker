@@ -7,8 +7,10 @@ import { createRequire } from "node:module"
 // server.listen(), and direct fetch() calls in test mocks work too.
 const _require = createRequire(import.meta.url)
 const undici = _require("undici") as typeof import("undici")
-Object.defineProperty(globalThis, "fetch", {
-  value: undici.fetch,
-  writable: true,
-  configurable: true,
-})
+if (undici.fetch) {
+  Object.defineProperty(globalThis, "fetch", {
+    value: undici.fetch,
+    writable: true,
+    configurable: true,
+  })
+}
