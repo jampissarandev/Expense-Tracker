@@ -14,7 +14,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "happy-dom",
-    pool: "threads",
+    pool: "forks",
     setupFiles: ["./tests/unit/setup.ts"],
     include: ["tests/**/*.test.{ts,tsx}", "src/**/*.test.{ts,tsx}"],
   },
