@@ -15,6 +15,12 @@ export default defineConfig({
     globals: true,
     environment: "happy-dom",
     pool: "threads",
+    // happy-dom installs a Window-level fetch stub that throws
+    // "Failed to execute fetch() on Window". unstubGlobals restores
+    // the real Node.js (undici) fetch before each test so MSW can
+    // intercept it. We keep setup.ts as a fallback for the initial
+    // environmentbootstrap phase before the first test runs.
+    unstubGlobals: true,
     setupFiles: ["./tests/unit/setup.ts"],
     include: ["tests/**/*.test.{ts,tsx}", "src/**/*.test.{ts,tsx}"],
   },
