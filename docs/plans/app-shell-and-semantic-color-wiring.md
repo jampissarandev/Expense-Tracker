@@ -378,6 +378,8 @@ After D1 + D2, grep each page for stale `AlertDialog*` imports and remove them. 
 
 If a concrete consumer is identified later, a separate plan supersedes this section.
 
+**Resolution (2026-07-16)**: Pre-merge code review confirmed the component had no consumer across the repo, no tracked wire-up task, and was blocking on a decision the plan left explicitly open. Per the review, the file `frontend/src/components/common/SegmentedControl.tsx` was deleted to avoid landing dead code. If a concrete consumer is identified later, recreate the component from this plan description (it is small and self-contained) rather than restoring this section.
+
 ---
 
 # Open questions / decisions to confirm before coding

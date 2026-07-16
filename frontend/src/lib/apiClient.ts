@@ -26,27 +26,8 @@ const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL as string,
   withCredentials: true,
   headers: { "Content-Type": "application/json" },
-  // ── Fix for vitest + happy-dom test environment ──────────────────────
-  //
-  // Two issues arise when running unit tests in vitest + happy-dom:
-  //
-  // Issue 1 — baseURL timing: import.meta.env.VITE_API_URL is evaluated
-  //   here at module-load time, before any test-file top-level code runs.
-  //   Therefore VITE_API_URL must be set in vitest.config.ts (test.env),
-  //   NOT via vi.stubEnv() in test files — those run too late.
-  //
-  // Issue 2 — adapter selection: The default adapter order ['xhr', 'http',
-  //   'fetch'] selects 'xhr' because happy-dom defines XMLHttpRequest.
-  //   Happy-dom's XHR uses its own internal Fetch class, which bypasses
-  //   the real Node.js fetch that MSW patches via setupServer(). The
-  //   result is "Failed to execute fetch() on Window". Forcing the
-  //   "fetch" adapter in VITEST env sends requests through real Node.js
-  //   fetch, which MSW can intercept. setup.ts additionally restores
-  //   Request/Response/Headers from undici so the fetch adapter has the
-  //   correct constructors.
-  ...(import.meta.env.VITEST
-    ? { adapter: "fetch" }
-    : {}),
+  // VITEST adapter override — see docs/adr/0010-vitest-fetch-adapter.md
+  ...(import.meta.env.VITEST ? { adapter: "fetch" } : {}),
 });
 
 // ── CSRF (D2 / R8) — double-submit-cookie wiring ────────────────────────────

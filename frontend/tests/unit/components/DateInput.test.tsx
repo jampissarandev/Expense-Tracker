@@ -80,7 +80,10 @@ describe("DateInput", () => {
     expect(onChange).not.toHaveBeenCalled()
   })
 
-  it("calls onChange with empty string when input is cleared on blur", async () => {
+  it("does NOT clear a non-empty value when input is cleared on blur", async () => {
+    // Safety contract: clearing the field on blur must not silently wipe a
+    // previously-set value. The display should snap back to the parent's
+    // formatted value, and onChange should not be called.
     const onChange = vi.fn()
     render(<DateInput value="2026-07-08" onChange={onChange} />)
     const input = screen.getByPlaceholderText("dd/mm/yyyy")
@@ -88,6 +91,22 @@ describe("DateInput", () => {
     // Clear the input
     fireEvent.change(input, { target: { value: "" } })
     // Blur
+    fireEvent.blur(input)
+
+    expect(onChange).not.toHaveBeenCalled()
+    // Display should snap back to the parent's formatted value
+    expect(input).toHaveValue("08/07/2026")
+  })
+
+  it("calls onChange with empty string on blur when parent value was already empty", async () => {
+    // If the parent value was already empty, blurring an empty field is a
+    // no-op confirmation — we emit onChange("") so the parent knows the
+    // user actively engaged with (and left) the field.
+    const onChange = vi.fn()
+    render(<DateInput value="" onChange={onChange} />)
+    const input = screen.getByPlaceholderText("dd/mm/yyyy")
+
+    fireEvent.change(input, { target: { value: "" } })
     fireEvent.blur(input)
 
     expect(onChange).toHaveBeenCalledWith("")
@@ -116,5 +135,51 @@ describe("DateInput", () => {
     )
     const input = screen.getByPlaceholderText("dd/mm/yyyy")
     expect(input).toHaveAttribute("id", "filter-from")
+  })
+
+  // Regression test: on blur with a valid date, the displayed value must be
+  // the newly-formatted input (not the stale `value` prop that the parent
+  // hasn't updated yet). Previously handleTextBlur ran an unconditional
+  // `setDisplayValue(formatDateInput(value))` after a successful parse,
+  // causing a one-frame flicker back to the old display.
+  it("shows the newly-formatted value on blur with valid input (no flicker to old value)", async () => {
+    // Parent holds onto a stale value — simulating a controlled input where
+    // the consumer has not yet re-rendered with the new onChange callback.
+    const onChange = vi.fn()
+    const { rerender } = render(
+      <DateInput value="2026-01-01" onChange={onChange} />,
+    )
+    const input = screen.getByPlaceholderText("dd/mm/yyyy")
+
+    // Type a new valid date (replaces the existing "01/01/2026" display)
+    fireEvent.change(input, { target: { value: "15/03/2026" } })
+    // Trigger blur
+    fireEvent.blur(input)
+
+    // Display must show the *new* date in dd/mm/yyyy, not the stale 01/01/2026
+    expect(input).toHaveValue("15/03/2026")
+
+    // Sanity: parent should have been notified with the new ISO value
+    expect(onChange).toHaveBeenCalledWith("2026-03-15")
+
+    // And a re-render with the same stale prop must not regress the display
+    rerender(<DateInput value="2026-01-01" onChange={onChange} />)
+    expect(screen.getByPlaceholderText("dd/mm/yyyy")).toHaveValue("15/03/2026")
+  })
+
+  it("resets display to formatted parent value on blur with invalid input", () => {
+    // Typing garbage, then blurring, should snap the display back to the
+    // parent's current ISO value (formatted as dd/mm/yyyy), not blank.
+    const onChange = vi.fn()
+    render(<DateInput value="2026-07-08" onChange={onChange} />)
+    const input = screen.getByPlaceholderText("dd/mm/yyyy")
+
+    fireEvent.change(input, { target: { value: "garbage" } })
+    fireEvent.blur(input)
+
+    // onChange should NOT have been called with a new value
+    expect(onChange).not.toHaveBeenCalled()
+    // Display should snap back to the parent's formatted value
+    expect(input).toHaveValue("08/07/2026")
   })
 })

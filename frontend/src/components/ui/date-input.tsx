@@ -61,18 +61,26 @@ export function DateInput({
 
   const handleTextBlur = useCallback(() => {
     const raw = displayValue.trim()
-    if (raw === "") {
-      onChange("")
-      return
-    }
-    const parsed = parseDateInput(raw)
+    const parsed = raw === "" ? null : parseDateInput(raw)
     if (parsed !== null) {
       onChange(parsed)
-      // Re-sync display to the canonical formatted form
+      // Re-sync display to the canonical formatted form of the new value.
+      // Note: `value` in this closure is the stale prop — do NOT use it
+      // here, or the display will flicker back to the old value before
+      // the parent re-renders. The render-phase resync above (see
+      // lastValue) keeps display aligned with the parent afterwards.
       setDisplayValue(formatDateInput(parsed))
+    } else {
+      // Invalid or empty input on blur: snap display back to the parent's
+      // current ISO value. Only emit onChange("") when the parent was
+      // already empty (i.e. user is confirming an empty field); otherwise
+      // a stray keystroke clearing the field would wipe a real value.
+      if (raw === "" && value === "") {
+        onChange("")
+      } else {
+        setDisplayValue(formatDateInput(value))
+      }
     }
-    // On blur with invalid input, reset display to the parent's ISO value
-    setDisplayValue(formatDateInput(value))
   }, [displayValue, onChange, value])
 
   const handleCalendarSelect = useCallback(
