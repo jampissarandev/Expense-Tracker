@@ -22,6 +22,17 @@ const TABS: ReadonlyArray<TabItem> = [
   { to: "/categories", label: "หมวดหมู่", icon: TagsIcon },
 ]
 
+/**
+ * Five-column grid layout:
+ *
+ *   [ outer-left ][ inner-left ][ +ADD ][ right ][ spacer ]
+ *
+ * The first two tabs sit on the left of the raised primary action; the
+ * third tab sits on the right. The trailing spacer keeps the grid
+ * 5-column-balanced so the primary button renders visually centered.
+ */
+const [outerLeftTab, innerLeftTab, rightTab] = TABS
+
 export interface MobileTabBarProps {
   /** Called when the center "Add" button is pressed. */
   onAdd?: () => void
@@ -41,16 +52,9 @@ export function MobileTabBar({ onAdd }: MobileTabBarProps) {
       aria-label="เมนูนำทางด้านล่าง"
       className="bg-background/95 supports-[backdrop-filter]:bg-background/80 border-border fixed inset-x-0 bottom-0 z-40 flex h-16 items-end border-t px-2 pb-2 backdrop-blur lg:hidden"
     >
-      <ul
-        className="grid w-full grid-cols-5 items-end"
-        role="list"
-      >
-        {TABS.slice(0, 1).map((tab) => (
-          <TabLink key={tab.to} tab={tab} />
-        ))}
-        {TABS.slice(1, 2).map((tab) => (
-          <TabLink key={tab.to} tab={tab} />
-        ))}
+      <ul className="grid w-full grid-cols-5 items-end" role="list">
+        <TabLink tab={outerLeftTab} />
+        <TabLink tab={innerLeftTab} />
 
         {/* Center primary action — "Add transaction" */}
         <li className="flex justify-center pb-1">
@@ -69,9 +73,7 @@ export function MobileTabBar({ onAdd }: MobileTabBarProps) {
           </button>
         </li>
 
-        {TABS.slice(2).map((tab) => (
-          <TabLink key={tab.to} tab={tab} />
-        ))}
+        <TabLink tab={rightTab} />
         {/* Spacer to keep grid 5 columns balanced */}
         <li aria-hidden="true" />
       </ul>
