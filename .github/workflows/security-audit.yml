@@ -90,7 +90,7 @@ jobs:
 
       - name: Upload vulnerability report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: backend-vulnerable-packages
           path: backend/vulnerable.txt
@@ -140,7 +140,7 @@ jobs:
 
       - name: Upload npm audit JSON
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: frontend-npm-audit
           path: frontend/npm-audit.json
